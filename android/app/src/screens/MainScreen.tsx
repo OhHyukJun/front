@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import styles from './css/MainScreen'; // 분리된 스타일 파일 import
+import styles from './css/MainScreen';
 
 const MainScreen = ({ onNavigateToBluetooth }: { onNavigateToBluetooth: () => void }) => {
   return (
