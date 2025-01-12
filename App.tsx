@@ -1,35 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text,StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 import SplashScreen from './android/app/src/screens/SplashScreen';
+import MainScreen from './android/app/src/screens/MainScreen';
+import BLEConnection from './android/app/src/screens/BLEConnection';
 
-const App = (): JSX.Element => {
-  const [isLoading, setIsLoading] = useState(true);
+const App = () => {
+  const [currentScreen, setCurrentScreen] = useState<'splash' | 'main' | 'bluetooth'>('splash');
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 10000); // 3초 뒤 스플래쉬 화면 종료
-    return () => clearTimeout(timer);
-  }, []);
+  // 스플래시 화면 종료 후 메인 화면으로 전환
+  const handleSplashFinish = () => {
+    setCurrentScreen('main');
+  };
 
-  if (isLoading) {
-    return <SplashScreen />;
+  // 메인 화면에서 블루투스 연결 화면으로 전환
+  const navigateToBluetooth = () => {
+    setCurrentScreen('bluetooth');
+  };
+
+  // 현재 화면 상태에 따라 적절한 컴포넌트를 렌더링
+  if (currentScreen === 'splash') {
+    return <SplashScreen onFinish={handleSplashFinish} />;
   }
 
-  return (
-    <View style={styles.container}>
-      <Text>메인 화면</Text>
-    </View>
-  );
-};
+  if (currentScreen === 'main') {
+    return <MainScreen onNavigateToBluetooth={navigateToBluetooth} />;
+  }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-  },
-});
+  return <BLEConnection />;
+};
 
 export default App;
