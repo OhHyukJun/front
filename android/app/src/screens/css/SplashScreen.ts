@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FDFCFF',
   },
   title: {
-    fontFamily: 'Jua',
+    fontFamily: 'KCC-Ganpan',
     fontSize: 105,
     lineHeight: 131,
     color: '#4750BD',
