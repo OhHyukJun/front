@@ -3,17 +3,16 @@ import { View, Text } from 'react-native';
 import styles from './css/SplashScreen';
 
 type SplashScreenProps = {
-  onFinish: () => void; // 스플래시 화면 종료 시 호출되는 함수
+  navigation: any;
 };
 
-const SplashScreen = ({ onFinish }: SplashScreenProps) => {
+const SplashScreen = ({ navigation   }: SplashScreenProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      onFinish(); // 3초 후 호출
+      navigation.replace('Main'); //3초 뒤 메인 화면으로 이동동
     }, 3000);
-
-    return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
-  }, [onFinish]);
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
