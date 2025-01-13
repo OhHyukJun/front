@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   text: {
+    fontFamily: 'KCC-Ganpan',
     fontSize: 20,
     color: '#333333',
     marginBottom: 20,
