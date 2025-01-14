@@ -252,38 +252,6 @@
     {
       "path": "assets/fonts/KCC-Ganpan/KCC-Ganpan.ttf:Zone.Identifier",
       "sha1": "93f3e630cb4ae778536a6f7af04eeb5eab73afca"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/[Tlab] KCC간판체 가이드라인 20221130.pdf",
-      "sha1": "a99b6d14572aa45748f21b58cc5e27d1ab972dbd"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/[Tlab] KCC간판체 가이드라인 20221130.pdf:Zone.Identifier",
-      "sha1": "93f3e630cb4ae778536a6f7af04eeb5eab73afca"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/webfont/KCC-Ganpan.eot",
-      "sha1": "51dad67416796580e3768ba33f04d53fd5f2c9ba"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/webfont/KCC-Ganpan.eot:Zone.Identifier",
-      "sha1": "93f3e630cb4ae778536a6f7af04eeb5eab73afca"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/webfont/KCC-Ganpan.woff",
-      "sha1": "d0311f979ee3cc4a29ac1e9be0a5aa0328d8a3ae"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/webfont/KCC-Ganpan.woff2",
-      "sha1": "16e0e05beb8d6870a7335568095f188b93e006bf"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/webfont/KCC-Ganpan.woff2:Zone.Identifier",
-      "sha1": "93f3e630cb4ae778536a6f7af04eeb5eab73afca"
-    },
-    {
-      "path": "assets/fonts/KCC-Ganpan/webfont/KCC-Ganpan.woff:Zone.Identifier",
-      "sha1": "93f3e630cb4ae778536a6f7af04eeb5eab73afca"
     }
   ]
 }

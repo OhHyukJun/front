@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FDFCFF',
   },
   title: {
-    fontFamily: 'KCC-Ganpan',
+    fontFamily: 'KCC-ganpan',
     fontSize: 105,
     lineHeight: 131,
     color: '#4750BD',
@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   logo: {
 
   },
-  
 });
 
 export default styles;
