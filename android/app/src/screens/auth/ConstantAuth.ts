@@ -29,4 +29,3 @@ const FAIL = {
 };
   
 export default { USERNAME, PASSWORD, EMAIL, SUCCESS, FAIL };
-  
