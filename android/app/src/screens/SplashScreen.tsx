@@ -9,7 +9,7 @@ type SplashScreenProps = {
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Main'); //3초 뒤 메인 화면으로 이동동
+      navigation.replace('Login'); //3초 뒤 로그인인 화면으로 이동
     }, 3000);
     return () => clearTimeout(timer);
   }, [navigation]);
