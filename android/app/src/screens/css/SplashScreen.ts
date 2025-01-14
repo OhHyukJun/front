@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    left: '0%',
-    top: '0%',
     backgroundColor: '#FDFCFF',
   },
   title: {
@@ -21,13 +19,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Jua',
-    fontStyle: 'normal',
+    fontFamily: 'Jua-Regular',
     fontSize: 15,
     lineHeight: 18,
     textAlign: 'center',
     color: '#000000',
     marginTop: 20,
+  },
+  logo: {
+
   },
 });
 

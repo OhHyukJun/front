@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import styles from './css/SplashScreen';
 
 type SplashScreenProps = {
@@ -17,6 +17,9 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.background} />
+        <Image
+          source={require('./img/logo.png')}
+        />
       <Text style={styles.title}>나비잠</Text>
       <Text style={styles.subtitle}>아기야 두 팔 벌리고 편하게 자렴 :)</Text>
     </View>
