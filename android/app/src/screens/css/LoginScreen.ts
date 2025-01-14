@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 
 const { width } = Dimensions.get('window'); // 화면 너비 기준으로 반응형 설정
 const rem = width / 375; // 375px 기준으로 rem 단위 생성
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     titleImg: {
-        width: 200,
+        width: vw(50),
         height: 200,
     },
     title: {
