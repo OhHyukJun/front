@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     socialIcon: {
+        width: vw(85),
         borderRadius: vh(5),
     },
     socialContainer: {

@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { userIdState, userPwState } from '../../atom/login';
-import styles from '../css/LoginScreen';
-import axiosInstance from '../../api/axios';
-import constants from './ConstantAuth';
+import { userIdState, userPwState } from '../../../atom/login';
+import styles from '../../css/auth/Login/LoginScreen';
+import axiosInstance from '../../../api/axios';
+import constants from '../ConstantAuth';
 
 type RootParamList = {
   MainScreen: undefined;
@@ -75,7 +75,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../img/logo.png')} style={styles.titleImg} />
+      <Image source={require('../../img/logo.png')} style={styles.titleImg} />
       <Text style={styles.title}>나비잠</Text>
 
       <View style={styles.inputContainer}>
@@ -118,15 +118,15 @@ const LoginScreen = () => {
 
       <View style={styles.socialLoginContainer}>
         <TouchableOpacity style={styles.socialContainer} onPress={handleKaKaoLogin}>
-          <Image source={require('../img/kakao.png')} style={styles.socialIcon} />
+          <Image source={require('../../img/kakao.png')} style={styles.socialIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.socialContainer} onPress={handleNaverLogin}>
-          <Image source={require('../img/naver.png')} style={styles.socialIcon} />
+          <Image source={require('../../img/naver.png')} style={styles.socialIcon} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText} onPress={() => navigation.navigate('Register')}>회원가입</Text>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('Info')}>회원가입</Text>
         <Text style={styles.footerText}>아이디 찾기</Text>
         <Text style={styles.footerText}>비밀번호 찾기</Text>
       </View>
