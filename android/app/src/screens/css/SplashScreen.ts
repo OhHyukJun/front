@@ -14,14 +14,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#FDFCFF',
   },
   title: {
-    fontFamily: 'KCC-Ganpan',
+    fontFamily: 'KCC-ganpan',
     fontSize: 105,
     lineHeight: 131,
     color: '#4750BD',
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: 'Jua',
+    fontStyle: 'normal',
     fontSize: 15,
     lineHeight: 18,
     textAlign: 'center',
