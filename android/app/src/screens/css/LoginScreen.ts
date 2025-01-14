@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
+import { vw, vh } from 'react-native-expo-viewport-units';
 
 const { width } = Dimensions.get('window'); // 화면 너비 기준으로 반응형 설정
 const rem = width / 375; // 375px 기준으로 rem 단위 생성
@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     titleImg: {
-        width: vw(50),
-        height: 200,
+        marginTop: vw(5),
+        width: vw(42),
+        height: vw(42),
     },
     title: {
         fontFamily:'KCC-Ganpan',
@@ -23,35 +24,38 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '85%',
-        marginBottom: 20,
     },
     inputField: {
         width: '100%',
         borderWidth: 1,
         borderColor: '#4750BD',
-        padding: 12,
+        color:'#4750BD',
+        padding: 10,
         marginBottom: 10,
         borderRadius: 8,
-        fontSize: 1.25 * rem, // 20px
-        color: '#000000',
+        fontSize: vw(3), // 20px
     },
-    passwordContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+    inputPwField: {
+        width: '100%',
         borderWidth: 1,
         borderColor: '#4750BD',
-        padding: 12,
+        color:'#4750BD',
+        padding: 10,
+        marginBottom: 10,
         borderRadius: 8,
-    },
-    passwordText: {
-        fontSize: 0.75 * rem, // 20px
-        color: '#C4C4C4',
+        fontSize: vw(3), // 20px
     },
     eyeIcon: {
         width: 20,
         height: 20,
         tintColor: '#C4C4C4',
+    },
+    snsText: {
+        textAlign: 'center', // 텍스트 중앙 정렬
+        fontSize: vw(3), // 반응형 폰트 크기
+        color: '#292929',
+        justifyContent: 'space-between',
+        marginBottom: vh(2),
     },
     loginButton: {
         width: '85%',
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
         width: '85%',
         borderTopWidth: 1,
         borderColor: '#4750BD',
-        marginBottom: 20,
+        marginBottom: 10,
     },
     socialLoginContainer: {
         width: '85%',
@@ -97,21 +101,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 8,
     },
-    kakaoButton: {
-        backgroundColor: '#FEE500',
+    socialIcon: {
+        borderRadius: vh(5),
     },
-    kakaoText: {
-        fontFamily: 'Inter',
-        fontSize: 2.5 * rem, // 40px
-        color: '#000000',
-    },
-    naverButton: {
-        backgroundColor: '#03C75A',
-    },
-    naverText: {
-        fontFamily: 'Inter',
-        fontSize: 2.5 * rem, // 40px
-        color: '#FFFFFF',
+    socialContainer: {
+        marginBottom: 7,
     },
     footer: {
         flexDirection: 'row',
@@ -120,8 +114,9 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontFamily: 'Work Sans',
-        fontSize: 1.5 * rem, // 24px
-        color: '#000000',
+        fontSize: 10 * rem, // 24px
+        justifyContent: 'center',
+        color: '#4750BD',
     },
 });
 
