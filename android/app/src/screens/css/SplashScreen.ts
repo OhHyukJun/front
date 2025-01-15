@@ -1,9 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   background: {
     position: 'absolute',
@@ -12,14 +15,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FDFCFF',
   },
   title: {
-    fontFamily: 'KCC-ganpan',
-    fontSize: 105,
-    lineHeight: 131,
+    fontFamily: 'KCC-Ganpan',
+    fontSize: vw(21),
+    lineHeight: vw(23),
     color: '#4750BD',
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Jua-Regular',
+    fontFamily: 'Inter',
     fontSize: 15,
     lineHeight: 18,
     textAlign: 'center',
@@ -27,7 +30,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   logo: {
-
+    width: vw(60),
+    height: 200,
   },
 });
 
