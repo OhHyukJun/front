@@ -22,13 +22,14 @@ const LoginScreen = () => {
 
   // 유효성 검사 함수
   const validateInputs = (): boolean => {
+    const emailRegex = constants.EMAIL.PATTERN;
     if (!userId) {
-      Alert.alert('로그인 실패', constants.USERNAME.REQUIRED_MESSAGE);
+      Alert.alert('로그인 실패', constants.EMAIL.EMPTY_MESSAGE);
       userIdInputRef.current?.focus();
       return false;
     }
-    if (userId.length < constants.USERNAME.MIN_LENGTH || userId.length > constants.USERNAME.MAX_LENGTH) {
-      Alert.alert('로그인 실패', constants.USERNAME.LENGTH_MESSAGE);
+    if (!emailRegex.test(userId)) {
+      Alert.alert('로그인 실패', constants.EMAIL.CHECK_MESSAGE);
       userIdInputRef.current?.focus();
       return false;
     }
@@ -82,7 +83,7 @@ const LoginScreen = () => {
         <TextInput
           ref={userIdInputRef}
           style={styles.inputField}
-          placeholder="아이디 입력"
+          placeholder= {constants.EMAIL.REQUIRED_MESSAGE}
           placeholderTextColor="#292929"
           value={userId}
           onChangeText={setUserId}
@@ -94,7 +95,7 @@ const LoginScreen = () => {
         <TextInput
           ref={userPwInputRef}
           style={styles.inputPwField}
-          placeholder="비밀번호 8~40자"
+          placeholder= {constants.PASSWORD.LENGTH_MESSAGE}
           placeholderTextColor="#292929"
           secureTextEntry
           maxLength={constants.PASSWORD.MAX_LENGTH}
@@ -109,10 +110,6 @@ const LoginScreen = () => {
         <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity>
 
-      <View style={styles.rememberContainer}>
-        <Text style={styles.rememberText}>로그인 상태 유지</Text>
-      </View>
-
       <View style={styles.divider} />
       <Text style={styles.snsText}>SNS 간편 로그인</Text>
 
@@ -126,9 +123,15 @@ const LoginScreen = () => {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText} onPress={() => navigation.navigate('Info')}>회원가입</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Info')}>
+        <Text style={styles.footerText}>회원가입</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
         <Text style={styles.footerText}>아이디 찾기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
         <Text style={styles.footerText}>비밀번호 찾기</Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
