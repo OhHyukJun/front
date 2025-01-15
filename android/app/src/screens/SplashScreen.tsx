@@ -9,7 +9,7 @@ type SplashScreenProps = {
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Main'); //3초 뒤 메인 화면으로 이동동
+      navigation.replace('Login'); //3초 뒤 로그인인 화면으로 이동
     }, 3000);
     return () => clearTimeout(timer);
   }, [navigation]);
@@ -19,6 +19,8 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
       <View style={styles.background} />
         <Image
           source={require('./img/logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
         />
       <Text style={styles.title}>나비잠</Text>
       <Text style={styles.subtitle}>아기야 두 팔 벌리고 편하게 자렴 :)</Text>
