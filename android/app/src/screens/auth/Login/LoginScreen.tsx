@@ -7,38 +7,38 @@ import styles from '../../css/auth/Login/LoginScreen';
 import axiosInstance from '../../../api/axios';
 import constants from '../ConstantAuth';
 
+
 type RootParamList = {
   MainScreen: undefined;
   RegisterScreen: undefined;
 };
 
 const LoginScreen = () => {
-  const [userId, setUserId] = useRecoilState(userIdState);
-  const [userPw, setUserPw] = useRecoilState(userPwState);
+  const [email, setUserId] = useRecoilState(userIdState);
+  const [password, setUserPw] = useRecoilState(userPwState);
   const navigation = useNavigation<NavigationProp<RootParamList>>();
 
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
 
-  // 유효성 검사 함수
   const validateInputs = (): boolean => {
     const emailRegex = constants.EMAIL.PATTERN;
-    if (!userId) {
+    if (!email) {
       Alert.alert('로그인 실패', constants.EMAIL.EMPTY_MESSAGE);
       userIdInputRef.current?.focus();
       return false;
     }
-    if (!emailRegex.test(userId)) {
+    if (!emailRegex.test(email)) {
       Alert.alert('로그인 실패', constants.EMAIL.CHECK_MESSAGE);
       userIdInputRef.current?.focus();
       return false;
     }
-    if (!userPw) {
+    if (!password) {
       Alert.alert('로그인 실패', constants.PASSWORD.REQUIRED_MESSAGE);
       userPwInputRef.current?.focus();
       return false;
     }
-    if (userPw.length < constants.PASSWORD.MIN_LENGTH || userPw.length > constants.PASSWORD.MAX_LENGTH) {
+    if (password.length < constants.PASSWORD.MIN_LENGTH || password.length > constants.PASSWORD.MAX_LENGTH) {
       Alert.alert('로그인 실패', constants.PASSWORD.LENGTH_MESSAGE);
       userPwInputRef.current?.focus();
       return false;
@@ -46,12 +46,11 @@ const LoginScreen = () => {
     return true;
   };
 
-  // 로그인 처리
   const handleLogin = async () => {
     if (!validateInputs()) return;
 
     try {
-      const response = await axiosInstance.post('/auth/login', { userId, userPw });
+      const response = await axiosInstance.post('/auth/login', { email, password });
 
       if (response.status === 200) {
         Alert.alert('로그인 성공', constants.SUCCESS.Login);
@@ -85,7 +84,7 @@ const LoginScreen = () => {
           style={styles.inputField}
           placeholder= {constants.EMAIL.REQUIRED_MESSAGE}
           placeholderTextColor="#292929"
-          value={userId}
+          value={email}
           onChangeText={setUserId}
           autoCapitalize="none"
           autoCorrect={false}
@@ -99,7 +98,7 @@ const LoginScreen = () => {
           placeholderTextColor="#292929"
           secureTextEntry
           maxLength={constants.PASSWORD.MAX_LENGTH}
-          value={userPw}
+          value={password}
           onChangeText={setUserPw}
           autoCapitalize="none"
           autoCorrect={false}
