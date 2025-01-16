@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import styles from '../../css/auth/Register/PersonalInfo';
 import TERMS from '../Terms';
@@ -11,6 +11,15 @@ const PersonalInfo = ({ navigation }: PersonalInfoProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isCheckedOne, setIsCheckedOne] = useState(false);
   const [isCheckedTwo, setIsCheckedTwo] = useState(false);
+
+  useEffect(() => {
+    // 모든 개별 체크박스가 true인 경우만 "모두 동의"를 true로 설정
+    if (isCheckedOne && isCheckedTwo) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+    }, [isCheckedOne, isCheckedTwo]);
 
   const handleCheck = () => {
     const newChecked = !isChecked;
