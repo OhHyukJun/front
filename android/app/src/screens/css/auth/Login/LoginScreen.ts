@@ -72,14 +72,14 @@ const styles = StyleSheet.create({
     },
     rememberContainer: {
         flexDirection: 'row',
-        alignItems: 'center', // 수직 방향 중앙 정렬
-        justifyContent: 'flex-start', // 수평 방향 왼쪽 정렬
-        width: '85%', // 부모 너비에 맞게 확장
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width: '85%',
         marginBottom: 20,
     },
     rememberText: {
         fontFamily: 'Inter',
-        fontSize: 10.25 * rem, // 20px
+        fontSize: 10.25 * rem,
         color: '#4750BD',
         marginLeft: 10,
     },
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontFamily: 'Work Sans',
-        fontSize: 10 * rem, // 24px
+        fontSize: 10 * rem,
         justifyContent: 'center',
         color: '#4750BD',
     },

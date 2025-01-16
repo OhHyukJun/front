@@ -19,6 +19,8 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
       <View style={styles.background} />
         <Image
           source={require('./img/logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
         />
       <Text style={styles.title}>나비잠</Text>
       <Text style={styles.subtitle}>아기야 두 팔 벌리고 편하게 자렴 :)</Text>

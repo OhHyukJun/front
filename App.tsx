@@ -7,10 +7,13 @@ import SplashScreen from './android/app/src/screens/SplashScreen';
 import MainScreen from './android/app/src/screens/MainScreen';
 import BLEConnection from './android/app/src/screens/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
-import RegisterScreen from './android/app/src/screens/auth/Register/RegisterScreen';
+import RegisterEmail from './android/app/src/screens/auth/Register/RegisteEmail';
+import RegisterName from './android/app/src/screens/auth/Register/RegisterName';
+import RegisterPassword from './android/app/src/screens/auth/Register/RegisterPassword';
+import ConfirmPassword from './android/app/src/screens/auth/Register/CofirmPassword';
 import PersonalInfo from './android/app/src/screens/auth/Register/PersonalInfo';
 // React Query Client 생성
-// const queryClient = new QueryClient();
+// const queryClient = new QueryClient();s
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +26,10 @@ const App = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Main" component={MainScreen} />
           <Stack.Screen name="Info" component={PersonalInfo} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Email" component={RegisterEmail} />
+          <Stack.Screen name="Name" component={RegisterName} />
+          <Stack.Screen name="Password" component={RegisterPassword} />
+          <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
           <Stack.Screen name="Bluetooth" component={BLEConnection} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -7,37 +7,38 @@ import styles from '../../css/auth/Login/LoginScreen';
 import axiosInstance from '../../../api/axios';
 import constants from '../ConstantAuth';
 
+
 type RootParamList = {
   MainScreen: undefined;
   RegisterScreen: undefined;
 };
 
 const LoginScreen = () => {
-  const [userId, setUserId] = useRecoilState(userIdState);
-  const [userPw, setUserPw] = useRecoilState(userPwState);
+  const [email, setUserId] = useRecoilState(userIdState);
+  const [password, setUserPw] = useRecoilState(userPwState);
   const navigation = useNavigation<NavigationProp<RootParamList>>();
 
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
 
-  // 유효성 검사 함수
   const validateInputs = (): boolean => {
-    if (!userId) {
-      Alert.alert('로그인 실패', constants.USERNAME.REQUIRED_MESSAGE);
+    const emailRegex = constants.EMAIL.PATTERN;
+    if (!email) {
+      Alert.alert('로그인 실패', constants.EMAIL.EMPTY_MESSAGE);
       userIdInputRef.current?.focus();
       return false;
     }
-    if (userId.length < constants.USERNAME.MIN_LENGTH || userId.length > constants.USERNAME.MAX_LENGTH) {
-      Alert.alert('로그인 실패', constants.USERNAME.LENGTH_MESSAGE);
+    if (!emailRegex.test(email)) {
+      Alert.alert('로그인 실패', constants.EMAIL.CHECK_MESSAGE);
       userIdInputRef.current?.focus();
       return false;
     }
-    if (!userPw) {
+    if (!password) {
       Alert.alert('로그인 실패', constants.PASSWORD.REQUIRED_MESSAGE);
       userPwInputRef.current?.focus();
       return false;
     }
-    if (userPw.length < constants.PASSWORD.MIN_LENGTH || userPw.length > constants.PASSWORD.MAX_LENGTH) {
+    if (password.length < constants.PASSWORD.MIN_LENGTH || password.length > constants.PASSWORD.MAX_LENGTH) {
       Alert.alert('로그인 실패', constants.PASSWORD.LENGTH_MESSAGE);
       userPwInputRef.current?.focus();
       return false;
@@ -45,12 +46,11 @@ const LoginScreen = () => {
     return true;
   };
 
-  // 로그인 처리
   const handleLogin = async () => {
     if (!validateInputs()) return;
 
     try {
-      const response = await axiosInstance.post('/auth/login', { userId, userPw });
+      const response = await axiosInstance.post('/auth/login', { email, password });
 
       if (response.status === 200) {
         Alert.alert('로그인 성공', constants.SUCCESS.Login);
@@ -82,9 +82,9 @@ const LoginScreen = () => {
         <TextInput
           ref={userIdInputRef}
           style={styles.inputField}
-          placeholder="아이디 입력"
+          placeholder= {constants.EMAIL.REQUIRED_MESSAGE}
           placeholderTextColor="#292929"
-          value={userId}
+          value={email}
           onChangeText={setUserId}
           autoCapitalize="none"
           autoCorrect={false}
@@ -94,11 +94,11 @@ const LoginScreen = () => {
         <TextInput
           ref={userPwInputRef}
           style={styles.inputPwField}
-          placeholder="비밀번호 8~40자"
+          placeholder= {constants.PASSWORD.LENGTH_MESSAGE}
           placeholderTextColor="#292929"
           secureTextEntry
           maxLength={constants.PASSWORD.MAX_LENGTH}
-          value={userPw}
+          value={password}
           onChangeText={setUserPw}
           autoCapitalize="none"
           autoCorrect={false}
@@ -108,10 +108,6 @@ const LoginScreen = () => {
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity>
-
-      <View style={styles.rememberContainer}>
-        <Text style={styles.rememberText}>로그인 상태 유지</Text>
-      </View>
 
       <View style={styles.divider} />
       <Text style={styles.snsText}>SNS 간편 로그인</Text>
@@ -126,9 +122,15 @@ const LoginScreen = () => {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText} onPress={() => navigation.navigate('Info')}>회원가입</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Info')}>
+        <Text style={styles.footerText}>회원가입</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
         <Text style={styles.footerText}>아이디 찾기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
         <Text style={styles.footerText}>비밀번호 찾기</Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
