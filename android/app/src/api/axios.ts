@@ -1,18 +1,22 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { ToastAndroid, Platform, Alert } from 'react-native';
 
-const baseURL = 'http://localhost:3000/api';
-
+//const baseURL = 'http://localhost:3000/api';
+// const baseURL = 'http://localhost:3000/api'; // 프로토콜 추가
+const baseURL = 'http://10.0.2.2:3000/api';
 const axiosInstance = axios.create({
   baseURL,
   withCredentials: true,
 });
 
+// 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    console.log('요청 데이터:', config);
     return config;
   },
   (error: AxiosError) => {
+    console.error('요청 에러:', error.message);
     return Promise.reject(error);
   }
 );
@@ -20,44 +24,31 @@ axiosInstance.interceptors.request.use(
 // 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    // 응답 데이터 처리
+    console.log('응답 데이터:', response.data);
     return response;
   },
   (error: AxiosError) => {
-    if (error.response) {
-      const status = error.response.status;
+    console.error('응답 에러:', error.message);
 
-      switch (status) {
-        case 400:
-          showToast('잘못된 요청입니다.');
-          break;
-        case 401:
-          showToast('로그인이 필요합니다.');
-          break;
-        case 403:
-          showToast('권한이 없습니다.');
-          break;
-        case 404:
-          showToast('요청하신 페이지를 찾을 수 없습니다.');
-          break;
-        case 500:
-          showToast('서버에 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-          break;
-        default:
-          showToast('에러가 발생했습니다. 잠시 후 다시 시도해주세요.');
-          break;
-      }
+    // 상세 에러 로그
+    if (error.response) {
+      console.error('응답 상태 코드:', error.response.status);
+      console.error('응답 헤더:', error.response.headers);
+      console.error('응답 데이터:', error.response.data);
+    } else if (error.request) {
+      console.error('요청 데이터:', error.request);
+    } else {
+      console.error('설정 중 에러:', error.message);
     }
+
+    if (Platform.OS === 'android') {
+      ToastAndroid.show('에러 발생: ' + error.message, ToastAndroid.LONG);
+    } else {
+      Alert.alert('에러 발생', error.message);
+    }
+
     return Promise.reject(error);
   }
 );
-
-function showToast(message: string) {
-  if (Platform.OS === 'android') {
-    ToastAndroid.show(message, ToastAndroid.SHORT);
-  } else {
-    Alert.alert('알림', message);
-  }
-}
 
 export default axiosInstance;
