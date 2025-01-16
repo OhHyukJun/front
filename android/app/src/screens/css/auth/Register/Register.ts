@@ -100,8 +100,9 @@ const styles = StyleSheet.create({
   },
   verificationButton: {
     color: '#6D73C6',
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: 10,
+    marginTop: 5,
+    marginBottom: 3,
     textDecorationLine: 'underline',
   },
 });

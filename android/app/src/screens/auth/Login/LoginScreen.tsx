@@ -54,7 +54,7 @@ const LoginScreen = () => {
 
       if (response.status === 200) {
         Alert.alert('로그인 성공', constants.SUCCESS.Login);
-        navigation.navigate('MainScreen');
+        navigation.navigate('Home');
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
       }

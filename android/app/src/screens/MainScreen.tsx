@@ -18,10 +18,6 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         <Image source={require('./img/baby_profile.jpg')} style={styles.baby} />
         <Image source={require('./img/chatbot.png')} style={styles.chatbot} />
       </View>
-      <View style={styles.navigationContainer}>
-        <View style={[styles.dot, styles.activeDot]} />
-        <View style={styles.dot} />
-      </View>
     </View>
   );
 };
