@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontWeight: '400',
       fontSize: vw(6),
-      lineHeight: 42,
+      lineHeight: vh(6),
       color: '#6D73C6',
       marginTop: vh(2),
     },
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontWeight: '400',
       fontSize: vw(3.5),
+      lineHeight: vh(3),
       marginBottom: vw(3),
       color: '#6D73C6',
     },
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center', // 세로 중앙 정렬
       justifyContent: 'flex-start', // 왼쪽 정렬
-      height: vw(8), // 고정 높이 설정
+      height: vh(4), // 고정 높이 설정
       marginVertical: vw(1), // 위아래 적당한 여백 추가
     },
     checkIcon: {
@@ -75,15 +76,21 @@ const styles = StyleSheet.create({
       lineHeight: vw(4.5), // 폰트 크기와 동일한 라인 높이
       marginTop: 0, // 기본 마진 제거
     },
-
-  icon: {
-    width: 50,
-    height: 50,
-    borderWidth: 4,
-    borderColor: '#6D73C6',
-    borderRadius: 25,
-    marginTop: 20,
-  },
+    descriptionMini: {
+      fontWeight: '400',
+      fontSize: vw(3),
+      lineHeight: vw(4.5), // 폰트 크기와 동일한 라인 높이
+      marginLeft: vw(1.2),
+      color: '#6D73C6',
+    },
+    icon: {
+      width: 50,
+      height: 50,
+      borderWidth: 4,
+      borderColor: '#6D73C6',
+      borderRadius: 25,
+      marginTop: 20,
+    },
 
   line: {
     width: '85%',
@@ -97,22 +104,43 @@ const styles = StyleSheet.create({
     height: vh(20),
     flexDirection: 'column',
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: 5,
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
   },
 
   scrollContent: {
-    padding: 10, // 스크롤 내용에 여백 추가
+    paddingLeft: 5, // 스크롤 내용에 여백 추가
+    paddingRight:5,
+    paddingBottom:3,
   },
 
   infoText:{
-    padding:vw(3),
+    paddingLeft:vw(3),
+    paddingRight:vw(3),
     fontSize: vw(3),
   },
-
-  responsiveText: {
-    fontSize: 30,
+  responseButton: {
+    marginTop: vw(5),
+    position: 'relative',
+    width: '45%',
+    height: '6%',
+    backgroundColor: '#6D73C6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+  disabledButton: {
+    backgroundColor: '#f0f0f0',
+    width: '45%',
+  },
+  responseButtonText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  disabledButtonText: {
+    color: '#888888',
   },
 });
 
