@@ -5,8 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RecoilRoot } from 'recoil';
 import SplashScreen from './android/app/src/screens/SplashScreen';
 import HomeScreen from './android/app/src/screens/HomeScreen';
-import MainScreen from './android/app/src/screens/MainScreen';
-import DashboardScreen from './android/app/src/screens/DashboardScreen';
 import BLEConnection from './android/app/src/screens/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
 import RegisterEmail from './android/app/src/screens/auth/Register/RegisteEmail';
