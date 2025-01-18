@@ -5,8 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RecoilRoot } from 'recoil';
 import SplashScreen from './android/app/src/screens/SplashScreen';
 import HomeScreen from './android/app/src/screens/HomeScreen';
-import BLEConnection from './android/app/src/screens/BLEConnection';
+import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
+import IdFind from './android/app/src/screens/auth/Login/IdFInd';
+import PasswordFind from './android/app/src/screens/auth/Login/PasswordFind';
 import RegisterEmail from './android/app/src/screens/auth/Register/RegisteEmail';
 import RegisterName from './android/app/src/screens/auth/Register/RegisterName';
 import RegisterPassword from './android/app/src/screens/auth/Register/RegisterPassword';
@@ -28,9 +30,10 @@ const App = () => {
           <Stack.Screen name="Info" component={PersonalInfo} />
           <Stack.Screen name="Email" component={RegisterEmail} />
           <Stack.Screen name="Name" component={RegisterName} />
+          <Stack.Screen name="IdFind" component={IdFind} />
+          <Stack.Screen name="PasswordFind" component={PasswordFind} />
           <Stack.Screen name="Password" component={RegisterPassword} />
           <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
-          <Stack.Screen name="Bluetooth" component={BLEConnection} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>
