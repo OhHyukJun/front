@@ -1,13 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, Button, Alert, PermissionsAndroid, Platform } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
-import styles from './css/BLEConnection';
 
 const targetDeviceName = 'AivleBigPAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:41';
 
-const BLEConnection = () => {
-  const managerRef = useRef(new BleManager());
+const useBluetooth = () => {
+  const managerRef = useRef<BleManager>(new BleManager());
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
 
   const requestPermissions = async (): Promise<boolean> => {
@@ -29,7 +28,8 @@ const BLEConnection = () => {
   const connectToDevice = async () => {
     const hasPermissions = await requestPermissions();
     if (!hasPermissions) {
-      Alert.alert('Permission Denied', 'Bluetooth permissions are required.');
+      Alert.alert('Permission Denied', '블루투스 연결 권한이 필요합니다.');
+      console.log('Bluetooth permissions are required.');
       return;
     }
 
@@ -47,21 +47,16 @@ const BLEConnection = () => {
           await deviceConnection.discoverAllServicesAndCharacteristics();
           setConnectedDevice(deviceConnection);
           Alert.alert('Success', `Connected to ${deviceConnection.name}`);
+          console.log(`Connected to ${deviceConnection.name}`)
         } catch (err) {
           console.error(err);
+          console.log('Failed to connect to the device.');
         }
       }
     });
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>
-        {connectedDevice ? `Connected to ${connectedDevice.name}` : 'No device connected'}
-      </Text>
-      <Button title="Connect to Bluetooth" onPress={connectToDevice} />
-    </View>
-  );
+  return { connectedDevice, connectToDevice };
 };
 
-export default BLEConnection;
+export default useBluetooth;
