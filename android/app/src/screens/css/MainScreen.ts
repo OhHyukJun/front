@@ -76,6 +76,11 @@ const styles = StyleSheet.create({
     lineHeight: vh(4.3), // 라인 높이 조정
     marginLeft: vh(1.3),
   },
+  connectionStatus: {
+    fontSize: vw(3),
+    marginTop: vw(2),
+    color: '#292929',
+  },
 });
 
 export default styles;

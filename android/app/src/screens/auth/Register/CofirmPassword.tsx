@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { emailState, nameState, passwordState } from '../../../atom/Register';
 import styles from '../../css/auth/Register/Register';
 import axiosInstance from '../../../api/axios'; // Axios 인스턴스 가져오기
@@ -11,9 +11,9 @@ type NameProps = {
 };
 
 const ConfirmPassword = ({ navigation }: NameProps) => {
-  const username = useRecoilValue(nameState); // 이메일 가져오기
-  const email = useRecoilValue(emailState); // 이름 가져오기
-  const password = useRecoilValue(passwordState); // 비밀번호 가져오기
+  const [username, setNameState] = useRecoilState(nameState); // 이름 상태 관리
+  const [email, setEmailState] = useRecoilState(emailState); // 이메일 상태 관리
+  const [password, setPasswordState] = useRecoilState(passwordState); // 비밀번호 상태 관리
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handlePrev = () => {
@@ -49,13 +49,18 @@ const ConfirmPassword = ({ navigation }: NameProps) => {
 
       if (response.status === 200 || response.status === 201) {
         Alert.alert('성공', '회원가입이 완료되었습니다!');
+        setNameState('');
+        setEmailState('');
+        setPasswordState('');
         navigation.navigate('Login');
       } else {
         Alert.alert('오류', '회원가입에 실패했습니다. 다시 시도해주세요.');
       }
     } catch (error) {
       console.error('회원가입 오류:', error);
-      Alert.alert('오류', '서버와의 통신 중 문제가 발생했습니다. 다시 시도해주세요.');
+      const errorMessage = error.response?.data?.message || '서버와의 통신 중 문제가 발생했습니다. 다시 시도해주세요.';
+
+      Alert.alert('오류', errorMessage);
     }
   };
 
