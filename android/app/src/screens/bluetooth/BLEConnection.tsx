@@ -1,9 +1,10 @@
+// BLEConnection.tsx
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 import useBluetooth from './useBlutooth';
 import styles from '../css/BLEConnection';
 
-const BLEConnection: React.FC = () => {
+const BLEConnection = () => {
   const { connectedDevice, connectToDevice } = useBluetooth();
 
   return (
