@@ -34,6 +34,7 @@ const App = () => {
           <Stack.Screen name="PasswordFind" component={PasswordFind} />
           <Stack.Screen name="Password" component={RegisterPassword} />
           <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
+          <Stack.Screen name="BLEConnection" component={BLEConnection} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>
