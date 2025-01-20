@@ -8,7 +8,7 @@ type MainScreenProps = {
 };
 
 const MainScreen = ({ navigation }: MainScreenProps) => {
-  const { connectToDevice } = useBluetooth();
+  const { connectToDevice, connectedDevice } = useBluetooth();
 
   const handleBluetooth = () => {
     connectToDevice();
@@ -24,6 +24,11 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         <TouchableOpacity onPress={handleBluetooth}>
           <Image source={require('./img/baby_profile.jpg')} style={styles.baby} />
         </TouchableOpacity>
+        <Text style={styles.connectionStatus}>
+          {connectedDevice
+            ? `Connected to ${connectedDevice.name}`
+            : ''}
+        </Text>
         <Image source={require('./img/chatbot.png')} style={styles.chatbot} />
       </View>
     </View>
