@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from './css/MainScreen';
 import useBluetooth from './bluetooth/useBlutooth';
 
@@ -21,15 +21,14 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
             아이를 클릭해{'\n'}녹음해주세요 :)
           </Text>
         </ImageBackground>
-        <TouchableOpacity onPress={handleBluetooth}>
-          <Image source={require('./img/baby_profile.jpg')} style={styles.baby} />
+        <Image source={require('./img/baby_profile.jpg')} style={styles.baby} />
+        {/* chatbot 이미지에 TouchableOpacity 추가 */}
+        <TouchableOpacity
+          style={styles.chatbot}
+          onPress={() => navigation.navigate('Chatbot')} // Chatbot 페이지로 이동
+        >
+          <Image source={require('./img/chatbot.png')} style={styles.chatbot} />
         </TouchableOpacity>
-        <Text style={styles.connectionStatus}>
-          {connectedDevice
-            ? `Connected to ${connectedDevice.name}`
-            : ''}
-        </Text>
-        <Image source={require('./img/chatbot.png')} style={styles.chatbot} />
       </View>
     </View>
   );

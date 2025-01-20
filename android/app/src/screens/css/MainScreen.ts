@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
   },
   chatbot: {
     position: 'absolute',
-    bottom: vw(5),
-    right: vw(5),
+    bottom: vw(2),
+    right: vw(2),
     width: vw(16),
     height: vw(16),
     resizeMode: 'contain',
