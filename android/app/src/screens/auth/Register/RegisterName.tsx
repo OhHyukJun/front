@@ -33,7 +33,6 @@ const RegisterName = ({ navigation }: NameProps) => {
 
   return (
     <View style={styles.container}>
-      {/* 헤더 */}
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handlePrev} style={styles.backButton}>
           <Text style={styles.backButtonText}>{'<'}</Text>

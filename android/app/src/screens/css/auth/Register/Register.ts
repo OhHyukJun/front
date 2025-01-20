@@ -86,22 +86,31 @@ const styles = StyleSheet.create({
     color: '#6D73C6',
   },
 
+  messageText: {
+    marginTop: 5,
+    fontSize: 10,
+    color: '#6D73C6',
+  },
+
   continueButton: {
     backgroundColor: '#6D73C6',
+    marginTop: vh(3),
     paddingVertical: vh(1),
     borderRadius: 30,
     alignItems: 'center',
   },
 
   continueButtonText: {
-    fontSize: vw(4),
+    fontSize: vw(5),
+    marginBottom: vw(1),
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
   verificationButton: {
     color: '#6D73C6',
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: 10,
+    marginTop: 5,
+    marginBottom: 3,
     textDecorationLine: 'underline',
   },
 });
