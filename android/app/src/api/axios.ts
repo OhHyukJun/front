@@ -1,9 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { ToastAndroid, Platform, Alert } from 'react-native';
 
-//const baseURL = 'http://localhost:3000/api';
-// const baseURL = 'http://localhost:3000/api'; // 프로토콜 추가
-const baseURL = 'http://10.0.2.2:3000/api';
+// const baseURL = 'http://172.21.122.160:3000/api';
+const baseURL = 'https://ai-aivle-bigp-18-swagger-bvdjenf2axdmhpdw.koreacentral-01.azurewebsites.net/api';
+// const baseURL = 'http://10.0.2.2:3000/api';
+
 const axiosInstance = axios.create({
   baseURL,
   withCredentials: true,
