@@ -5,13 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RecoilRoot } from 'recoil';
 import SplashScreen from './android/app/src/screens/SplashScreen';
 import HomeScreen from './android/app/src/screens/HomeScreen';
-<<<<<<< HEAD
-import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
-=======
 import ChatbotScreen from './android/app/src/screens/ChatbotScreen';
 import SettingScreen from './android/app/src/screens/SettingScreen';
-import BLEConnection from './android/app/src/screens/BLEConnection';
->>>>>>> bc73022 (Design: 공지사항 페이지 구현, 메인 화면 챗봇 버튼 연결, 대시보드 설정 버튼 연결)
+import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
 import IdFind from './android/app/src/screens/auth/Login/IdFInd';
 import PasswordFind from './android/app/src/screens/auth/Login/PasswordFind';
@@ -31,7 +27,7 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Splash" component={SplashScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Login" component={LoginScreen}/>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Chatbot" component={ChatbotScreen} />
           <Stack.Screen name="Setting" component={SettingScreen} />
