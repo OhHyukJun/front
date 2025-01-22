@@ -2,18 +2,20 @@ import { useRef, useState } from 'react';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
 import base64 from 'react-native-base64'; // Base64 인코딩을 위해 사용
+import RNFS from 'react-native-fs';
 
+//HC-06 (98:DA:60:0D:B5:74)
 const targetDeviceName = 'AivleBigPAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:41';
-const targetServiceUUID = 'your-service-uuid';
-const targetCharacteristicUUID = 'your-characteristic-uuid';
+const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+const characteristicUUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
-interface UseBluetooth {
+interface useBluetooth {
   connectedDevice: Device | null;
   connectToDevice: () => Promise<void>;
 }
 
-const useBluetooth = (): UseBluetooth => {
+const useBluetooth = (): useBluetooth => {
   const managerRef = useRef(new BleManager());
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
 
@@ -42,11 +44,9 @@ const useBluetooth = (): UseBluetooth => {
     const hasPermissions = await requestPermissions();
     if (!hasPermissions) {
       Alert.alert('Permission Denied', 'Bluetooth 권한이 필요합니다.');
-      console.log('Bluetooth permissions denied.');
-      return; 
+      return;
     }
 
-    console.log('Scanning for Bluetooth devices...');
     managerRef.current.startDeviceScan(null, null, async (error, device) => {
       if (error) {
         console.error('Error during device scan:', error);
@@ -58,21 +58,16 @@ const useBluetooth = (): UseBluetooth => {
       console.log(`Device found: ${device?.name || 'Unknown'} (${device?.id || 'Unknown ID'})`);
 
       if (device && (device.name === targetDeviceName || device.id === targetDeviceId)) {
-        console.log(`Target device found: ${device.name} (${device.id})`);
         managerRef.current.stopDeviceScan();
         try {
-          console.log('Attempting to connect to the device...');
           const deviceConnection = await device.connect();
-          console.log('Device connected. Discovering services and characteristics...');
           await deviceConnection.discoverAllServicesAndCharacteristics();
           setConnectedDevice(deviceConnection);
           Alert.alert('Success', `Connected to ${deviceConnection.name}`);
-          console.log(`Connected to device: ${deviceConnection.name}`);
 
           await sendData(deviceConnection);
 
         } catch (err) {
-          console.error('Failed to connect to the device:', err);
           Alert.alert('Connection Failed', '장치 연결에 실패했습니다. 다시 시도해주세요.');
         }
       }
@@ -86,18 +81,58 @@ const useBluetooth = (): UseBluetooth => {
 
   const sendData = async (device: Device): Promise<void> => {
     try {
-      console.log('Sending data to the device...');
-      const encodedData = base64.encode('r'); // 'r' 데이터를 Base64로 인코딩
-      await device.writeCharacteristicWithResponseForService(
-        targetServiceUUID,
-        targetCharacteristicUUID,
-        encodedData
-      );
-      console.log('Data sent successfully: r');
-      Alert.alert('Data Sent', 'The data "r" has been successfully sent.');
+      const services = await device.services();
+      for (const service of services) {
+        const characteristics = await service.characteristics();
+        for (const characteristic of characteristics) {
+          if (characteristic.isWritableWithResponse) {
+            const encodedData = base64.encode('r');
+            await characteristic.writeWithResponse(encodedData);
+            Alert.alert('Data Sent', 'The data "r" has been successfully sent.');
+            return;
+          }
+        }
+      }
+      Alert.alert('Error', 'No writable characteristic found on the device.');
     } catch (err) {
       console.error('Failed to send data:', err);
       Alert.alert('Error', 'Failed to send data to the device.');
+    }
+  };
+
+  const receiveData = async (device: Device): Promise<void> => {
+    try {
+      console.log('Starting to monitor for data...');
+      device.monitorCharacteristicForService(
+        serviceUUID,
+        characteristicUUID,
+        (error, characteristic) => {
+          if (error) {
+            console.error('Error while monitoring:', error);
+            return;
+          }
+
+          if (characteristic?.value) {
+            const decodedData = base64.decode(characteristic.value); // Base64로 디코딩
+            console.log(`Received data: ${decodedData}`);
+            // 데이터를 파일로 저장하거나 화면에 출력 가능
+          }
+        }
+      );
+    } catch (err) {
+      console.error('Error receiving data:', err);
+    }
+  };
+
+  const saveToFile = async (data: string) => {
+    try {
+      const path = `${RNFS.DocumentDirectoryPath}/receivedFile.wav`;
+      await RNFS.writeFile(path, data, 'base64');
+      console.log(`File saved to: ${path}`);
+      Alert.alert('File Saved', `The file has been saved to ${path}`);
+    } catch (err) {
+      console.error('Failed to save file:', err);
+      Alert.alert('Error', 'Failed to save the file.');
     }
   };
 
