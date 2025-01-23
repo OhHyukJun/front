@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { userIdState, userPwState, accessTokenState, refreshTokenState } from '../../../atom/login';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useNavigation, NavigationProp, CommonActions  } from '@react-navigation/native';
+import { userIdState, userPwState, accessTokenState, refreshTokenState, loginState } from '../../../atom/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/auth/Login/LoginScreen';
 import axiosInstance from '../../../api/axios';
@@ -24,8 +24,20 @@ const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
   const [, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
+  const login = useRecoilValue(loginState);
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (login) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Home' }], // Home을 루트로 설정
+        })
+      );
+    }
+  }, [login, navigation]);
 
   const validateInputs = (): boolean => {
     const emailRegex = constants.EMAIL.PATTERN;
@@ -68,7 +80,12 @@ const LoginScreen = () => {
         setRefreshToken(refreshToken);
 
         Alert.alert('로그인 성공', constants.SUCCESS.Login);
-        navigation.navigate('Home');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          })
+        );
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
       }
