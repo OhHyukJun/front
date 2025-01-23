@@ -10,7 +10,6 @@ type MainScreenProps = {
 const MainScreen = ({ navigation }: MainScreenProps) => {
   // const { findDeviceAndSendData, disconnectDevice } = useBluetooth();
   const { connectToDevice, disconnectToDevice } = useBluetooth();
-
   /* const handleBluetooth = async () => {
     try {
       await findDeviceAndSendData('r'); // Attempt to find, connect, and send data
