@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRecoilState } from 'recoil';
-import { accessTokenState, refreshTokenState, userIdState, userPwState } from '../../../atom/login';
+import { useRecoilState,useRecoilValue } from 'recoil';
+import { accessTokenState, refreshTokenState, userIdState, userPwState, loginState } from '../../../atom/login';
 import { Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
+import axiosInstance from '../../../api/axios';
 
 type RootParamList = {
   LoginScreen: undefined;
