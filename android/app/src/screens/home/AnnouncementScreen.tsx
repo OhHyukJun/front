@@ -28,9 +28,11 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
           </View>
         </View>
         {/* 하위 텍스트 안전하게 렌더링 */}
-        <Text style={styles.subHeaderText}>
-          총 <Text style={styles.highlightedText}>20건</Text>의 공지사항이 있습니다.
-        </Text>
+        <View>
+          <Text style={styles.subHeaderText}>
+            총 <Text style={styles.highlightedText}>20건</Text>의 공지사항이 있습니다.
+          </Text>
+        </View>
       </View>
 
       {/* 공지사항 목록 */}
