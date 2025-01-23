@@ -36,7 +36,8 @@
     "react-native-screens": "^4.5.0",
     "react-native-vector-icons": "^10.2.0",
     "react-native-viewport-units": "^0.0.5",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "recoil-persist": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
