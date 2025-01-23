@@ -30,7 +30,7 @@ const IdFind = ({ navigation }: NameProps) => {
       Alert.alert('오류', '올바른 이메일 형식을 입력해주세요.');
       return;
     }
-
+  
     try {
       const response = await axiosInstance.get(`/auth/findEmail?email=${email}`);
       const data = response.data;
