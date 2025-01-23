@@ -52,6 +52,7 @@ const ConfirmPassword = ({ navigation }: NameProps) => {
         setNameState('');
         setEmailState('');
         setPasswordState('');
+        setConfirmPassword('');
         navigation.navigate('Login');
       } else {
         Alert.alert('오류', '회원가입에 실패했습니다. 다시 시도해주세요.');
