@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
 
   inputHelper: {
     fontSize: vw(3),
-    marginBottom: vw(7),
     color: '#6D73C6',
   },
 
