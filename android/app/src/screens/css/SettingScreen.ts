@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   settingCard: {
     width: vw(90),
     marginTop: vh(0.5),
-    borderRadius: 15,
+    borderRadius: vw(5),
     borderWidth: 1,
     borderColor: '#999CD9',
     padding: vw(5),
@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
   radioOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: vw(5),
+    marginRight: vw(24),
   },
   radioOuterCircle: {
     width: vw(5.6),
     height: vw(5.6),
     borderRadius: vw(2.8),
-    borderWidth: 1, // 얇게 조정
+    borderWidth: 1,
     borderColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
@@ -100,22 +100,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#84ABFF',
   },
   radioText: {
-    fontSize: 14,
+    fontSize: vh(2.2),
     color: '#333333',
-    textAlignVertical: 'center', // 텍스트 중앙 정렬
+    textAlignVertical: 'center',
   },
   input: {
     width: vw(25),
-    height: vh(4), // 크기 그대로 유지
+    height: vh(4),
     borderWidth: 1,
     borderColor: '#F0F1FE',
-    borderRadius: 8,
+    borderRadius: vw(2),
     backgroundColor: '#F0F1FE',
-    fontSize: vh(2), // 폰트 크기를 vh로 설정
-    lineHeight: vh(2), // 라인 높이를 vh 기준으로 조정
+    fontSize: vh(2),
+    lineHeight: vh(2),
     color: '#333333',
-    textAlignVertical: 'center', // 텍스트 세로 중앙 정렬
-    paddingVertical: 0, // 상하 패딩 제거
+    textAlignVertical: 'center',
+    paddingVertical: 0,
   },
   sliderContainer: {
     marginTop: vh(2),
@@ -124,55 +124,49 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: vh(3),
     justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: vh(1.5),
     overflow: 'hidden',
   },
-  sliderDummy: {
-    position: 'absolute',
-    height: vh(3),
-    width: '100%',
-    backgroundColor: '#E0E0E0',
-    borderRadius: vh(1.5),
+  sliderContent: {
+    marginLeft: vw(1.6),
   },
-  sliderReal: {
-    position: 'absolute',
-    height: vh(3),
-    backgroundColor: '#6D73C6',
-    borderRadius: vh(1.5),
-  },
-  slider: {
-    width: '100%',
-    height: '100%',
+  sliderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   sliderLabels: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   sliderLabelLeft: {
-    fontSize: 14,
+    fontSize: vh(2),
     color: '#888888',
+    marginLeft: vw(-1),
   },
   sliderLabelRight: {
-    fontSize: 14,
+    fontSize: vh(2),
     color: '#888888',
+    marginRight: vw(-2),
   },
   sliderValue: {
-    fontSize: 16,
+    fontSize: vh(2.5),
     fontWeight: 'bold',
     color: '#333333',
     textAlign: 'right',
-    marginTop: vh(1),
+    marginLeft: vw(5.4),
+    marginBottom: vh(3),
   },
   saveButton: {
-    alignSelf: 'flex-end', // 설정 카드 안에서 오른쪽 정렬
-    marginTop: vh(2), // 설정 카드 아래와의 간격
-    marginRight: vw(2), // 설정 카드 오른쪽 끝에서의 간격
+    alignSelf: 'flex-end',
+    marginTop: vh(2),
+    marginRight: vw(2),
     width: vw(21),
     height: vh(5.8),
     backgroundColor: '#6D73C6',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: vw(3),
   },
   saveButtonText: {
     fontSize: vh(2.2),

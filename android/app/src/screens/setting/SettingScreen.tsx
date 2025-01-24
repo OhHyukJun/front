@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
-import Slider from '@react-native-community/slider';
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import Slider from 'react-native-simple-slider'; // react-native-simple-slider 사용
 import styles from './css/SettingScreen';
+import { vw, vh } from 'react-native-expo-viewport-units';
+
+const screenWidth = Dimensions.get('window').width;
 
 type SettingScreenProps = {
   navigation: any;
@@ -13,6 +16,9 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [childBirthDate, setChildBirthDate] = useState(''); // 아이 생년월일 상태
   const [deleteDays, setDeleteDays] = useState(12); // 데이터 삭제 기한 상태
 
+  const thumbButtonSize = 20; // Thumb 버튼의 크기
+  const sliderWidth = screenWidth * 0.65; // 슬라이더 바 전체 너비
+  const sliderPadding = thumbButtonSize / 2;
   const handleSave = () => {
     navigation.navigate('Home');
   };
@@ -97,28 +103,32 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
         {/* 데이터 삭제 기한 */}
         <View style={styles.row}>
           <Text style={styles.label}>데이터 삭제 기한</Text>
-          <View style={styles.sliderWrapper}>
-            <View style={styles.sliderDummy} />
-            <View
-              style={[
-                styles.sliderReal,
-                { width: `${(deleteDays / 60) * 100}%` }, // 활성화된 슬라이더 바의 너비 계산
-              ]}
-            />
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={60}
-              step={1}
-              value={deleteDays}
-              onValueChange={(value) => setDeleteDays(value)}
-              minimumTrackTintColor="transparent"
-              maximumTrackTintColor="transparent"
-              thumbTintColor="#6D73C6"
-            />
-            <View style={styles.sliderLabels}>
-              <Text style={styles.sliderLabelLeft}>0</Text>
-              <Text style={styles.sliderLabelRight}>60</Text>
+          <View style={styles.sliderRow}>
+            <View style={styles.sliderContent}>
+              <Slider
+                value={deleteDays}
+                minimumValue={0} // 최소값 여백 조정
+                maximumValue={60}
+                step={1}
+                onValueChange={(value) => setDeleteDays(value)} // 슬라이더 값 변경
+                minimumTrackTintColor="#8C90D3"
+                maximumTrackTintColor="#8C90D3"
+                thumbButton={(
+                  <Image
+                    source={require('./img/thumb_button.png')} // 버튼으로 사용할 이미지
+                    style={{
+                      resizeMode: 'contain', // 이미지 비율 유지
+                    }}
+                  />
+                )}
+                sliderHeight={8} // 슬라이더 높이
+                sliderBorderRadius={4} // 슬라이더 둥근 모서리
+                sliderWidth={sliderWidth - (thumbButtonSize) / 2} // 슬라이더 폭을 카드 내부에 맞추기
+              />
+              <View style={styles.sliderLabels}>
+                <Text style={styles.sliderLabelLeft}>0</Text>
+                <Text style={styles.sliderLabelRight}>60</Text>
+              </View>
             </View>
             <Text style={styles.sliderValue}>{deleteDays} 일</Text>
           </View>

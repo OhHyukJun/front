@@ -7,6 +7,7 @@ import SplashScreen from './android/app/src/screens/SplashScreen';
 import HomeScreen from './android/app/src/screens/home/HomeScreen';
 import ChatbotScreen from './android/app/src/screens/chatbot/ChatbotScreen';
 import SettingScreen from './android/app/src/screens/setting/SettingScreen';
+import AccountScreen from './android/app/src/screens/setting/AccountScreenuntScreen';
 import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
 import IdFind from './android/app/src/screens/auth/Login/IdFInd';
@@ -35,6 +36,7 @@ const App = () => {
           <Stack.Screen name="Chatbot" component={ChatbotScreen} />
           <Stack.Screen name="Setting" component={SettingScreen} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="Account" component={AccountScreen} />
           <Stack.Screen name="Info" component={PersonalInfo} />
           <Stack.Screen name="Email" component={RegisterEmail} />
           <Stack.Screen name="Name" component={RegisterName} />

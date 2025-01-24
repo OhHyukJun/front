@@ -4,7 +4,6 @@ import { accessTokenState, refreshTokenState, userIdState, userPwState, loginSta
 import { Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import axiosInstance from '../../../api/axios';
-
 type RootParamList = {
   Login: undefined;
 };
