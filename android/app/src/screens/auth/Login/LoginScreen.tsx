@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { userIdState, userPwState } from '../../../atom/login';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useNavigation, NavigationProp, CommonActions  } from '@react-navigation/native';
+import { userIdState, userPwState, accessTokenState, refreshTokenState, loginState } from '../../../atom/login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/auth/Login/LoginScreen';
 import axiosInstance from '../../../api/axios';
 import constants from '../ConstantAuth';
@@ -11,15 +12,32 @@ import constants from '../ConstantAuth';
 type RootParamList = {
   MainScreen: undefined;
   RegisterScreen: undefined;
+  Info: undefined;
+  IdFind: undefined;
+  PasswordFind: undefined;
+  Home: undefined; // 추가
 };
 
 const LoginScreen = () => {
   const [email, setUserId] = useRecoilState(userIdState);
   const [password, setUserPw] = useRecoilState(userPwState);
   const navigation = useNavigation<NavigationProp<RootParamList>>();
-
+  const [, setAccessToken] = useRecoilState(accessTokenState);
+  const [, setRefreshToken] = useRecoilState(refreshTokenState);
+  const login = useRecoilValue(loginState);
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (login) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Home' }], // Home을 루트로 설정
+        })
+      );
+    }
+  }, [login, navigation]);
 
   const validateInputs = (): boolean => {
     const emailRegex = constants.EMAIL.PATTERN;
@@ -50,11 +68,24 @@ const LoginScreen = () => {
     if (!validateInputs()) return;
 
     try {
-      const response = await axiosInstance.post('/auth/login', { email, password });
+      const response = await axiosInstance.post<{ accessToken: string; refreshToken: string }>('/auth/login', { email, password });
 
       if (response.status === 200) {
+        const { accessToken, refreshToken } = response.data;
+
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+
+        setAccessToken(accessToken);
+        setRefreshToken(refreshToken);
+
         Alert.alert('로그인 성공', constants.SUCCESS.Login);
-        navigation.navigate('Home');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          })
+        );
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
       }
@@ -126,10 +157,10 @@ const LoginScreen = () => {
         <Text style={styles.footerText}>회원가입</Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={styles.footerText}>아이디 찾기</Text>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>아이디 찾기</Text>
       </TouchableOpacity>
       <TouchableOpacity>
-        <Text style={styles.footerText}>비밀번호 찾기</Text>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('PasswordFind')}>비밀번호 찾기</Text>
       </TouchableOpacity>
       </View>
     </View>

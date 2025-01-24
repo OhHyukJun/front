@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
   },
   chatbot: {
     position: 'absolute',
-    bottom: vw(5),
-    right: vw(5),
+    bottom: vw(2),
+    right: vw(2),
     width: vw(16),
     height: vw(16),
     resizeMode: 'contain',
@@ -75,6 +75,11 @@ const styles = StyleSheet.create({
     marginBottom: vh(1), // 하단 마진 조정
     lineHeight: vh(4.3), // 라인 높이 조정
     marginLeft: vh(1.3),
+  },
+  connectionStatus: {
+    fontSize: vw(3),
+    marginTop: vw(2),
+    color: '#292929',
   },
 });
 

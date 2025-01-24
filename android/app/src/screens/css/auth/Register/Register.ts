@@ -82,19 +82,26 @@ const styles = StyleSheet.create({
 
   inputHelper: {
     fontSize: vw(3),
-    marginBottom: vw(7),
+    color: '#6D73C6',
+  },
+
+  messageText: {
+    marginTop: 5,
+    fontSize: 10,
     color: '#6D73C6',
   },
 
   continueButton: {
     backgroundColor: '#6D73C6',
+    marginTop: vh(3),
     paddingVertical: vh(1),
     borderRadius: 30,
     alignItems: 'center',
   },
 
   continueButtonText: {
-    fontSize: vw(4),
+    fontSize: vw(5),
+    marginBottom: vw(1),
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
