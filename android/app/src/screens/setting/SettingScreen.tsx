@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import Slider from 'react-native-simple-slider'; // react-native-simple-slider 사용
-import styles from './css/SettingScreen';
+import styles from '../css/SettingScreen';
 import { vw, vh } from 'react-native-expo-viewport-units';
 
 const screenWidth = Dimensions.get('window').width;
@@ -28,7 +28,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
       {/* 프로필 섹션 */}
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
-          <Image source={require('./img/profile_placeholder.png')} style={styles.profileImage} />
+          <Image source={require('../img/profile_placeholder.png')} style={styles.profileImage} />
           <Text style={styles.usernameText}>사용자</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Account')}>
@@ -115,7 +115,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
                 maximumTrackTintColor="#8C90D3"
                 thumbButton={(
                   <Image
-                    source={require('./img/thumb_button.png')} // 버튼으로 사용할 이미지
+                    source={require('../img/thumb_button.png')} // 버튼으로 사용할 이미지
                     style={{
                       resizeMode: 'contain', // 이미지 비율 유지
                     }}

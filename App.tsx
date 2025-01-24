@@ -7,7 +7,7 @@ import SplashScreen from './android/app/src/screens/SplashScreen';
 import HomeScreen from './android/app/src/screens/home/HomeScreen';
 import ChatbotScreen from './android/app/src/screens/chatbot/ChatbotScreen';
 import SettingScreen from './android/app/src/screens/setting/SettingScreen';
-import AccountScreen from './android/app/src/screens/setting/AccountScreenuntScreen';
+import AccountScreen from './android/app/src/screens/setting/AccountScreen';
 import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
 import IdFind from './android/app/src/screens/auth/Login/IdFInd';

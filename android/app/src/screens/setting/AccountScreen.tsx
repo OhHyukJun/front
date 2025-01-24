@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import styles from '../css/AccountScreenn';
+import styles from '../css/AccountScreen';
 
 const AccountScreen = () => {
   return (
@@ -9,12 +9,12 @@ const AccountScreen = () => {
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image
-            source={require('./img/profile_placeholder.png')}
+            source={require('../img/profile_placeholder.png')}
             style={styles.profileImage}
           />
           <TouchableOpacity style={styles.profileChangeButton}>
             <Image
-              source={require('./img/profile_change.png')}
+              source={require('../img/profile_change.png')}
               style={styles.profileChangeIcon}
             />
           </TouchableOpacity>
@@ -50,21 +50,21 @@ const AccountScreen = () => {
         <TouchableOpacity style={styles.actionRow}>
           <Text style={styles.actionLabel}>비밀번호 변경</Text>
           <Image
-            source={require('./img/right_arrow.png')}
+            source={require('../img/right_arrow.png')}
             style={styles.arrowIcon}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionRow}>
           <Text style={styles.actionLabel}>로그아웃</Text>
           <Image
-            source={require('./img/right_arrow.png')}
+            source={require('../img/right_arrow.png')}
             style={styles.arrowIcon}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionRow}>
           <Text style={styles.actionLabel}>회원 탈퇴</Text>
           <Image
-            source={require('./img/right_arrow.png')}
+            source={require('../img/right_arrow.png')}
             style={styles.arrowIcon}
           />
         </TouchableOpacity>
