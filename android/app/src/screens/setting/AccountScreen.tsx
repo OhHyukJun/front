@@ -2,7 +2,10 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../css/AccountScreen';
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }: NameProps) => {
+  const handleChange = () => {
+    navigation.navigate('ChangePassword');
+  };
   return (
     <View style={styles.container}>
       {/* 프로필 섹션 */}
@@ -47,7 +50,7 @@ const AccountScreen = () => {
         <Text style={styles.containerSubtitle}>
           서비스에서 사용하는 내 계정 정보를 관리할 수 있습니다.
         </Text>
-        <TouchableOpacity style={styles.actionRow}>
+        <TouchableOpacity style={styles.actionRow} onPress={handleChange}>
           <Text style={styles.actionLabel}>비밀번호 변경</Text>
           <Image
             source={require('../img/right_arrow.png')}

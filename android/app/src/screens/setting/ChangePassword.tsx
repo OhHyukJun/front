@@ -22,8 +22,7 @@ const ChangePassword = ({navigation}: NameProps) => {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const userPwInputRef = useRef<TextInput>(null);
-  const email = useRecoilValue(userIdState);
-
+  const email = 'kmh7277@naver.com'; //여기 너 이메일 넣으면 되는거에요. 할 수 있죠? 현아 어린이
   const handlePrev = () => {
     navigation.goBack();
   };
@@ -47,7 +46,7 @@ const ChangePassword = ({navigation}: NameProps) => {
 
   const handleConfirm = async () => {
     if (!validateInputs()) return;
-
+    console.log(email);
     try {
       const response = await axiosInstance.post<{
         accessToken: string;
@@ -60,7 +59,7 @@ const ChangePassword = ({navigation}: NameProps) => {
 
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
-
+        setPasswordState('');
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
       } else {
@@ -113,11 +112,11 @@ const ChangePassword = ({navigation}: NameProps) => {
           )}
           {isChecked ? (
             <Text style={styles.smallSubtitle}>
-              현재 비밀번호를 입력해주세요 :)
+              새 비밀번호를 입력해주세요 :)
             </Text>
           ) : (
             <Text style={styles.smallSubtitle}>
-              새 비밀번호를 입력해주세요 :)
+              현재 비밀번호를 입력해주세요 :)
             </Text>
           )}
         </View>
@@ -138,7 +137,7 @@ const ChangePassword = ({navigation}: NameProps) => {
         )}
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={isChecked ? handleConfirm : handleChange}>
+          onPress={isChecked ? handleChange : handleConfirm}>
           <Text style={styles.continueButtonText}>계속하기</Text>
         </TouchableOpacity>
       </View>

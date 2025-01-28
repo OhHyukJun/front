@@ -11,14 +11,13 @@ type RootParamList = {
 export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) => {
   const [, setUserId] = useRecoilState(userIdState);
   const [, setUserPw] = useRecoilState(userPwState);
-  const [, setAccessToken] = useRecoilState(accessTokenState);
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
 
   const handleLogout = async () => {
     try {
       // AsyncStorage에서 accessToken 가져오기
-      const accessToken = await AsyncStorage.getItem('accessToken');
       console.log('Access Token:', accessToken);
 
       if (!accessToken) {
