@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity  } from 'react-native';
 import styles from '../css/AnnouncementScreen';
 
 type AnnouncementScreenProps = {
@@ -38,7 +38,7 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
       {/* 공지사항 목록 */}
       <ScrollView style={styles.postsContainer}>
         {posts.map((post, index) => (
-          <View key={post.id} style={styles.postItemContainer}>
+          <TouchableOpacity  key={post.id} style={styles.postItemContainer} onPress={() => navigation.navigate('AnnouncementDetail', { post })}>
             <View style={styles.postItem}>
               <View style={styles.postTextContainer}>
                 <Text style={styles.postTitle}>{post.title || '제목 없음'}</Text>
@@ -48,7 +48,7 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
               <Image source={require('../img/right_arrow.png')} style={styles.arrow} />
             </View>
             {index !== posts.length - 1 && <View style={styles.divider} />} {/* 보라색 구분선 */}
-          </View>
+          </TouchableOpacity >
         ))}
       </ScrollView>
     </View>
