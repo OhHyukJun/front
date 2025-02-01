@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet,Dimensions  } from 'react-native';
 import { vw, vh } from 'react-native-expo-viewport-units';
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: vw(3),
     padding: vw(5),
-    marginBottom: vh(2),
+    marginBottom: vh(1.5),
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },
