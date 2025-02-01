@@ -18,11 +18,14 @@ type NameProps = {
 
 const ChangePassword = ({navigation}: NameProps) => {
   const [isChecked, setIsChecked] = useState(false);
-  const [password, setPasswordState] = useRecoilState(userPwState); // 비밀번호 상태 관리
+  const [isCheckedTwo, setIsCheckedTwo] = useState(false);
+  const [password, setPasswordState] = useRecoilState(userPwState); // 현재 비밀번호
+  const [newPassword, setNewPassword] = useState(''); // 새 비밀번호 저장
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const userPwInputRef = useRef<TextInput>(null);
-  const email = 'kmh7277@naver.com'; //여기 너 이메일 넣으면 되는거에요. 할 수 있죠? 현아 어린이
+  const email = useRecoilValue(userIdState);
+
   const handlePrev = () => {
     navigation.goBack();
   };
@@ -74,23 +77,35 @@ const ChangePassword = ({navigation}: NameProps) => {
     }
   };
 
+  const handleNext = () => {
+    if (!validateInputs()) return;
+    setIsCheckedTwo(true);
+  };
+
+  // 비밀번호 변경 요청
   const handleChange = async () => {
+    console.log(password);
+    console.log(newPassword);
+    if (password !== newPassword) {
+      Alert.alert('인증 실패', '새 비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
     try {
       const response = await axiosInstance.post('/config/setPass', {
         accessToken,
         password,
       });
+
       if (response.status === 200) {
         Alert.alert('인증 완료', '비밀번호 변경이 완료되었습니다.');
+        setPasswordState('');
+        navigation.goBack();
       } else {
         Alert.alert('인증 실패', constants.PASSWORD.CHECK_MESSAGE);
       }
     } catch (error) {
-      console.error('인증 오류:', error);
-      Alert.alert(
-        '인증 실패',
-        '서버에 문제가 발생했습니다. 나중에 다시 시도해주세요.',
-      );
+      Alert.alert('인증 실패', '서버에 문제가 발생했습니다. 나중에 다시 시도해주세요.');
     }
   };
 
@@ -105,20 +120,16 @@ const ChangePassword = ({navigation}: NameProps) => {
       <View style={styles.containerMini}>
         <View style={styles.content}>
           <Text style={styles.title}>사용자</Text>
-          {isChecked ? (
-            <Text style={styles.subtitle}>새 비밀번호 입력</Text>
-          ) : (
-            <Text style={styles.subtitle}>비밀번호 확인</Text>
-          )}
-          {isChecked ? (
-            <Text style={styles.smallSubtitle}>
-              새 비밀번호를 입력해주세요 :)
-            </Text>
-          ) : (
-            <Text style={styles.smallSubtitle}>
-              현재 비밀번호를 입력해주세요 :)
-            </Text>
-          )}
+          <Text style={styles.subtitle}>
+            {isChecked
+              ? isCheckedTwo
+                ? '새 비밀번호 확인'
+                : '새 비밀번호 입력'
+              : '현재 비밀번호 입력'}
+          </Text>
+          <Text style={styles.smallSubtitle}>
+            {isChecked ? '새 비밀번호를 입력해주세요 :)' : '현재 비밀번호를 입력해주세요 :)'}
+          </Text>
         </View>
 
         <View style={styles.inputContainer}>
@@ -127,18 +138,22 @@ const ChangePassword = ({navigation}: NameProps) => {
             style={styles.inputField}
             placeholder="비밀번호를 입력해주세요"
             placeholderTextColor="#BDBDBD"
-            value={password}
-            onChangeText={setPasswordState}
+            value={isCheckedTwo ? newPassword : password}
+            onChangeText={isCheckedTwo ? setNewPassword : setPasswordState}
             secureTextEntry
           />
         </View>
+
         {isChecked && (
-          <Text style={styles.inputHelper}>비밀번호가 일치합니다.</Text>
+          <Text style={styles.inputHelper}>
+            {isCheckedTwo ? '새 비밀번호를 다시 입력해주세요.' : '변경할 새 비밀번호를 입력해주세요.'}
+          </Text>
         )}
+
         <TouchableOpacity
           style={styles.continueButton}
-          onPress={isChecked ? handleChange : handleConfirm}>
-          <Text style={styles.continueButtonText}>계속하기</Text>
+          onPress={isChecked ? (isCheckedTwo ? handleChange : handleNext) : handleConfirm}>
+          <Text style={styles.continueButtonText}>{isCheckedTwo ? '완료' : '계속하기'}</Text>
         </TouchableOpacity>
       </View>
     </View>

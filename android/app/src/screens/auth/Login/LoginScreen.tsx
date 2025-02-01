@@ -69,13 +69,13 @@ const LoginScreen = () => {
 
     try {
       const response = await axiosInstance.post<{ accessToken: string; refreshToken: string }>('/auth/login', { email, password });
+      await AsyncStorage.setItem('email', email);
 
       if (response.status === 200) {
         const { accessToken, refreshToken } = response.data;
 
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
-
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
 

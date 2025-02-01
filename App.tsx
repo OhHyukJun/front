@@ -8,6 +8,7 @@ import HomeScreen from './android/app/src/screens/home/HomeScreen';
 import ChatbotScreen from './android/app/src/screens/chatbot/ChatbotScreen';
 import SettingScreen from './android/app/src/screens/setting/SettingScreen';
 import AccountScreen from './android/app/src/screens/setting/AccountScreen';
+import AnnouncementDetail from './android/app/src/screens/home/AnnouncementDetail';
 import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
 import IdFind from './android/app/src/screens/auth/Login/IdFInd';
@@ -19,7 +20,7 @@ import ChangePassword from './android/app/src/screens/setting/ChangePassword';
 import ConfirmPassword from './android/app/src/screens/auth/Register/CofirmPassword';
 import PersonalInfo from './android/app/src/screens/auth/Register/PersonalInfo';
 // React Query Client 생성
-// const queryClient = new QueryClient();s
+// const queryClient = new QueryClient();
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
 
@@ -33,6 +34,7 @@ const App = () => {
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="AnnouncementDetail" component={AnnouncementDetail} />
           <Stack.Screen name="Chatbot" component={ChatbotScreen} />
           <Stack.Screen name="Setting" component={SettingScreen} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
