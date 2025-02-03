@@ -40,6 +40,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom:5,
   },
+  deleteButton: {
+    alignSelf: 'flex-end',
+    marginRight: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    backgroundColor: '#D9534F',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginBottom:5,
+  },
+  
 });
 
 export default styles;
