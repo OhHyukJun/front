@@ -5,12 +5,11 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
     padding: vw(5),
   },
   profileSection: {
     alignItems: 'center',
-    marginBottom: vh(3),
   },
   profileDetails: {
     position: 'relative',
@@ -47,53 +46,59 @@ const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 1,
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#6D73C6',
     marginVertical: vh(2),
   },
   infoContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: vw(3),
     padding: vw(5),
-    marginBottom: vh(1.5),
+    marginTop: vh(1),
+    marginBottom: vh(2),
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: '#999CD9',
   },
   containerTitle: {
     fontSize: vh(2.2),
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: vh(0.5),
+    marginBottom: vh(1),
   },
   containerSubtitle: {
-    fontSize: vh(1.8),
+    fontSize: vh(1.3),
     color: '#666666',
     marginBottom: vh(2),
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: vh(1.5),
+    marginBottom: vh(0.2),
+    paddingVertical: vh(1.3),
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
   },
   infoLabel: {
     fontSize: vh(2),
     color: '#333333',
+    fontWeight: 'bold',
   },
   infoValue: {
-    fontSize: vh(2),
+    fontSize: vh(1.8),
     color: '#666666',
   },
   actionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: vh(1.5),
-    paddingVertical: vh(1),
+    marginBottom: vh(0.2),
+    paddingVertical: vh(1.3),
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
   },
   actionLabel: {
     fontSize: vh(2),
     color: '#333333',
+    fontWeight: 'bold',
   },
   arrowIcon: {
     width: vw(5),
