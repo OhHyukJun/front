@@ -7,7 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/auth/Login/LoginScreen';
 import axiosInstance from '../../../api/axios';
 import constants from '../ConstantAuth';
-
+import { adminState } from '../../../atom/admin';
+import { ADMIN_EMAIL } from '@env';
 
 type RootParamList = {
   MainScreen: undefined;
@@ -25,6 +26,7 @@ const LoginScreen = () => {
   const [, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const login = useRecoilValue(loginState);
+  const [admin, setAdmin] = useRecoilState(adminState);
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
 
@@ -78,6 +80,14 @@ const LoginScreen = () => {
         await AsyncStorage.setItem('refreshToken', refreshToken);
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
+
+        if (email === ADMIN_EMAIL){
+          setAdmin(true);
+          console.log(admin);
+        }
+        else{
+          setAdmin(false);
+        }
 
         Alert.alert('로그인 성공', constants.SUCCESS.Login);
         navigation.dispatch(
