@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../css/AccountScreen';
-
-const AccountScreen = ({ navigation }: NameProps) => {
+import { useLogout } from '../auth/Login/Logout';
+import LogoutModal from './LogoutModal';
+type AccountScreenProps = {
+  navigation: any;
+};
+const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const handleChange = () => {
     navigation.navigate('ChangePassword');
   };
+  const handlePrev = () => {
+    navigation.goBack();
+  };
+  const handleLogout = useLogout(navigation.navigate);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   return (
     <View style={styles.container}>
       {/* 프로필 섹션 */}
@@ -42,6 +51,9 @@ const AccountScreen = ({ navigation }: NameProps) => {
           <Text style={styles.infoLabel}>이름</Text>
           <Text style={styles.infoValue}>김나박이</Text>
         </View>
+        <TouchableOpacity onPress={handlePrev}>
+          <Text>뒤로</Text>
+        </TouchableOpacity>
       </View>
 
       {/* 계정 관리 컨테이너 */}
@@ -57,12 +69,9 @@ const AccountScreen = ({ navigation }: NameProps) => {
             style={styles.arrowIcon}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionRow}>
+        <TouchableOpacity style={styles.actionRow} onPress={() => setIsModalVisible(true)}>
           <Text style={styles.actionLabel}>로그아웃</Text>
-          <Image
-            source={require('../img/right_arrow.png')}
-            style={styles.arrowIcon}
-          />
+          <Image source={require('../img/right_arrow.png')} style={styles.arrowIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionRow}>
           <Text style={styles.actionLabel}>회원 탈퇴</Text>
@@ -72,6 +81,16 @@ const AccountScreen = ({ navigation }: NameProps) => {
           />
         </TouchableOpacity>
       </View>
+
+      <LogoutModal
+        isVisible={isModalVisible}
+        onConfirm={() => {
+          setIsModalVisible(false);
+          handleLogout();
+        }}
+        onCancel={() => setIsModalVisible(false)}
+      />
+
     </View>
   );
 };

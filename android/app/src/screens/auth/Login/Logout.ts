@@ -42,7 +42,6 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
       setRefreshToken(null);
       setLoginState(false);
 
-      Alert.alert('로그아웃 성공', '성공적으로 로그아웃되었습니다.');
       navigate('Login');
     } catch (error: any) {
       console.error('로그아웃 오류:', error.response?.data || error.message);
