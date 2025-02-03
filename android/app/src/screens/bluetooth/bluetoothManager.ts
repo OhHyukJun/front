@@ -111,7 +111,56 @@ export const receiveData = async (
     }
   };
 
-  export const sendData = async (device: Device, serviceUUID: string, characteristicUUID: string): Promise<void> => {
+
+/*
+export const receiveData = async (
+  device: Device,
+  serviceUUID: string,
+  characteristicUUID: string
+): Promise<void> => {
+  try {
+    console.log('데이터 수신 대기 중...');
+    let completeData: number[] = []; // 수신된 전체 데이터 저장
+
+    const subscription = device.monitorCharacteristicForService(
+      serviceUUID,
+      characteristicUUID,
+      async (error, characteristic) => {
+        if (error) {
+          console.error('Error while monitoring:', error);
+          return;
+        }
+
+        if (characteristic?.value) {
+          const decodedData = Buffer.from(base64.decode(characteristic.value), 'binary');
+          console.log(`Received chunk of size ${decodedData.length}`);
+
+          if (decodedData.toString() === 'EOF') {
+            console.log('파일 수신 완료');
+            subscription.remove();
+            await saveToFile(completeData, 16000);
+            return;
+          }
+
+          const buffer = new Uint8Array(decodedData);
+          for (let i = 0; i < buffer.length; i += 2) {
+            const uint16Value = (buffer[i] | (buffer[i + 1] << 8));
+            completeData.push(uint16Value);
+          }
+        }
+      }
+    );
+
+    setTimeout(() => {
+      console.log('Monitoring timed out. Stopping subscription.');
+      subscription.remove();
+    }, 40000);
+  } catch (err) {
+    console.error('Error receiving data:', err);
+  }
+};
+*/
+/*export const sendData = async (device: Device, serviceUUID: string, characteristicUUID: string): Promise<void> => {
     try {
       const services = await device.services();
       for (const service of services) {
@@ -131,4 +180,30 @@ export const receiveData = async (
       console.error('Failed to send data:', err);
       Alert.alert('Error', 'Failed to send data to the device.');
     }
-  };
+  };*/
+
+export const sendData = async (device: Device, serviceUUID: string, characteristicUUID: string): Promise<void> => {
+  try {
+    const services = await device.services();
+    for (const service of services) {
+      const characteristics = await service.characteristics();
+      for (const characteristic of characteristics) {
+        if (characteristic.isWritableWithResponse) {
+          console.log('Sending start recording signal...');
+          await characteristic.writeWithResponse(base64.encode('r'));
+          Alert.alert('Data Sent', 'The data "r" has been successfully sent.');
+
+          // 약간의 지연을 주어 아두이노가 녹음할 준비 시간을 확보할 수 있도록 함
+          setTimeout(async () => {
+            await receiveData(device, serviceUUID, characteristicUUID);
+          }, 500); 
+          return;
+        }
+      }
+    }
+    Alert.alert('Error', 'No writable characteristic found on the device.');
+  } catch (err) {
+    console.error('Failed to send data:', err);
+    Alert.alert('Error', 'Failed to send data to the device.');
+  }
+};
