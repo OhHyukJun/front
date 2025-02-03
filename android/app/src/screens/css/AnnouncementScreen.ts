@@ -85,6 +85,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#6A5AE0',
     marginHorizontal: vw(4),
   },
+  addButton: {
+    position: 'absolute',
+    bottom: 15,
+    right: 0,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addIcon: {
+    width: vh(9),
+    height:vh(9),
+  },
 });
 
 export default styles;
