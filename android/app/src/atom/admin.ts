@@ -3,7 +3,7 @@ import persistAtom from './persist';
 
 export const adminState = atom<boolean>({
     key: 'adminState',
-    default: true,
+    default: false,
     effects_UNSTABLE: [persistAtom],
 });
 
