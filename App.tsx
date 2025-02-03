@@ -19,6 +19,7 @@ import RegisterPassword from './android/app/src/screens/auth/Register/RegisterPa
 import ChangePassword from './android/app/src/screens/setting/ChangePassword';
 import ConfirmPassword from './android/app/src/screens/auth/Register/CofirmPassword';
 import PersonalInfo from './android/app/src/screens/auth/Register/PersonalInfo';
+import AdminWrite from './android/app/src/screens/home/admin/AdminWrite';
 // React Query Client 생성
 // const queryClient = new QueryClient();
 import { Buffer } from 'buffer';
@@ -35,6 +36,7 @@ const App = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="AnnouncementDetail" component={AnnouncementDetail} />
+          <Stack.Screen name="AdminWrite" component={AdminWrite} />
           <Stack.Screen name="Chatbot" component={ChatbotScreen} />
           <Stack.Screen name="Setting" component={SettingScreen} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
