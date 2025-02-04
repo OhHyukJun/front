@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useNavigation, NavigationProp, CommonActions  } from '@react-navigation/native';
+import { useNavigation, NavigationProp, CommonActions } from '@react-navigation/native';
 import { userIdState, userPwState, accessTokenState, refreshTokenState, loginState } from '../../../atom/login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/auth/Login/LoginScreen';
@@ -16,7 +16,7 @@ type RootParamList = {
   Info: undefined;
   IdFind: undefined;
   PasswordFind: undefined;
-  Home: undefined; // 추가
+  Home: undefined;
 };
 
 const LoginScreen = () => {
@@ -25,21 +25,24 @@ const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
   const [, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
-  const login = useRecoilValue(loginState);
+  const [, setLoginState] = useRecoilState(loginState);
   const [admin, setAdmin] = useRecoilState(adminState);
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    if (login) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'Home' }], // Home을 루트로 설정
-        })
-      );
-    }
-  }, [login, navigation]);
+    AsyncStorage.getItem('accessToken').then((token) => {
+      if (token) {
+        setLoginState(true);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          })
+        );
+      }
+    });
+  }, [navigation]);
 
   const validateInputs = (): boolean => {
     const emailRegex = constants.EMAIL.PATTERN;
@@ -75,27 +78,32 @@ const LoginScreen = () => {
 
       if (response.status === 200) {
         const { accessToken, refreshToken } = response.data;
+        const isAdmin = email === ADMIN_EMAIL;
 
         await AsyncStorage.setItem('accessToken', accessToken);
-        await AsyncStorage.setItem('refreshToken', refreshToken);
         setAccessToken(accessToken);
-        setRefreshToken(refreshToken);
 
-        if (email === ADMIN_EMAIL){
-          setAdmin(true);
-          console.log(admin);
-        }
-        else{
-          setAdmin(false);
+        if (!isAdmin) {
+          await AsyncStorage.setItem('refreshToken', refreshToken);
+          setRefreshToken(refreshToken);
         }
 
-        Alert.alert('로그인 성공', constants.SUCCESS.Login);
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Home' }],
-          })
-        );
+        setAdmin(isAdmin);
+        setLoginState(true);
+
+        console.log('Admin:', isAdmin);
+        console.log('Access Token:', accessToken);
+
+        // 상태 업데이트 후 네비게이션 수행
+        setTimeout(() => {
+          Alert.alert('로그인 성공', constants.SUCCESS.Login);
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Home' }],
+            })
+          );
+        }, 100);
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
       }
@@ -123,7 +131,7 @@ const LoginScreen = () => {
         <TextInput
           ref={userIdInputRef}
           style={styles.inputField}
-          placeholder= {constants.EMAIL.REQUIRED_MESSAGE}
+          placeholder={constants.EMAIL.REQUIRED_MESSAGE}
           placeholderTextColor="#292929"
           value={email}
           onChangeText={setUserId}
@@ -135,7 +143,7 @@ const LoginScreen = () => {
         <TextInput
           ref={userPwInputRef}
           style={styles.inputPwField}
-          placeholder= {constants.PASSWORD.LENGTH_MESSAGE}
+          placeholder={constants.PASSWORD.LENGTH_MESSAGE}
           placeholderTextColor="#292929"
           secureTextEntry
           maxLength={constants.PASSWORD.MAX_LENGTH}
@@ -163,15 +171,15 @@ const LoginScreen = () => {
       </View>
 
       <View style={styles.footer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Info')}>
-        <Text style={styles.footerText}>회원가입</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>아이디 찾기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.footerText} onPress={() => navigation.navigate('PasswordFind')}>비밀번호 찾기</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Info')}>
+          <Text style={styles.footerText}>회원가입</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>아이디 찾기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.footerText} onPress={() => navigation.navigate('PasswordFind')}>비밀번호 찾기</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

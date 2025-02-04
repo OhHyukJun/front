@@ -11,26 +11,33 @@ type SplashScreenProps = {
 
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
   const [login, setLoginState] = useRecoilState(loginState);
-  const accessToken = useRecoilValue(accessTokenState);
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
   useEffect(() => {
     const initializeApp = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // 2초 대기 후 실행
 
-      console.log('Loaded Login State:', login);
-      console.log('Loaded Access Token:', accessToken);
+      try {
+        const storedAccessToken = await AsyncStorage.getItem('accessToken');
+        console.log('Loaded Access Token from Storage:', storedAccessToken);
 
-      if (accessToken) {
-        setLoginState(true);
-        navigation.replace('Home');
-      } else {
+        if (storedAccessToken) {
+          setAccessToken(storedAccessToken);
+          setLoginState(true);
+          navigation.replace('Home');
+        } else {
+          setLoginState(false);
+          navigation.replace('Login');
+        }
+      } catch (error) {
+        console.error('Error loading access token:', error);
         setLoginState(false);
         navigation.replace('Login');
       }
     };
 
     initializeApp();
-  }, [navigation, accessToken, login]);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
