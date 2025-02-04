@@ -30,14 +30,6 @@ const Stack = createNativeStackNavigator();
 
 
 const App = () => {
-  const resetAsyncStorage = async () => {
-    await AsyncStorage.clear();
-    console.log('AsyncStorage 초기화 완료');
-  };
-  
-    useEffect(() => {
-      resetAsyncStorage();
-    }, []);
   return (
     <RecoilRoot>
       <NavigationContainer>
