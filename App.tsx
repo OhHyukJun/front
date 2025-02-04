@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { QueryClient } from '@tanstack/react-query';
@@ -27,7 +28,16 @@ global.Buffer = Buffer;
 
 const Stack = createNativeStackNavigator();
 
+
 const App = () => {
+  const resetAsyncStorage = async () => {
+    await AsyncStorage.clear();
+    console.log('AsyncStorage 초기화 완료');
+  };
+  
+    useEffect(() => {
+      resetAsyncStorage();
+    }, []);
   return (
     <RecoilRoot>
       <NavigationContainer>

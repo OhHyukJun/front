@@ -67,7 +67,7 @@ const AdminDelete = ({ navigation, route }: AdminDeleteScreenProps) => {
             value={header}
             editable={false} // 수정 불가
             placeholder="제목 없음"
-            placeholderTextColor="#999"
+            placeholderTextColor="#292929"
           />
         </View>
 
@@ -78,7 +78,7 @@ const AdminDelete = ({ navigation, route }: AdminDeleteScreenProps) => {
             multiline={true}
             editable={false} // 수정 불가
             placeholder="내용 없음"
-            placeholderTextColor="#999"
+            placeholderTextColor="#292929"
           />
         </View>
         {isAdmin && (
