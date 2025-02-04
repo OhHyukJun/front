@@ -18,7 +18,6 @@ export const userIdState = atom({
 export const userPwState = atom({
   key: 'userPwState',
   default: '',
-  effects_UNSTABLE: [persistAtom],
 });
 
 // Access Token Atom
