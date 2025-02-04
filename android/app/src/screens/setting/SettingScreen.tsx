@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
-import Slider from 'react-native-simple-slider'; // react-native-simple-slider 사용
+import { View, Text, Image, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import DatePicker from 'react-native-date-picker'; // ✅ DatePicker 추가
+import Slider from 'react-native-simple-slider';
 import styles from '../css/SettingScreen';
-import { vw, vh } from 'react-native-expo-viewport-units';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -13,12 +13,16 @@ type SettingScreenProps = {
 const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [notification, setNotification] = useState('동의'); // 알림 설정 상태
   const [childName, setChildName] = useState(''); // 아이 이름 상태
-  const [childBirthDate, setChildBirthDate] = useState(''); // 아이 생년월일 상태
-  const [deleteDays, setDeleteDays] = useState(12); // 데이터 삭제 기한 상태
+  const [deleteMonths, setDeleteMonths] = useState(12); // 데이터 삭제 기한 (개월 단위)
 
-  const thumbButtonSize = 20; // Thumb 버튼의 크기
-  const sliderWidth = screenWidth * 0.65; // 슬라이더 바 전체 너비
+  // ✅ DatePicker 관련 상태 추가
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+
+  const thumbButtonSize = 20;
+  const sliderWidth = screenWidth * 0.65;
   const sliderPadding = thumbButtonSize / 2;
+
   const handleSave = () => {
     navigation.navigate('Home');
   };
@@ -88,14 +92,23 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
               onChangeText={setChildName}
             />
           </View>
+
           <View style={styles.inputContainer}>
             <Text style={styles.label}>아이 생년 월일</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="20xx.xx.xx"
-              placeholderTextColor="#BBBBBB"
-              value={childBirthDate}
-              onChangeText={setChildBirthDate}
+            <TouchableOpacity onPress={() => setIsDatePickerVisible(true)}>
+              <Text style={styles.input}>{selectedDate.toISOString().split('T')[0]}</Text>
+            </TouchableOpacity>
+            <DatePicker
+              modal
+              open={isDatePickerVisible}
+              date={selectedDate}
+              mode="date"
+              locale="ko"
+              onConfirm={(date) => {
+                setIsDatePickerVisible(false);
+                setSelectedDate(date);
+              }}
+              onCancel={() => setIsDatePickerVisible(false)}
             />
           </View>
         </View>
@@ -106,11 +119,11 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
           <View style={styles.sliderRow}>
             <View style={styles.sliderContent}>
               <Slider
-                value={deleteDays}
-                minimumValue={0} // 최소값 여백 조정
-                maximumValue={60}
+                value={deleteMonths}
+                minimumValue={3} // 최소값 3개월
+                maximumValue={24} // 최대값 24개월
                 step={1}
-                onValueChange={(value) => setDeleteDays(value)} // 슬라이더 값 변경
+                onValueChange={(value) => setDeleteMonths(value)} // 슬라이더 값 변경
                 minimumTrackTintColor="#8C90D3"
                 maximumTrackTintColor="#8C90D3"
                 thumbButton={(
@@ -121,16 +134,16 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
                     }}
                   />
                 )}
-                sliderHeight={8} // 슬라이더 높이
-                sliderBorderRadius={4} // 슬라이더 둥근 모서리
-                sliderWidth={sliderWidth - (thumbButtonSize) / 2} // 슬라이더 폭을 카드 내부에 맞추기
+                sliderHeight={8}
+                sliderBorderRadius={4}
+                sliderWidth={sliderWidth - (thumbButtonSize) / 2}
               />
               <View style={styles.sliderLabels}>
-                <Text style={styles.sliderLabelLeft}>0</Text>
-                <Text style={styles.sliderLabelRight}>60</Text>
+                <Text style={styles.sliderLabelLeft}>3</Text>
+                <Text style={styles.sliderLabelRight}>24</Text>
               </View>
             </View>
-            <Text style={styles.sliderValue}>{deleteDays} 일</Text>
+            <Text style={styles.sliderValue}>{deleteMonths} 개월</Text>
           </View>
         </View>
       </View>

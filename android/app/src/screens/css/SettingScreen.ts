@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: vh(1),
   },
+  dateText: {
+    fontSize: vh(2),
+    color: '#333333',
+  },
   radioGroup: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     borderColor: '#F0F1FE',
     borderRadius: vw(2),
     backgroundColor: '#F0F1FE',
-    fontSize: vh(2),
+    fontSize: vh(1.6),
     lineHeight: vh(2),
     color: '#333333',
     textAlignVertical: 'center',
@@ -150,7 +154,7 @@ const styles = StyleSheet.create({
     marginRight: vw(-2),
   },
   sliderValue: {
-    fontSize: vh(2.5),
+    fontSize: vh(2),
     fontWeight: 'bold',
     color: '#333333',
     textAlign: 'right',

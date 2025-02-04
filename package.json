@@ -29,6 +29,7 @@
     "react-native-bluetooth-classic": "^1.73.0-rc.12",
     "react-native-date-picker": "^5.0.10",
     "react-native-dotenv": "^3.4.11",
+    "react-native-date-picker": "^5.0.10",
     "react-native-expo-viewport-units": "^0.0.8",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.22.0",
