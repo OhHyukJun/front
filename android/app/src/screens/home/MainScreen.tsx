@@ -46,7 +46,7 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
           </Text>
         </ImageBackground>
         <TouchableOpacity onPress={handleBluetooth}>
-          <Image source={require('../img/baby_profile.jpg')} style={styles.baby} />
+          <Image source={require('../img/baby_profile.png')} style={styles.baby} />
         </TouchableOpacity>
         {/* chatbot 이미지에 TouchableOpacity 추가 */}
         <TouchableOpacity
