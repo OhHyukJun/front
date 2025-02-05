@@ -1,40 +1,41 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import styles from '../css/LogoutModal';
+import styles from '../css/DeleteAccountModal';
 
-interface LogoutModalProps {
+interface DeleteAccountModalProps {
     isVisible: boolean;
     onConfirm: () => void;
     onCancel: () => void;
 }
 
-const LogoutModal = ({ isVisible, onConfirm, onCancel }: LogoutModalProps) => {
+const DeleteAccountModal = ({ isVisible, onConfirm, onCancel }: DeleteAccountModalProps) => {
     return (
         <Modal transparent={true} visible={isVisible} animationType="fade">
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    {/* 텍스트 부분만 위아래 패딩 추가 */}
                     <View style={styles.modalTextContainer}>
-                        <Text style={styles.modalText}>계정에서 로그아웃하시겠어요?</Text>
+                        <Text style={styles.modalText}>정말 탈퇴하시겠어요?</Text>
+                        <Text style={styles.modalSubText}>
+                            탈퇴 버튼 선택 시, 계정은 삭제되며 복구되지 않습니다.
+                        </Text>
                     </View>
 
-                    {/* 구분선 */}
                     <View style={styles.divider} />
 
-                    <TouchableOpacity onPress={onConfirm} style={[styles.modalButton, styles.borderTop]}>
-                        <Text style={[styles.modalButtonText, { color: 'red' }]}>로그아웃</Text>
+                    <TouchableOpacity onPress={onConfirm} style={styles.modalButtonDelete}>
+                        <Text style={[styles.modalButtonText, styles.deleteButtonText]}>탈퇴</Text>
                     </TouchableOpacity>
 
-                    {/* 구분선 */}
                     <View style={styles.divider} />
 
                     <TouchableOpacity onPress={onCancel} style={styles.modalButtonCancel}>
                         <Text style={styles.modalButtonText}>취소</Text>
                     </TouchableOpacity>
                 </View>
+
             </View>
         </Modal>
     );
 };
 
-export default LogoutModal;
+export default DeleteAccountModal;

@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from '../css/AccountScreen';
 import { useLogout } from '../auth/Login/Logout';
 import LogoutModal from './LogoutModal';
+import { useDeleteAccount } from '../auth/Login/DeleteAccount';
+import DeleteAccountModal from './DeleteAccountModal';
+import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
+
 type AccountScreenProps = {
   navigation: any;
 };
@@ -10,11 +14,32 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const handleChange = () => {
     navigation.navigate('ChangePassword');
   };
-  const handlePrev = () => {
-    navigation.goBack();
-  };
+
   const handleLogout = useLogout(navigation.navigate);
+  const handleDeleteAccount = useDeleteAccount(navigation.navigate);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUserInfo = async () => {
+      try {
+        const data = await fetchUserInfo();
+        setUserInfo(data);
+      } catch (error) {
+        console.error('사용자 정보를 불러오는 중 오류 발생:', error);
+        setUserInfo(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserInfo();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* 프로필 섹션 */}
@@ -44,16 +69,13 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           서비스에서 사용하는 내 계정 정보를 확인할 수 있습니다.
         </Text>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>이메일</Text>
-          <Text style={styles.infoValue}>aaa123@gmail.com</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>이름</Text>
-          <Text style={styles.infoValue}>김나박이</Text>
-        </View>
-        <TouchableOpacity onPress={handlePrev}>
-          <Text>뒤로</Text>
-        </TouchableOpacity>
+              <Text style={styles.infoLabel}>이메일</Text>
+              <Text style={styles.infoValue}>{userInfo?.email || '이메일 없음'}</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>이름</Text>
+              <Text style={styles.infoValue}>{userInfo?.name || '이름 없음'}</Text>
+            </View>
       </View>
 
       {/* 계정 관리 컨테이너 */}
@@ -73,12 +95,9 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           <Text style={styles.actionLabel}>로그아웃</Text>
           <Image source={require('../img/right_arrow.png')} style={styles.arrowIcon} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionRow}>
+        <TouchableOpacity style={styles.actionRow} onPress={() => setIsDeleteModalVisible(true)}>
           <Text style={styles.actionLabel}>회원 탈퇴</Text>
-          <Image
-            source={require('../img/right_arrow.png')}
-            style={styles.arrowIcon}
-          />
+          <Image source={require('../img/right_arrow.png')} style={styles.arrowIcon} />
         </TouchableOpacity>
       </View>
 
@@ -89,6 +108,15 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           handleLogout();
         }}
         onCancel={() => setIsModalVisible(false)}
+      />
+
+      <DeleteAccountModal
+        isVisible={isDeleteModalVisible}
+        onConfirm={() => {
+          setIsDeleteModalVisible(false);
+          handleDeleteAccount();
+        }}
+        onCancel={() => setIsDeleteModalVisible(false)}
       />
 
     </View>

@@ -25,7 +25,11 @@ const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
   const [, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
+<<<<<<< HEAD
   const [, setLoginState] = useRecoilState(loginState);
+=======
+  const login = useRecoilValue(loginState);
+>>>>>>> 8d65f0730dde083e0cb493fb74930f13b807ccd8
   const [admin, setAdmin] = useRecoilState(adminState);
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
@@ -83,6 +87,7 @@ const LoginScreen = () => {
         await AsyncStorage.setItem('accessToken', accessToken);
         setAccessToken(accessToken);
 
+<<<<<<< HEAD
         if (!isAdmin) {
           await AsyncStorage.setItem('refreshToken', refreshToken);
           setRefreshToken(refreshToken);
@@ -103,6 +108,23 @@ const LoginScreen = () => {
             })
           );
         }, 100);
+=======
+        if (email === ADMIN_EMAIL){
+          setAdmin(true);
+          console.log(admin);
+        }
+        else{
+          setAdmin(false);
+        }
+
+        Alert.alert('로그인 성공', constants.SUCCESS.Login);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          })
+        );
+>>>>>>> 8d65f0730dde083e0cb493fb74930f13b807ccd8
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
       }

@@ -59,6 +59,14 @@ export const disconnectDevice = async (
     Alert.alert('No Device Connected', '현재 연결된 장치가 없습니다.');
   }
 };
+export const receiveData = async (
+  device: Device,
+  serviceUUID: string,
+  characteristicUUID: string
+): Promise<void> => {
+  try {
+    console.log('데이터 수신 대기 중...');
+    let completeData: number[] = []; // 수신된 전체 데이터를 저장할 배열
 
 export const receiveData = async (
   device: Device,
