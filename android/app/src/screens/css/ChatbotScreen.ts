@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: vh(10),
-    paddingHorizontal: vw(5),
+    height: vh(6),
+    
   },
   headerTitle: {
     textAlign: 'center',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   suggestionButton: {
     backgroundColor: '#F0F1FE',
-    paddingVertical: 8,
+    paddingVertical: 5,
     paddingHorizontal: 12,
     borderRadius: 15,
     marginHorizontal: 5,
