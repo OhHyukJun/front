@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import styles from '../css/ChatbotScreen';
-
+import io from 'socket.io-client';
 const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const [messages, setMessages] = useState([
     { id: '1', text: '안녕하세요! 무엇이든지 알려드립니다.', sender: 'bot' },
   ]);
   const [inputText, setInputText] = useState('');
 
-  const handlePrev = () => {
-    navigation.goBack();
-  };
+  useEffect(() => {
+    const newSocket = io(SOCKET_SERVER_URL, {
+      transports: ['websocket'],
+    });
+    setSocket(newSocket);
+
+    newSocket.on('connect', () => {
+      console.log('Socket connected');
+    });
+
+    newSocket.on('response', (data: { text: string }) => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { id: Date.now().toString(), text: data.text, sender: 'bot' },
+      ]);
+    });
+
+    return () => newSocket.disconnect();
+  }, []);
 
   const sendMessage = () => {
     if (inputText.trim() === '') return;
