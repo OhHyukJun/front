@@ -3,7 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { QueryClient } from '@tanstack/react-query';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useSetRecoilState } from 'recoil';
+import { loginState, accessTokenState } from './android/app/src/atom/login';
+import { adminState } from './android/app/src/atom/admin';
 import SplashScreen from './android/app/src/screens/SplashScreen';
 import HomeScreen from './android/app/src/screens/home/HomeScreen';
 import ChatbotScreen from './android/app/src/screens/chatbot/ChatbotScreen';
@@ -28,6 +30,35 @@ global.Buffer = Buffer;
 
 const Stack = createNativeStackNavigator();
 
+const AppInitializer = () => {
+  const setLogin = useSetRecoilState(loginState);
+  const setAdmin = useSetRecoilState(adminState);
+  const setAccessToken = useSetRecoilState(accessTokenState);
+
+  useEffect(() => {
+    const initializeState = async () => {
+      try {
+        const storedAccessToken = await AsyncStorage.getItem('accessToken');
+        const storedAdminState = await AsyncStorage.getItem('adminState');
+
+        if (storedAccessToken) {
+          setAccessToken(storedAccessToken);
+          setLogin(true);
+        }
+
+        if (storedAdminState !== null) {
+          setAdmin(JSON.parse(storedAdminState)); // 저장된 값 반영
+        }
+      } catch (error) {
+        console.error('앱 초기화 오류:', error);
+      }
+    };
+
+    initializeState();
+  }, []);
+
+  return null; // 아무 UI도 렌더링하지 않음
+};
 
 const App = () => {
   return (

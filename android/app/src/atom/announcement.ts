@@ -1,6 +1,11 @@
 import { atom } from 'recoil';
 
-export const announcementListState = atom({
+type Announcement = {
+  header: string;
+  writetime: string;
+};
+
+export const announcementListState = atom<Announcement[]>({
   key: 'announcementListState',
-  default: [], // 공지 목록 초기값
+  default: [], // 초기값 명확히 설정
 });
