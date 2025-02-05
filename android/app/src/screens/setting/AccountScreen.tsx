@@ -14,9 +14,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const handleChange = () => {
     navigation.navigate('ChangePassword');
   };
-  const handlePrev = () => {
-    navigation.goBack();
-  };
+
   const handleLogout = useLogout(navigation.navigate);
   const handleDeleteAccount = useDeleteAccount(navigation.navigate);
 
