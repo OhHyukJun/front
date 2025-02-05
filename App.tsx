@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { QueryClient } from '@tanstack/react-query';
@@ -8,7 +9,7 @@ import HomeScreen from './android/app/src/screens/home/HomeScreen';
 import ChatbotScreen from './android/app/src/screens/chatbot/ChatbotScreen';
 import SettingScreen from './android/app/src/screens/setting/SettingScreen';
 import AccountScreen from './android/app/src/screens/setting/AccountScreen';
-import AnnouncementDetail from './android/app/src/screens/home/AnnouncementDetail';
+import AdminDelete from './android/app/src/screens/home/admin/AdminDelete';
 import BLEConnection from './android/app/src/screens/bluetooth/BLEConnection';
 import LoginScreen from './android/app/src/screens/auth/Login/LoginScreen';
 import IdFind from './android/app/src/screens/auth/Login/IdFInd';
@@ -19,12 +20,14 @@ import RegisterPassword from './android/app/src/screens/auth/Register/RegisterPa
 import ChangePassword from './android/app/src/screens/setting/ChangePassword';
 import ConfirmPassword from './android/app/src/screens/auth/Register/CofirmPassword';
 import PersonalInfo from './android/app/src/screens/auth/Register/PersonalInfo';
+import AdminWrite from './android/app/src/screens/home/admin/AdminWrite';
 // React Query Client 생성
 // const queryClient = new QueryClient();
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
 
 const Stack = createNativeStackNavigator();
+
 
 const App = () => {
   return (
@@ -34,7 +37,8 @@ const App = () => {
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="AnnouncementDetail" component={AnnouncementDetail} />
+          <Stack.Screen name="AdminDelete" component={AdminDelete} />
+          <Stack.Screen name="AdminWrite" component={AdminWrite} />
           <Stack.Screen name="Chatbot" component={ChatbotScreen} />
           <Stack.Screen name="Setting" component={SettingScreen} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
