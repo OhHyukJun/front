@@ -59,6 +59,7 @@ export const disconnectDevice = async (
     Alert.alert('No Device Connected', '현재 연결된 장치가 없습니다.');
   }
 };
+
 export const receiveData = async (
   device: Device,
   serviceUUID: string,
@@ -66,7 +67,10 @@ export const receiveData = async (
 ): Promise<void> => {
   try {
     console.log('데이터 수신 대기 중...');
-    let completeData: number[] = []; // 수신된 전체 데이터를 저장할 배열
+
+    let completeData: number[] = []; 
+    let lastChunkTime = Date.now(); 
+    const EOF_MARKER = new Uint8Array([69, 79, 70]); 
 
     const subscription = device.monitorCharacteristicForService(
       serviceUUID,
@@ -79,28 +83,30 @@ export const receiveData = async (
 
         if (characteristic?.value) {
           try {
-            const decodedString = base64.decode(characteristic.value); // Base64 디코딩
-            console.log(`Received data: ${decodedString}`);
+            const rawData = base64.decode(characteristic.value);
+            const decodedBytes = new Uint8Array([...rawData].map((char) => char.charCodeAt(0)));
 
-            // **EOF 체크 (문자열 비교 유지)**
-            if (decodedString === 'EOF') {
-              console.log('파일 수신 완료:', completeData);
+            console.log(`Raw received data: ${characteristic.value}`);
+            console.log(`Decoded byte array:`, decodedBytes);
 
-              // Uint8Array로 변환 후 저장
-              const fullData = new Uint8Array(completeData);
-              await saveToFile(fullData, 16000);
+            lastChunkTime = Date.now();
 
-              subscription.remove();
+            if (
+              decodedBytes.length === EOF_MARKER.length &&
+              decodedBytes.every((val, idx) => val === EOF_MARKER[idx])
+            ) {
+              console.log('파일 수신 완료. 데이터 저장 중...');
+              subscription.remove(); 
+              
+              await saveToFile(new Uint8Array(completeData), 16000);
+
+              console.log('파일 저장 완료');
               return;
             }
 
-            // **데이터를 바이트 배열로 변환**
-            const decodedData = new Uint8Array([...decodedString].map((char) => char.charCodeAt(0)));
-
-            // **16비트 데이터 변환**
-            for (let i = 0; i < decodedData.length; i += 2) {
-              if (i + 1 < decodedData.length) {
-                const uint16Value = (decodedData[i] | (decodedData[i + 1] << 8)); // 16비트 데이터 조합
+            for (let i = 0; i < decodedBytes.length; i += 2) {
+              if (i + 1 < decodedBytes.length) {
+                const uint16Value = decodedBytes[i] | (decodedBytes[i + 1] << 8);
                 completeData.push(uint16Value);
               }
             }
@@ -111,14 +117,13 @@ export const receiveData = async (
       }
     );
 
-    setTimeout(() => {
-      console.log('Monitoring timed out. Stopping subscription.');
-      subscription.remove();
-    }, 40000);
   } catch (err) {
-    console.error('Error receiving data:', err);
+    console.error('데이터 수신 중 오류 발생:', err);
   }
-};/*
+};
+
+
+/*
 export const receiveData = async (
     device: Device,
     serviceUUID: string,
