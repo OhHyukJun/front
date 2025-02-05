@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet  } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import styles from '../css/AnnouncementScreen';
@@ -13,22 +13,13 @@ type Announcement = {
   header: string;
   time: string;
 };
-/* 더미 데이터 (데이터베이스 연동 전 테스트용)
-const announcements = [
-  { id: 1, header: '[공지] 아이 감정 분류 AI를 만들고 있습니다.',body:'예시', writetime: '2024.01.15' },
-  { id: 2, header: '[공지] 이런 식으로 들어가면 스크롤도 가능.',body:'예시시', writetime: '2024.01.15' },
-  { id: 3, header: '[공지] 최신 순으로 위로 쌓아주자.',body:'예시3', writetime: '2024.01.15' },
-  { id: 4, header: '[공지] 최신 순으로 위로 쌓아주자.',body:'예시시', writetime: '2024.01.15' },
-  { id: 5, header: '[공지] 최신 순으로 위로 쌓아주자.',body:'예시', writetime: '2024.01.15' },
-  { id: 6, header: '[공지] 최신 순으로 위로 쌓아주자.',body:'예시', writetime: '2024.01.15' },
-];*/
 
 const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
   const isAdmin = useRecoilValue(adminState);
   const [announcements, setAnnouncements] = useRecoilState<Announcement[]>(announcementListState);
   const isFocused = useIsFocused();
   //console.log(setAnnouncements);
-  const fetchAnnouncements = async () => {
+  const fetchAnnouncements = useCallback(async () => {
     try {
       const response = await axiosInstance.get<{ data: Announcement[] }>('/admin/getNoticeList');
       if (response.data && Array.isArray(response.data.data)) {
@@ -43,17 +34,17 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
     } catch (error) {
       console.error('공지사항 불러오기 오류:', error);
     }
-  };
+  }, [setAnnouncements]);
 
   useEffect(() => {
     fetchAnnouncements();
-  }, []);
+  }, [fetchAnnouncements]);
 
   useEffect(() => {
     if (isFocused) {
       fetchAnnouncements();
     }
-  }, [isFocused]);
+  }, [isFocused, fetchAnnouncements]);
 
   return (
     <View style={styles.container}>

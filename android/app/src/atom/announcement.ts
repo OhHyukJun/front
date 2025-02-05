@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 type Announcement = {
   header: string;
-  writetime: string;
+  time: string;
 };
 
 export const announcementListState = atom<Announcement[]>({
