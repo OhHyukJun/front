@@ -80,7 +80,6 @@ const RegisterEmail = ({ navigation }: NameProps) => {
   const handleVerifyCode = () => {
     if (String(inputVerificationCode) === String(verificationCode)) {
       setIsEmailVerified(true);
-      Alert.alert('성공', '이메일 인증이 완료되었습니다.');
     } else {
       Alert.alert('오류', '인증 코드가 올바르지 않습니다.');
     }

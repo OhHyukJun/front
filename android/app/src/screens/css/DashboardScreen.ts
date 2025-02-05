@@ -1,47 +1,39 @@
 import { StyleSheet } from 'react-native';
-import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
+import { vw, vh } from 'react-native-expo-viewport-units';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#ffffff',
+    paddingHorizontal: vw(5),
   },
-  text: {
-    fontFamily: 'KCC-Ganpan',
-    fontSize: 20,
-    color: '#333333',
-    marginBottom: 20,
+  headerRow: {
+    flexDirection: 'row', // 가로 정렬
+    justifyContent: 'space-between', // 텍스트와 이미지가 양 끝에 배치
+    alignItems: 'center', // 세로 정렬
   },
   roundedContainer: {
-    width: vw(90),
-    height: vh(85),
+    width: vw(88),
+    height: vh(8),
     backgroundColor: '#EDEEFF',
     borderRadius: 20,
     justifyContent: 'center',
-    alignItems: 'center',
     padding: 10,
+    marginTop: vh(3.1),
   },
-  navigationContainer: {
-    width: vw(27),
-    height: vh(2.5),
-    backgroundColor: '#EDEEFF',
-    borderRadius: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: vh(3.5),
+  image: {
+    width: vw(8),
+    height: vw(8),
+    resizeMode: 'contain',
   },
-  dot: {
-    height: vw(2),
-    width: vw(2),
-    backgroundColor: '#d0d0d0',
-    borderRadius: vw(1),
-    marginHorizontal: 10,
+  headerText: {
+    fontSize: vh(2.8), // 기본 크기
+    fontWeight: 'bold',
+    color: '#333333',
   },
-  activeDot: {
-    backgroundColor: '#000000',
+  defaultMessageText: { // ✅ 기본 메시지 스타일 추가
+    fontSize: vh(2.1), // 작은 크기
+    color: '#BBBBBB', // 회색
   },
 });
 

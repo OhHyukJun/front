@@ -1,25 +1,48 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { userIdState, userPwState } from '../../../atom/login';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useNavigation, NavigationProp, CommonActions } from '@react-navigation/native';
+import { userIdState, userPwState, accessTokenState, refreshTokenState, loginState } from '../../../atom/login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/auth/Login/LoginScreen';
 import axiosInstance from '../../../api/axios';
 import constants from '../ConstantAuth';
-
+import { adminState } from '../../../atom/admin';
+import { ADMIN_EMAIL } from '@env';
 
 type RootParamList = {
   MainScreen: undefined;
   RegisterScreen: undefined;
+  Info: undefined;
+  IdFind: undefined;
+  PasswordFind: undefined;
+  Home: undefined;
 };
 
 const LoginScreen = () => {
   const [email, setUserId] = useRecoilState(userIdState);
   const [password, setUserPw] = useRecoilState(userPwState);
   const navigation = useNavigation<NavigationProp<RootParamList>>();
-
+  const [, setAccessToken] = useRecoilState(accessTokenState);
+  const [, setRefreshToken] = useRecoilState(refreshTokenState);
+  const [, setLoginState] = useRecoilState(loginState);
+  const [admin, setAdmin] = useRecoilState(adminState);
   const userIdInputRef = useRef<TextInput>(null);
   const userPwInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem('accessToken').then((token) => {
+      if (token) {
+        setLoginState(true);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          })
+        );
+      }
+    });
+  }, [navigation, setLoginState]);
 
   const validateInputs = (): boolean => {
     const emailRegex = constants.EMAIL.PATTERN;
@@ -50,11 +73,36 @@ const LoginScreen = () => {
     if (!validateInputs()) return;
 
     try {
-      const response = await axiosInstance.post('/auth/login', { email, password });
+      const response = await axiosInstance.post<{ accessToken: string; refreshToken: string }>('/auth/login', { email, password });
+      await AsyncStorage.setItem('email', email ?? '');
 
       if (response.status === 200) {
-        Alert.alert('로그인 성공', constants.SUCCESS.Login);
-        navigation.navigate('Home');
+        const { accessToken, refreshToken } = response.data;
+        const isAdmin = email === ADMIN_EMAIL;
+
+        await AsyncStorage.setItem('accessToken', accessToken);
+        setAccessToken(accessToken);
+
+        if (!isAdmin) {
+          await AsyncStorage.setItem('refreshToken', refreshToken);
+          setRefreshToken(refreshToken);
+        }
+
+        setAdmin(isAdmin);
+        setLoginState(true);
+
+        console.log('Admin:', isAdmin);
+        console.log('Access Token:', accessToken);
+
+        setTimeout(() => {
+          Alert.alert('로그인 성공', constants.SUCCESS.Login);
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Home' }],
+            })
+          );
+        }, 100);
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
       }
@@ -82,9 +130,9 @@ const LoginScreen = () => {
         <TextInput
           ref={userIdInputRef}
           style={styles.inputField}
-          placeholder= {constants.EMAIL.REQUIRED_MESSAGE}
+          placeholder={constants.EMAIL.REQUIRED_MESSAGE}
           placeholderTextColor="#292929"
-          value={email}
+          value={email ?? ''}
           onChangeText={setUserId}
           autoCapitalize="none"
           autoCorrect={false}
@@ -94,7 +142,7 @@ const LoginScreen = () => {
         <TextInput
           ref={userPwInputRef}
           style={styles.inputPwField}
-          placeholder= {constants.PASSWORD.LENGTH_MESSAGE}
+          placeholder={constants.PASSWORD.LENGTH_MESSAGE}
           placeholderTextColor="#292929"
           secureTextEntry
           maxLength={constants.PASSWORD.MAX_LENGTH}
@@ -122,15 +170,15 @@ const LoginScreen = () => {
       </View>
 
       <View style={styles.footer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Info')}>
-        <Text style={styles.footerText}>회원가입</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.footerText}>아이디 찾기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.footerText}>비밀번호 찾기</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Info')}>
+          <Text style={styles.footerText}>회원가입</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>아이디 찾기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.footerText} onPress={() => navigation.navigate('PasswordFind')}>비밀번호 찾기</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
