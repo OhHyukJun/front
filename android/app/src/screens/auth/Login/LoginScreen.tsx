@@ -42,7 +42,7 @@ const LoginScreen = () => {
         );
       }
     });
-  }, [navigation]);
+  }, [navigation, setLoginState]);
 
   const validateInputs = (): boolean => {
     const emailRegex = constants.EMAIL.PATTERN;
@@ -74,7 +74,7 @@ const LoginScreen = () => {
 
     try {
       const response = await axiosInstance.post<{ accessToken: string; refreshToken: string }>('/auth/login', { email, password });
-      await AsyncStorage.setItem('email', email);
+      await AsyncStorage.setItem('email', email ?? '');
 
       if (response.status === 200) {
         const { accessToken, refreshToken } = response.data;
@@ -94,7 +94,6 @@ const LoginScreen = () => {
         console.log('Admin:', isAdmin);
         console.log('Access Token:', accessToken);
 
-        // 상태 업데이트 후 네비게이션 수행
         setTimeout(() => {
           Alert.alert('로그인 성공', constants.SUCCESS.Login);
           navigation.dispatch(
@@ -133,7 +132,7 @@ const LoginScreen = () => {
           style={styles.inputField}
           placeholder={constants.EMAIL.REQUIRED_MESSAGE}
           placeholderTextColor="#292929"
-          value={email}
+          value={email ?? ''}
           onChangeText={setUserId}
           autoCapitalize="none"
           autoCorrect={false}
