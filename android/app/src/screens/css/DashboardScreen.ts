@@ -8,9 +8,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: vw(5),
   },
   headerRow: {
-    flexDirection: 'row', // 가로 정렬
-    justifyContent: 'space-between', // 텍스트와 이미지가 양 끝에 배치
-    alignItems: 'center', // 세로 정렬
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   roundedContainer: {
     width: vw(88),
@@ -27,13 +27,48 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   headerText: {
-    fontSize: vh(2.8), // 기본 크기
+    fontSize: vh(2.8),
     fontWeight: 'bold',
     color: '#333333',
   },
-  defaultMessageText: { // ✅ 기본 메시지 스타일 추가
-    fontSize: vh(2.1), // 작은 크기
-    color: '#BBBBBB', // 회색
+  defaultMessageText: {
+    fontSize: vh(2.1),
+    color: '#BBBBBB',
+  },
+
+  /* 🆕 아기 기록 타이틀 */
+  recordTitle: {
+    fontSize: vh(2.5),
+    fontWeight: 'bold',
+    marginTop: vh(2),
+    marginBottom: vh(1),
+    color: '#333333',
+  },
+
+  /* 🆕 보라색 컨테이너 */
+  recordContainer: {
+    width: vw(88),
+    height: vh(24), // ✅ 기존 컨테이너 높이의 3배
+    backgroundColor: '#D3C4FF',
+    borderRadius: 20,
+    padding: 15,
+    marginBottom: vh(3),
+  },
+
+  /* 🆕 스크롤 가능한 아이템 */
+  recordItem: {
+    width: vw(30),
+    height: vh(20),
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: vw(2),
+  },
+
+  recordText: {
+    fontSize: vh(2),
+    color: '#333333',
   },
 });
 
