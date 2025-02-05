@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import axiosInstance from '../../../api/axios';
 import { accessTokenState } from '../../../atom/login';
@@ -22,7 +22,26 @@ const AdminDelete = ({ navigation, route }: AdminDeleteScreenProps) => {
   const accessToken = useRecoilValue(accessTokenState);
   const setAnnouncements = useSetRecoilState(announcementListState);
   const isAdmin = useRecoilValue(adminState);
-  const { header, body, writetime } = route.params;
+  const { header, writetime } = route.params;
+  const [body, setBody] = useState<string>('본문 없음');
+
+  useEffect(() => {
+    const fetchBody = async () => {
+      try {
+        const response = await axiosInstance.get('/admin/readNotice', {
+          params: { header, writetime },
+        });
+
+        if (response.data && typeof response.data === 'object') {
+          setBody(response.data.body ?? '본문 없음');
+        }
+      } catch (error) {
+        console.error('게시글 본문 조회 오류:', error);
+      }
+    };
+
+    fetchBody();
+  }, [header, writetime])
 
   const handleDelete = async () => {
     Alert.alert('삭제 확인', '정말로 이 공지사항을 삭제하시겠습니까?', [
