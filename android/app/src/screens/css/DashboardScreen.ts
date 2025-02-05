@@ -27,9 +27,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   headerText: {
-    fontSize: 18,
+    fontSize: vh(2.8), // 기본 크기
     fontWeight: 'bold',
     color: '#333333',
+  },
+  defaultMessageText: { // ✅ 기본 메시지 스타일 추가
+    fontSize: vh(2.1), // 작은 크기
+    color: '#BBBBBB', // 회색
   },
 });
 
