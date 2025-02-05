@@ -4,44 +4,99 @@ import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-  },
-  text: {
-    fontFamily: 'KCC-Ganpan',
-    fontSize: 20,
-    color: '#333333',
-    marginBottom: 20,
-  },
-  roundedContainer: {
-    width: vw(90),
-    height: vh(85),
-    backgroundColor: '#EDEEFF',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
     padding: 10,
   },
-  navigationContainer: {
-    width: vw(27),
-    height: vh(2.5),
-    backgroundColor: '#EDEEFF',
-    borderRadius: 20,
+  headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: vh(3.5),
+    justifyContent: 'center',
+    width: '100%',
+    height: vh(10),
+    paddingHorizontal: vw(5),
   },
-  dot: {
-    height: vw(2),
-    width: vw(2),
-    backgroundColor: '#d0d0d0',
-    borderRadius: vw(1),
-    marginHorizontal: 10,
+  headerTitle: {
+    textAlign: 'center',
+    fontSize: vw(7),
+    color: '#6D73C6',
+    fontWeight: '600',
   },
-  activeDot: {
-    backgroundColor: '#000000',
+  backButton: {
+    padding: 10,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#6D73C6',
+  },
+  chatContainer: {
+    flexGrow: 1,
+    paddingVertical: 10,
+  },
+  messageBubble: {
+    maxWidth: '75%',
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+  },
+  userBubble: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#F0F1FE',
+  },
+  botBubble: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#DDE0FF',
+  },
+  messageText: {
+    fontSize: 16,
+    color: '#292929',
+  },
+  suggestionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  suggestionButton: {
+    backgroundColor: '#F0F1FE',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 15,
+    marginHorizontal: 5,
+    marginBottom: 5,
+  },
+  suggestionText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  inputBox: {
+    flex: 1,
+    height: 40,
+    borderColor: '#E5E5E5',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    backgroundColor: '#F8F9FA',
+    fontSize: 16,
+  },
+  sendButton: {
+    marginLeft: 10,
+    backgroundColor: '#6D73C6',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+  },
+  sendButtonText: {
+    fontSize: 16,
+    color: '#FFF',
   },
 });
 
