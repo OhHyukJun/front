@@ -75,6 +75,9 @@ const styles = StyleSheet.create({
     marginBottom: vh(1), // 하단 마진 조정
     lineHeight: vh(4.3), // 라인 높이 조정
     marginLeft: vh(1.3),
+    maxWidth: '90%',
+    flexWrap: 'wrap',
+    paddingHorizontal: vh(2),
   },
   connectionStatus: {
     fontSize: vw(3),

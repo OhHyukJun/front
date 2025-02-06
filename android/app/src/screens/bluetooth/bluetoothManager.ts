@@ -99,15 +99,19 @@ export const receiveData = async (
             if (waitingForResult && aiResult === '') {
               console.log('AI 결과 수신 완료');
               aiResult = decodedData;
+              if (!setResult) {
+                console.error('🚨 setResult is undefined! 사용 전에 확인이 필요합니다.');
+              } else {
+                setResult(aiResult);
+              }
               return;
             }
 
             if (decodedData === EOF_MARKER) {
               console.log('EOF 수신, 데이터 모니터링 종료');
               subscription.remove();
-
               setProcessing(false);
-              setResult(aiResult.trim());
+
               // Alert.alert('AI 결과', `예측 결과: ${aiResult.trim()}`);
               return;
             }
@@ -123,65 +127,12 @@ export const receiveData = async (
   }
 };
 
-
-/*
-export const receiveData = async (
-    device: Device,
-    serviceUUID: string,
-    characteristicUUID: string
-  ): Promise<void> => {
-    try {
-      console.log('데이터 수신 대기 중...');
-      let completeData: number[] = []; // 수신된 데이터를 저장
-
-      const subscription = device.monitorCharacteristicForService(
-        serviceUUID,
-        characteristicUUID,
-        async (error, characteristic) => {
-          if (error) {
-            console.error('Error while monitoring:', error);
-            return;
-          }
-
-          if (characteristic?.value) {
-            const decodedData = base64.decode(characteristic.value); // Base64 디코딩
-            console.log(`Received data: ${decodedData}`);
-
-            if (decodedData === 'EOF') {
-              console.log('파일 수신 완료:', completeData);
-              await saveToFile(completeData, 16000);
-              subscription.remove();
-              return;
-            }
-
-            const buffer = new Uint8Array([...decodedData].map((char) => char.charCodeAt(0))).buffer;
-            const dataView = new DataView(buffer);
-
-            for (let i = 0; i < dataView.byteLength; i += 2) {
-              const uint16Value = dataView.getUint16(i, true);
-              completeData.push(uint16Value);
-            }
-            console.log(completeData);
-          }
-        }
-      );
-
-      setTimeout(() => {
-        console.log('Monitoring timed out. Stopping subscription.');
-        subscription.remove();
-      }, 40000);
-    } catch (err) {
-      console.error('Error receiving data:', err);
-    }
-};
-*/
-
 export const sendData = async (
   device: Device, 
   serviceUUID: string, characteristicUUID: string,
   setProcessing: (status: boolean) => void,
-  setText: (text: string) => void,
-  setResult: (result: string) => void): Promise<void> => {
+  setResult: (result: string) => void
+): Promise<void> => {
   try {
     const services = await device.services();
     for (const service of services) {
@@ -196,6 +147,10 @@ export const sendData = async (
           setProcessing(true);
           // 약간의 지연을 주어 아두이노가 녹음할 준비 시간을 확보할 수 있도록 함
           setTimeout(async () => {
+            if (!setResult) {
+              console.error('setResult is undefined');
+              return;
+            }
             await receiveData(device, serviceUUID, characteristicUUID, setProcessing, setResult);
           }, 500);
           return;

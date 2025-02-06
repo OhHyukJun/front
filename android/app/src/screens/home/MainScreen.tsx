@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from '../css/MainScreen';
 import useBluetooth from '../bluetooth/useBlutooth';
+import { emotionTexts } from './emotionData';
 
 type MainScreenProps = {
   navigation: any;
@@ -18,6 +19,13 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
     }
   };
   */
+  const getEmotionMessage = (emotion: string | null) => {
+    if (emotion && emotion in emotionTexts) {
+      return emotionTexts[emotion]; // `result` 값과 일치하는 감정 메시지 출력
+    }
+    return '아이를 클릭해\n녹음해주세요 :)'; // 기본 메시지
+  };
+
   const handleDisconnect = async () => {
     try {
       console.log('Attempting to disconnect Bluetooth device...');
@@ -42,7 +50,7 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
       <View style={styles.roundedContainer}>
         <ImageBackground source={require('../img/thought_balloon.png')} style={styles.balloon}>
         <Text style={styles.balloonText}>
-            {isProcessing ? '응답을 생성 중입니다...' : '아이를 클릭해\n녹음해주세요 :)'}
+            {isProcessing ? '응답을 생성 중입니다...' : getEmotionMessage(result)}
           </Text>
         </ImageBackground>
         <TouchableOpacity onPress={handleBluetooth}>
@@ -55,7 +63,11 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         >
           <Image source={require('../img/chatbot.png')} style={styles.chatbot} />
         </TouchableOpacity>
+        
       </View>
+      <TouchableOpacity onPress={handleDisconnect}>
+        <Text>해제</Text>
+      </TouchableOpacity>
     </View>
   );
 };
