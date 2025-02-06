@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   balloonText: {
-    color: '#808080', // 회색
-    fontSize: vh(3.4), // 적당한 폰트 사이즈
-    textAlign: 'center', // 텍스트 중앙 정렬
+    color: '#808080',
+    fontSize: vh(3.4),
+    textAlign: 'center',
     marginTop: -vh(1.3), // 상단 마진 조정
     marginBottom: vh(1), // 하단 마진 조정
     lineHeight: vh(4.3), // 라인 높이 조정
