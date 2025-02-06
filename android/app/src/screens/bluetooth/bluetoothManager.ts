@@ -108,7 +108,7 @@ export const receiveData = async (
 
               setProcessing(false);
               setResult(aiResult.trim());
-              Alert.alert('AI 결과', `예측 결과: ${aiResult.trim()}`);
+              // Alert.alert('AI 결과', `예측 결과: ${aiResult.trim()}`);
               return;
             }
           } catch (decodeError) {
