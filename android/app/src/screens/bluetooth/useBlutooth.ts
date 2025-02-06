@@ -13,12 +13,16 @@ interface useBluetooth {
   connectedDevice: Device | null;
   connectToDevice: () => Promise<void>;
   disconnectToDevice: () => Promise<void>;
+  isProcessing: boolean;
+  result: string;
 }
 
 const useBluetooth = (): useBluetooth => {
   const managerRef = useRef(new BleManager());
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
   const [isManuallyDisconnected, setIsManuallyDisconnected] = useState(false); // 수동 해제 상태 플래그
+  const [isProcessing, setProcessing] = useState<boolean>(false);
+  const [result, setResult] = useState<string>('');
 
   const connectToDeviceWrapper = async () => {
     if (isManuallyDisconnected) {
@@ -38,7 +42,7 @@ const useBluetooth = (): useBluetooth => {
       targetDeviceId,
       setConnectedDevice,
       async (device) => {
-        await sendData(device, serviceUUID, characteristicUUID);
+        await sendData(device, serviceUUID, characteristicUUID, setProcessing, setResult);
       }
     );
   };
@@ -52,7 +56,7 @@ const useBluetooth = (): useBluetooth => {
     }, 1000);
   };
 
-  return { connectedDevice, connectToDevice: connectToDeviceWrapper, disconnectToDevice };
+  return { connectedDevice, connectToDevice: connectToDeviceWrapper, disconnectToDevice, isProcessing, result };
 };
 
 export default useBluetooth;
