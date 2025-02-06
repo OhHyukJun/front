@@ -4,6 +4,9 @@ import { accessTokenState, refreshTokenState, userIdState, userPwState, loginSta
 import { Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import axiosInstance from '../../../api/axios';
+
+const RNRestart = require('react-native-restart').default;
+
 type RootParamList = {
   Login: undefined;
 };
@@ -14,7 +17,7 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
-
+  
   const handleLogout = async () => {
     try {
       // AsyncStorage에서 accessToken 가져오기
@@ -42,7 +45,7 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
       setRefreshToken(null);
       setLoginState(false);
 
-      navigate('Login');
+      RNRestart.restart();
     } catch (error: any) {
       console.error('로그아웃 오류:', error.response?.data || error.message);
 
