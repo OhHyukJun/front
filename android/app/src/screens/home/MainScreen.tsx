@@ -9,7 +9,7 @@ type MainScreenProps = {
 
 const MainScreen = ({ navigation }: MainScreenProps) => {
   // const { findDeviceAndSendData, disconnectDevice } = useBluetooth();
-  const { connectToDevice, disconnectToDevice } = useBluetooth();
+  const {  connectToDevice, disconnectToDevice, isProcessing, result } = useBluetooth();
   /* const handleBluetooth = async () => {
     try {
       await findDeviceAndSendData('r'); // Attempt to find, connect, and send data
@@ -41,8 +41,8 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
     <View style={styles.container}>
       <View style={styles.roundedContainer}>
         <ImageBackground source={require('../img/thought_balloon.png')} style={styles.balloon}>
-          <Text style={styles.balloonText}>
-            아이를 클릭해{'\n'}녹음해주세요 :)
+        <Text style={styles.balloonText}>
+            {isProcessing ? '응답을 생성 중입니다...' : '아이를 클릭해\n녹음해주세요 :)'}
           </Text>
         </ImageBackground>
         <TouchableOpacity onPress={handleBluetooth}>
