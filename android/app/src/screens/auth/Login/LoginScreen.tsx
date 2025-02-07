@@ -143,15 +143,17 @@ const LoginScreen = () => {
           autoCorrect={false}
         />
       </View>
-      <View style={styles.divider} />
+      
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => navigation.navigate('Info')}>
           <Text style={styles.footerText}>회원가입</Text>
         </TouchableOpacity>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>|</Text>
         <TouchableOpacity>
           <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>아이디 찾기</Text>
         </TouchableOpacity>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>|</Text>
         <TouchableOpacity>
           <Text style={styles.footerText} onPress={() => navigation.navigate('PasswordFind')}>비밀번호 찾기</Text>
         </TouchableOpacity>

@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
     },
     titleImg: {
         marginTop: vw(30),
-        width: vw(22),
-        height: vw(22),
+        width: vw(30),
+        height: vw(30),
     },
     title: {
         fontFamily:'KCC-Ganpan',
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
         marginBottom: 7,
     },
     footer: {
+        marginTop: vh(5),
         marginBottom: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
