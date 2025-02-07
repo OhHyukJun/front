@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity,Alert } from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useRecoilState,useRecoilValue } from 'recoil';
 import styles from '../css/AccountScreen';
 import { useLogout } from '../auth/Login/Logout';
 import LogoutModal from './LogoutModal';
 import { useDeleteAccount } from '../auth/Login/DeleteAccount';
 import DeleteAccountModal from './DeleteAccountModal';
 import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
+import { userImageState } from '../../atom/userImage';
+import { userNameState } from '../../atom/userInfo';
 
 type AccountScreenProps = {
   navigation: any;
@@ -24,13 +28,16 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
 
   const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useRecoilState(userImageState);
+  const [userName, setUserName ] = useRecoilState(userNameState);
 
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
         const data = await fetchUserInfo();
         setUserInfo(data);
+        setUserName(data?.name);
+        console.log(setUserName);
       } catch (error) {
         console.error('사용자 정보를 불러오는 중 오류 발생:', error);
         setUserInfo(null);
@@ -41,6 +48,17 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
 
     loadUserInfo();
   }, []);
+
+  const requestCameraPermission = async () => {
+    const result = await request(PERMISSIONS.ANDROID.CAMERA);
+    if (result === RESULTS.GRANTED) {
+      console.log('카메라 권한 허용됨.');
+      return true;
+    } else {
+      Alert.alert('카메라 권한이 필요합니다.');
+      return false;
+    }
+  };
 
   const handleImageUpload = () => {
     Alert.alert(
@@ -82,6 +100,9 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   };
 
   const captureImageWithCamera = async () => {
+    const hasPermission = await requestCameraPermission();
+    if (!hasPermission) return;
+
     launchCamera(
       {
         mediaType: 'photo',
