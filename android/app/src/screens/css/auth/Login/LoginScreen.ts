@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         marginBottom: 7,
     },
     footer: {
-        marginTop: vh(5),
+        marginTop: vh(6),
         marginBottom: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
