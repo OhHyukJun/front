@@ -100,7 +100,7 @@ export const receiveData = async (
               console.log('AI 결과 수신 완료');
               aiResult = decodedData;
               if (!setResult) {
-                console.error('🚨 setResult is undefined! 사용 전에 확인이 필요합니다.');
+                console.error('setResult is undefined! 사용 전에 확인이 필요합니다.');
               } else {
                 setResult(aiResult);
               }
@@ -141,8 +141,6 @@ export const sendData = async (
         if (characteristic.isWritableWithResponse) {
           console.log('Sending start recording signal...');
           await characteristic.writeWithResponse(base64.encode('r'));
-
-          Alert.alert('Data Sent', 'The data "r" has been successfully sent.');
 
           setProcessing(true);
           // 약간의 지연을 주어 아두이노가 녹음할 준비 시간을 확보할 수 있도록 함
