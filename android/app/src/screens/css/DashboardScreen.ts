@@ -35,41 +35,155 @@ const styles = StyleSheet.create({
     fontSize: vh(2.1),
     color: '#BBBBBB',
   },
-
-  /* 🆕 아기 기록 타이틀 */
   recordTitle: {
+    fontSize: vh(2.5),
+    fontWeight: 'bold',
+    marginTop: vh(3),
+    marginBottom: vh(1),
+    marginLeft: vw(2),
+  },
+  emotionContainer: {
+    width: vw(88),
+    height: vh(21),
+    backgroundColor: '#F8F8FF',
+    borderRadius: 15,
+    padding: vw(4),
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  emotionWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  emotionItem: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginHorizontal: vw(3),
+  },
+  emotionDate: {
+    fontSize: vh(1.8),
+    marginBottom: vh(2),
+  },
+  emotionImage: {
+    width: vw(17),
+    height: vw(17),
+    resizeMode: 'contain',
+  },
+  emotionText: {
+    fontSize: vh(2),
+    marginTop: vh(1),
+  },
+  separator: {
+    width: vw(1),
+    height: '60%',
+    backgroundColor: '#96BCFF',
+    marginHorizontal: vw(2),
+  },
+  noDataText: {
+    fontSize: vh(2),
+    color: '#888888',
+    textAlign: 'center',
+    width: '100%',
+  },
+  chartTitle: {
     fontSize: vh(2.5),
     fontWeight: 'bold',
     marginTop: vh(2),
     marginBottom: vh(1),
-    color: '#333333',
+    marginLeft: vw(2),
   },
-
-  /* 🆕 보라색 컨테이너 */
-  recordContainer: {
+  chartContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
     width: vw(88),
-    height: vh(24), // ✅ 기존 컨테이너 높이의 3배
-    backgroundColor: '#D3C4FF',
-    borderRadius: 20,
-    padding: 15,
-    marginBottom: vh(3),
-  },
-
-  /* 🆕 스크롤 가능한 아이템 */
-  recordItem: {
-    width: vw(30),
-    height: vh(20),
-    backgroundColor: '#FFFFFF',
+    height: vh(25),
+    backgroundColor: '#EDEEFF',
     borderRadius: 15,
+    padding: vw(3),
+  },
+  outerChartContainer: {
+    width: vw(88),
+    height: vh(30),
+    backgroundColor: '#999CD9',
+    borderRadius: 15,
+    padding: vw(3),
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: vw(2),
+  },
+  innerChartContainer: {
+    width: '95%',
+    height: '85%',
+    backgroundColor: '#FFFFFF', // ✅ 추가된 하얀색 배경 컨테이너
+    borderRadius: 10,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    padding: vw(2),
+  },
+  chartHourContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly', // 또는 'space-between'
+    alignItems: 'center', // 수직 정렬 조정 (필요 시)
+    flexWrap: 'wrap', // 만약 줄 바꿈이 필요하면 추가
+    width: '90%', // 상위 컨테이너 전체를 사용하도록 설정
+    marginTop: vh(1),
+  },
+  
+
+
+  chartBarContainer: {
+    alignItems: 'center',
+    width: vw(10),
+  },
+  chartBar: {
+    width: vw(8),
+    borderRadius: 5,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  chartEmoji: {
+    width: vw(7),
+    height: vw(7),
+    marginBottom: vh(1),
+  },
+  chartHour: {
+    fontSize: vh(2),
+    marginTop: vh(0.5),
   },
 
-  recordText: {
-    fontSize: vh(2),
-    color: '#333333',
+  emotionDescriptionContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: vw(88),
+    backgroundColor: '#FFFFFF',
+    borderRadius: 15,
+    padding: vh(1),
+    marginTop: vh(2),
+    borderWidth: 2, // ✅ 테두리 두께 설정
+    borderColor: '#999CD9', // ✅ 테두리 색상 (흰색)
   },
+  
+  emotionDescriptionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: vh(1),
+    width: vw(25), // 한 줄에 2개씩 배치
+  },
+  emotionIcon: {
+    width: vw(5.6),
+    height: vw(5.6),
+    marginRight: vw(1.8),
+  },
+  emotionDescriptionText: {
+    fontSize: vh(1.6),
+    color: '#000',
+  },
+
+  
+  
 });
 
 export default styles;
