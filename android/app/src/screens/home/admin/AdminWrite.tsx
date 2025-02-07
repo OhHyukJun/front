@@ -1,52 +1,82 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import axiosInstance from '../../../api/axios';
+import { accessTokenState } from '../../../atom/login';
 import styles from '../../css/AdminWriteScreen';
+import { useRecoilValue } from 'recoil';
 
 type AdminWriteScreenProps = {
-  navigation: any;
+    navigation: any;
 };
 
 const AdminWrite = ({ navigation }: AdminWriteScreenProps) => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [header, setHeader] = useState('');
+  const [body, setBody] = useState('');
+  const accessToken = useRecoilValue(accessTokenState);
 
-  const handleSave = () => {
-    // 여기에 저장 로직 추가
-    console.log('제목:', title);
-    console.log('내용:', content);
-    navigation.goBack(); // 저장 후 이전 화면으로 이동
+  const handleSave = async () => {
+    if (!header.trim() || !body.trim()) {
+      Alert.alert('입력 오류', '제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post('/admin/updateNotice', {
+        accessToken,
+        header,
+        body,
+        footer: '공지사항이 등록되었습니다.',
+      });
+
+      if (response.status === 200) {
+        Alert.alert('성공', '공지사항이 정상적으로 등록되었습니다.', [
+          { text: '확인', onPress: () => navigation.goBack() }
+        ]);
+      } else {
+        throw new Error('서버에서 올바른 응답을 받지 못했습니다.');
+      }
+    } catch (error: any) {
+      console.error('공지사항 작성 오류:', error);
+      const errorMessage = error.response?.data?.message || '서버와의 통신 중 문제가 발생했습니다.';
+      Alert.alert('오류', errorMessage);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      {/* 제목 입력 */}
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.titleInput}
-          placeholder="제목을 입력해주세요."
-          placeholderTextColor="#999"
-          value={title}
-          onChangeText={setTitle}
-        />
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.titleInput}
+            placeholder="제목을 입력해주세요."
+            placeholderTextColor="#292929"
+            value={header}
+            onChangeText={setHeader}
+            returnKeyType="done"
+            blurOnSubmit={true}
+            onSubmitEditing={Keyboard.dismiss}
+          />
+        </View>
 
-      {/* 내용 입력 */}
-      <View style={styles.inputWrapper}>
+        <View style={styles.inputWrapper}>
         <TextInput
-          style={styles.contentInput}
-          placeholder="내용을 입력해주세요."
-          placeholderTextColor="#999"
-          multiline
-          value={content}
-          onChangeText={setContent}
+            style={styles.contentInput}
+            placeholder="내용을 입력해주세요."
+            placeholderTextColor="#292929"
+            multiline={true}
+            value={body}
+            onChangeText={setBody}
+            returnKeyType="done"
+            blurOnSubmit={false}
+            onSubmitEditing={Keyboard.dismiss}
         />
-      </View>
+        </View>
 
-      {/* 저장 버튼 */}
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>저장</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>저장</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

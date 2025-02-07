@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from '../css/MainScreen';
 import useBluetooth from '../bluetooth/useBlutooth';
+import { emotionTexts } from './emotionData';
 
 type MainScreenProps = {
   navigation: any;
@@ -9,7 +10,7 @@ type MainScreenProps = {
 
 const MainScreen = ({ navigation }: MainScreenProps) => {
   // const { findDeviceAndSendData, disconnectDevice } = useBluetooth();
-  const { connectToDevice, disconnectToDevice } = useBluetooth();
+  const {  connectToDevice, disconnectToDevice, isProcessing, result } = useBluetooth();
   /* const handleBluetooth = async () => {
     try {
       await findDeviceAndSendData('r'); // Attempt to find, connect, and send data
@@ -18,6 +19,13 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
     }
   };
   */
+  const getEmotionMessage = (emotion: string | null) => {
+    if (emotion && emotion in emotionTexts) {
+      return emotionTexts[emotion];
+    }
+    return '아이를 클릭해\n녹음해주세요 :)';
+  };
+
   const handleDisconnect = async () => {
     try {
       console.log('Attempting to disconnect Bluetooth device...');
@@ -41,12 +49,12 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
     <View style={styles.container}>
       <View style={styles.roundedContainer}>
         <ImageBackground source={require('../img/thought_balloon.png')} style={styles.balloon}>
-          <Text style={styles.balloonText}>
-            아이를 클릭해{'\n'}녹음해주세요 :)
+        <Text style={styles.balloonText}>
+            {isProcessing ? '응답을 생성 중입니다...' : getEmotionMessage(result)}
           </Text>
         </ImageBackground>
         <TouchableOpacity onPress={handleBluetooth}>
-          <Image source={require('../img/baby_profile.jpg')} style={styles.baby} />
+          <Image source={require('../img/baby_profile.png')} style={styles.baby} />
         </TouchableOpacity>
         {/* chatbot 이미지에 TouchableOpacity 추가 */}
         <TouchableOpacity
@@ -55,6 +63,7 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         >
           <Image source={require('../img/chatbot.png')} style={styles.chatbot} />
         </TouchableOpacity>
+
       </View>
     </View>
   );

@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
 import requestPermissions from './permissions';
 import { connectToDevice, sendData, receiveData, disconnectDevice } from './bluetoothManager';
-
+import { useRecoilState } from 'recoil';
+import { accessTokenState } from '../../atom/login';
+import axiosInstance from '../../api/axios';
 const targetDeviceName = 'AivleBigPAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:41';
 const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
@@ -13,12 +15,17 @@ interface useBluetooth {
   connectedDevice: Device | null;
   connectToDevice: () => Promise<void>;
   disconnectToDevice: () => Promise<void>;
+  isProcessing: boolean;
+  result: string;
 }
 
 const useBluetooth = (): useBluetooth => {
   const managerRef = useRef(new BleManager());
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
   const [isManuallyDisconnected, setIsManuallyDisconnected] = useState(false); // 수동 해제 상태 플래그
+  const [isProcessing, setProcessing] = useState<boolean>(false);
+  const [result, setResult] = useState<string>('');
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 
   const connectToDeviceWrapper = async () => {
     if (isManuallyDisconnected) {
@@ -38,7 +45,8 @@ const useBluetooth = (): useBluetooth => {
       targetDeviceId,
       setConnectedDevice,
       async (device) => {
-        await sendData(device, serviceUUID, characteristicUUID);
+        await sendData(device, serviceUUID, characteristicUUID, setProcessing, setResult);
+        console.log('setResult:', setResult);
       }
     );
   };
@@ -51,9 +59,29 @@ const useBluetooth = (): useBluetooth => {
       console.log('수동 연결 해제 플래그 초기화됨.');
     }, 1000);
   };
+  const postEmotion = async () => {
+    if (result === null || result === undefined) {
+      Alert.alert('Error', 'No emotion result available.');
+      return;
+    }
+  
+    try {
+      const response = await axiosInstance.post('/emotion/postEmotion', {
+        accessToken,
+        emotion: result,
+      })
+    } catch (error: any) {
+      console.error('Error sending emotion data:', error);
+      Alert.alert('Error', 'Failed to send emotion data.');
+    }
+  };
+  useEffect(() => {
+    if (result !== null) {
+      postEmotion();
+    }
+  },[result]);
 
-  return { connectedDevice, connectToDevice: connectToDeviceWrapper, disconnectToDevice };
+  return { connectedDevice, connectToDevice: connectToDeviceWrapper, disconnectToDevice, isProcessing, result };
 };
 
 export default useBluetooth;
-

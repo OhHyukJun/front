@@ -3,8 +3,11 @@ import { View, Text, Image, TouchableOpacity, TextInput, Dimensions, Alert } fro
 import Slider from 'react-native-simple-slider';
 import DatePicker from 'react-native-date-picker';
 import styles from '../css/SettingScreen';
-import { fetchSettingInfo } from './fetchSettingInfo';
-import { saveSettings } from './saveSettings';
+import { fetchSettingInfo } from './hook/fetchSettingInfo';
+import { saveSettings } from './hook/saveSettings';
+import { useRecoilValue } from 'recoil';
+import { userImageState } from '../../atom/userImage';
+import { userNameState } from '../../atom/userInfo';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -19,6 +22,8 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [deleteMonths, setDeleteMonths] = useState(12); // ✅ 기본값 12개월
   const [open, setOpen] = useState(false); // Date Picker 모달 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
+  const userImage = useRecoilValue(userImageState);
+  const userName = useRecoilValue(userNameState);
 
   // ✅ 설정 정보 불러오기
   useEffect(() => {
@@ -58,8 +63,8 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
       {/* 프로필 섹션 */}
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
-          <Image source={require('../img/profile_placeholder.png')} style={styles.profileImage} />
-          <Text style={styles.usernameText}>사용자</Text>
+          <Image source={userImage ? { uri: userImage } : require('../img/profile_placeholder.png')} style={styles.profileImage} />
+          <Text style={styles.usernameText}>{userName || '사용자'}</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Account')}>
           <Text style={styles.accountManagementText}>계정관리</Text>
