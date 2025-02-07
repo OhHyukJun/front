@@ -3,8 +3,8 @@ import { View, Text, Image, TouchableOpacity, TextInput, Dimensions, Alert } fro
 import Slider from 'react-native-simple-slider';
 import DatePicker from 'react-native-date-picker';
 import styles from '../css/SettingScreen';
-import { fetchSettingInfo } from './fetchSettingInfo';
-import { saveSettings } from './saveSettings';
+import { fetchSettingInfo } from './hook/fetchSettingInfo';
+import { saveSettings } from './hook/saveSettings';
 import { useRecoilValue } from 'recoil';
 import { userImageState } from '../../atom/userImage';
 import { userNameState } from '../../atom/userInfo';
