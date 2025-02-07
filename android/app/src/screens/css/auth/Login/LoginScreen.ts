@@ -7,12 +7,11 @@ const rem = width / 375; // 375px 기준으로 rem 단위 생성
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
     },
     titleImg: {
-        marginTop: vw(5),
+        marginTop: vw(30),
         width: vw(42),
         height: vw(42),
     },
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter',
         fontSize: 15 * rem, // 40px
         color: '#FFFFFF',
+        paddingBottom: vh(1),
     },
     rememberContainer: {
         flexDirection: 'row',
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         width: '85%',
         borderTopWidth: 1,
         borderColor: '#4750BD',
-        marginBottom: 10,
+        marginBottom: 70,
     },
     socialLoginContainer: {
         width: '85%',
@@ -109,15 +109,16 @@ const styles = StyleSheet.create({
         marginBottom: 7,
     },
     footer: {
+        marginBottom: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '85%',
     },
     footerText: {
         fontFamily: 'Work Sans',
-        fontSize: 10 * rem,
+        fontSize: vw(3.5),
         justifyContent: 'center',
-        color: '#4750BD',
+        color: '#292929',
     },
 });
 
