@@ -21,9 +21,9 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
   */
   const getEmotionMessage = (emotion: string | null) => {
     if (emotion && emotion in emotionTexts) {
-      return emotionTexts[emotion]; // `result` 값과 일치하는 감정 메시지 출력
+      return emotionTexts[emotion];
     }
-    return '아이를 클릭해\n녹음해주세요 :)'; // 기본 메시지
+    return '아이를 클릭해\n녹음해주세요 :)';
   };
 
   const handleDisconnect = async () => {
@@ -63,11 +63,8 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         >
           <Image source={require('../img/chatbot.png')} style={styles.chatbot} />
         </TouchableOpacity>
-        
+
       </View>
-      <TouchableOpacity onPress={handleDisconnect}>
-        <Text>해제</Text>
-      </TouchableOpacity>
     </View>
   );
 };
