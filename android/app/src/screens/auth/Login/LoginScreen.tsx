@@ -112,15 +112,6 @@ const LoginScreen = () => {
     }
   };
 
-  // SNS 로그인 처리
-  const handleKaKaoLogin = async () => {
-    Alert.alert('카카오 로그인', '카카오 로그인 로직을 추가하세요.');
-  };
-
-  const handleNaverLogin = async () => {
-    Alert.alert('네이버 로그인', '네이버 로그인 로직을 추가하세요.');
-  };
-
   return (
     <View style={styles.container}>
       <Image source={require('../../img/logo.png')} style={styles.titleImg} />
@@ -152,34 +143,24 @@ const LoginScreen = () => {
           autoCorrect={false}
         />
       </View>
-
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>로그인</Text>
-      </TouchableOpacity>
-
-      <View style={styles.divider} />
-      <Text style={styles.snsText}>SNS 간편 로그인</Text>
-
-      <View style={styles.socialLoginContainer}>
-        <TouchableOpacity style={styles.socialContainer} onPress={handleKaKaoLogin}>
-          <Image source={require('../../img/kakao.png')} style={styles.socialIcon} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialContainer} onPress={handleNaverLogin}>
-          <Image source={require('../../img/naver.png')} style={styles.socialIcon} />
-        </TouchableOpacity>
-      </View>
+      
 
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => navigation.navigate('Info')}>
           <Text style={styles.footerText}>회원가입</Text>
         </TouchableOpacity>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>|</Text>
         <TouchableOpacity>
           <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>아이디 찾기</Text>
         </TouchableOpacity>
+        <Text style={styles.footerText} onPress={() => navigation.navigate('IdFind')}>|</Text>
         <TouchableOpacity>
           <Text style={styles.footerText} onPress={() => navigation.navigate('PasswordFind')}>비밀번호 찾기</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>로그인</Text>
+      </TouchableOpacity>
     </View>
   );
 };

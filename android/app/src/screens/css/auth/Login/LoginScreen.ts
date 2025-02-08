@@ -7,18 +7,17 @@ const rem = width / 375; // 375px 기준으로 rem 단위 생성
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
     },
     titleImg: {
-        marginTop: vw(5),
-        width: vw(42),
-        height: vw(42),
+        marginTop: vw(30),
+        width: vw(30),
+        height: vw(30),
     },
     title: {
         fontFamily:'KCC-Ganpan',
-        fontSize: 25 * rem,
+        fontSize: 50 * rem,
         color: '#4750BD',
         marginBottom: 40,
     },
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
         fontSize: vw(3), // 반응형 폰트 크기
         color: '#292929',
         justifyContent: 'space-between',
-        marginBottom: vh(2),
+        marginBottom: vh(5),
     },
     loginButton: {
         width: '85%',
@@ -63,12 +62,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         alignItems: 'center',
         borderRadius: 30,
-        marginBottom: 20,
     },
     loginButtonText: {
         fontFamily: 'Inter',
         fontSize: 15 * rem, // 40px
         color: '#FFFFFF',
+        marginBottom: vh(0.5),
     },
     rememberContainer: {
         flexDirection: 'row',
@@ -87,7 +86,8 @@ const styles = StyleSheet.create({
         width: '85%',
         borderTopWidth: 1,
         borderColor: '#4750BD',
-        marginBottom: 10,
+        marginBottom: 70,
+        marginTop: 20,
     },
     socialLoginContainer: {
         width: '85%',
@@ -109,15 +109,17 @@ const styles = StyleSheet.create({
         marginBottom: 7,
     },
     footer: {
+        marginTop: vh(6),
+        marginBottom: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '85%',
     },
     footerText: {
         fontFamily: 'Work Sans',
-        fontSize: 10 * rem,
+        fontSize: vw(3.5),
         justifyContent: 'center',
-        color: '#4750BD',
+        color: '#292929',
     },
 });
 

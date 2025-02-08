@@ -8,7 +8,7 @@ const SOCKET_URL = 'ws://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.
 
 const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [messages, setMessages] = useState([{ id: '1', text: '안녕하세요! 무엇이든지 알려드립니다.', sender: 'bot' }]);
+  const [messages, setMessages] = useState([{ id: '1', text: '안녕하세요! 육아 도우미 챗봇 나비잠입니다. 육아에 대해 궁금한 사항을 알려주세요.', sender: 'bot' }]);
   const [inputText, setInputText] = useState('');
   const accessToken = useRecoilValue(accessTokenState);
   const flatListRef = useRef<FlatList>(null);
@@ -20,7 +20,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   // WebSocket 연결 함수
   const connectWebSocket = () => {
     if (isConnected.current) return;
-    
+
     console.log('WebSocket 연결 시도 중...');
     const ws = new WebSocket(SOCKET_URL);
 
@@ -28,7 +28,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
       console.log('WebSocket 연결 성공');
       isConnected.current = true;
       reconnectInterval.current = 1000;
-      
+
       // 서버에 인증 정보 포함하여 초기 메시지 전송
       const greetingPayload = {
         type: 'message',
@@ -80,13 +80,13 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
     ws.onclose = (event) => {
       console.log(`WebSocket 종료됨 - 코드: ${event.code}, 이유: ${event.reason || '서버에서 이유 제공 없음'}`);
       isConnected.current = false;
-    
+
       // 홈 화면에서는 WebSocket을 다시 연결하지 않음
       if (AppState.currentState !== 'active') {
         console.log('앱이 백그라운드 상태이므로 WebSocket을 재연결하지 않음.');
         return;
       }
-    
+
       // 자동 재연결 (점진적 대기 시간 증가)
       setTimeout(() => {
         console.log(`WebSocket 재연결 시도 (${reconnectInterval.current / 1000}초 후)`);
@@ -94,7 +94,6 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
         reconnectInterval.current = Math.min(reconnectInterval.current * 2, 30000);
       }, reconnectInterval.current);
     };
-    
 
     setSocket(ws);
   };
@@ -113,7 +112,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
       }
       setTimeout(() => {
         navigation.navigate('Home');
-      }, 500);
+      }, 300);
       return true;
     };
 
@@ -125,7 +124,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
         setSocket(null);
       }
       BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-    };    
+    };
   }, [accessToken]);
 
   const sendMessage = () => {
