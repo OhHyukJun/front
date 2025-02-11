@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
     ScrollView,
     View,
-    StyleSheet,
+    KeyboardAvoidingView,
     Dimensions,
     NativeSyntheticEvent,
     NativeScrollEvent,
@@ -34,6 +34,7 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
+            <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
             <ScrollView
                 horizontal
                 pagingEnabled
@@ -48,7 +49,8 @@ const HomeScreen = () => {
                     </View>
                 ))}
             </ScrollView>
-
+            </KeyboardAvoidingView>
+            
             {/* Pagination (페이지네이션 점) */}
             <View style={styles.pagination}>
                 {pages.map((_, index) => (
