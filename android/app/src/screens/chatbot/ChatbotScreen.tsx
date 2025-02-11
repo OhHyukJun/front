@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, BackHandler, AppState, InteractionManager  } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, BackHandler, AppState, InteractionManager,Alert } from 'react-native';
 import styles from '../css/ChatbotScreen';
 import { accessTokenState } from '../../atom/login';
 import { useRecoilValue } from 'recoil';
@@ -21,11 +21,11 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const connectWebSocket = () => {
     if (isConnected.current) return;
 
-    console.log('WebSocket 연결 시도 중...');
+    Alert.alert('WebSocket 연결 시도 중...');
     const ws = new WebSocket(SOCKET_URL);
 
     ws.onopen = () => {
-      console.log('WebSocket 연결 성공');
+      Alert.alert('WebSocket 연결 성공');
       isConnected.current = true;
       reconnectInterval.current = 1000;
 
@@ -129,7 +129,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
 
   const sendMessage = () => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.error('WebSocket이 열려있지 않거나 유효하지 않습니다.');
+      Alert.alert('WebSocket이 열려있지 않거나 유효하지 않습니다.');
       return;
     }
 
