@@ -47,12 +47,9 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
     }
 
     const emotions = await fetchBabyEmotion();
-    if (emotions) {
-      setBabyEmotions(emotions.babyRecently?.slice(0, 15).reverse() || []);
-      setBabyEmotionByTime(emotions.babyEmotionOrderByTime || []);
-    } else {
-      setBabyEmotions([]);
-      setBabyEmotionByTime([]);
+    if (emotions.success) {
+      setBabyEmotions(emotions.babyRecently.slice(0, 15)); // ✅ 이미 빈 배열이므로 `?.` 필요 없음
+      setBabyEmotionByTime(emotions.babyEmotionOrderByTime);
     }
   };
 
@@ -61,6 +58,7 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
       loadDashboardData();
     }, [])
   );
+
 
   const calculateDaysSinceBirth = (birthDate: string | null): number | null => {
     if (!birthDate) return null;

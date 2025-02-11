@@ -76,6 +76,7 @@ const useBluetooth = (): useBluetooth => {
         accessToken,
         emotion: result,
       })
+      console.log('전송');
     } catch (error: any) {
       console.error('Error sending emotion data:', error);
       Snackbar.show({
