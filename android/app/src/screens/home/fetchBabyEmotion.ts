@@ -20,7 +20,6 @@ interface BabyEmotionResponse {
   babyEmotionOrderByTime?: BabyEmotionByTimeData[]; // ✅ 시간별 감정 데이터
 }
 
-// ✅ 감정 기록을 가져오는 함수 (오류 방지 처리 추가)
 export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> => {
   try {
     const accessToken = await AsyncStorage.getItem('accessToken');
@@ -42,12 +41,7 @@ export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> =>
 
     console.log('✅ 감정 기록 불러오기 성공:', response.data);
 
-    // ✅ 데이터가 없으면 빈 배열 반환 (오류 방지)
-    return {
-      success: response.data.success,
-      babyRecently: response.data.babyRecently ?? [], // ✅ undefined일 경우 빈 배열 반환
-      babyEmotionOrderByTime: response.data.babyEmotionOrderByTime ?? [], // ✅ undefined일 경우 빈 배열 반환
-    };
+    return response.data; 
   } catch (error: any) {
     console.error('❌ 감정 기록 불러오기 오류:', error.response?.data || error.message);
     return null;
