@@ -7,6 +7,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write 
     name: Build & Release APK
     runs-on: ubuntu-latest
 
@@ -43,7 +45,6 @@ jobs:
           path: android/app/build/outputs/apk/release/app-release.apk
 
       - name: Create GitHub Release
-        id: create_release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v1.0.${{ github.run_number }}
@@ -51,4 +52,5 @@ jobs:
           body: "나비잠 APK입니다."
           files: android/app/build/outputs/apk/release/app-release.apk
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
