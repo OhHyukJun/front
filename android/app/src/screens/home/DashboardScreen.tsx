@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import styles from '../css/DashboardScreen';
@@ -101,6 +101,7 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
         </View>
       </View>
 
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContentContainer} keyboardShouldPersistTaps="handled">
       <Text style={styles.recordTitle}>
         {babyName ? `${babyName}이 기록` : '우리 아기 기록'}
       </Text>
@@ -148,7 +149,7 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
         </View>
         <View style={styles.chartHourContainer}>
           {displayedHours.map((hour, index) => (
-            <Text key={index} style={styles.chartHour}>{`${hour}시`}</Text>
+            <Text style={styles.chartHour}>{`${String(hour).padStart(2, '0')}시`}</Text>
           ))}
         </View>
       </View>
@@ -160,6 +161,7 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
           </View>
         ))}
       </View>
+      </ScrollView>
     </View>
   );
 };

@@ -27,6 +27,7 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
     }
     return '아이를 클릭해\n녹음해주세요 :)';
   };
+  
 
   const handleDisconnect = async () => {
     try {
