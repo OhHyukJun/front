@@ -35,13 +35,13 @@ jobs:
         run: |
           sed -i 's/<string name="app_name">.*<\/string>/<string name="app_name">나비잠<\/string>/' android/app/src/main/res/values/strings.xml
 
-      - name: Replace App Icon (No Assets Folder)
+      - name: Replace App Icon (Using mv)
         run: |
-              cp android/app/src/main/res/mipmap-mdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-              cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-              cp android/app/src/main/res/mipmap-xhdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-              cp android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-              cp android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          mv -f new_icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          mv -f new_icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          mv -f new_icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          mv -f new_icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          mv -f new_icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
       - name: Build Android APK
         run: |
