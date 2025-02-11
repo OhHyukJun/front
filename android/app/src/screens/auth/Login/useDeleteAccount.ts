@@ -4,6 +4,9 @@ import { accessTokenState, refreshTokenState, userIdState, userPwState, loginSta
 import { Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import axiosInstance from '../../../api/axios';
+import { userNameState } from '../../../atom/userInfo';
+import { userImageState } from '../../../atom/userImage';
+const RNRestart = require('react-native-restart').default;
 
 type RootParamList = {
   Login: undefined;
@@ -15,7 +18,8 @@ export const useDeleteAccount = (navigate: NavigationProp<RootParamList>['naviga
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
-
+  const [, setNameState] = useRecoilState(userNameState);
+  const [, setImgaeState] = useRecoilState(userImageState);
   const handleDeleteAccount = async () => {
     try {
       // 1️⃣ accessToken 확인
@@ -44,11 +48,13 @@ export const useDeleteAccount = (navigate: NavigationProp<RootParamList>['naviga
       setUserId('');
       setUserPw('');
       setAccessToken(null);
+      setNameState(null);
+      setImgaeState('');
       setRefreshToken(null);
       setLoginState(false);
 
-      Alert.alert('회원 탈퇴 완료', '정상적으로 탈퇴되었습니다.');
-      navigate('Login'); // 로그인 화면으로 이동
+      // Alert.alert('회원 탈퇴 완료', '정상적으로 탈퇴되었습니다.');
+      RNRestart.restart();
     } catch (error: any) {
       console.error('회원 탈퇴 오류:', error.response?.data || error.message);
 

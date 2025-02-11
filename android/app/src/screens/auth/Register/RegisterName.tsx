@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { nameState } from '../../../atom/Register';
@@ -10,6 +10,7 @@ type NameProps = {
 
 const RegisterName = ({ navigation }: NameProps) => {
   const [name, setName] = useRecoilState(nameState);
+  const [message, setMessage] = useState('');
 
   const handlePrev = () => {
     navigation.goBack();
@@ -17,7 +18,7 @@ const RegisterName = ({ navigation }: NameProps) => {
 
   const handleValid = (): boolean => {
     if (!name) {
-      Alert.alert('오류', '이름을 입력해주세요.');
+      setMessage('이름을 입력해주세요.');
       return false;
     }
     return true;
@@ -54,6 +55,7 @@ const RegisterName = ({ navigation }: NameProps) => {
             value={name}
             onChangeText={setName}
           />
+          {message ? <Text style={styles.messageText}>{message}</Text> : null}
         </View>
 
         <TouchableOpacity style={styles.continueButton} onPress={handleNext}>

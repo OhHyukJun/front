@@ -10,8 +10,8 @@ type SplashScreenProps = {
 };
 
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
-  const [login, setLoginState] = useRecoilState(loginState);
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+  const [,setLoginState] = useRecoilState(loginState);
+  const [,setAccessToken] = useRecoilState(accessTokenState);
 
   useEffect(() => {
     const initializeApp = async () => {

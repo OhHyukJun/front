@@ -29,7 +29,7 @@ export const fetchDashboardInfo = async (): Promise<DashboardInfoResponse | null
       // 강제 타입 단언 적용 (response.data의 타입을 DashboardInfoResponse로 변환)
       return response.data as DashboardInfoResponse;
     } catch (error) {
-      console.error('대시보드 정보 불러오기 오류:', error);
+      console.log('대시보드 정보 불러오기 오류:', error);
       return null;
     }
   };

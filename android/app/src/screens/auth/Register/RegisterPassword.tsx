@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { passwordState } from '../../../atom/Register'; // passwordState 가져오기
@@ -11,7 +11,7 @@ type NameProps = {
 
 const RegisterPassword = ({ navigation }: NameProps) => {
   const [password, setPassword] = useRecoilState(passwordState);
-
+  const [message, setMessage] = useState('');
   const handlePrev = () => {
     navigation.goBack();
   };
@@ -26,7 +26,7 @@ const RegisterPassword = ({ navigation }: NameProps) => {
 
   const handleValid = (): boolean => {
     if (!password) {
-      Alert.alert('오류', '비밀번호를 입력해주세요.');
+      setMessage('비밀번호를 입력해주세요.');
       return false;
     }
 
@@ -35,7 +35,7 @@ const RegisterPassword = ({ navigation }: NameProps) => {
     }
 
     if (password.length < constants.PASSWORD.MIN_LENGTH || password.length > constants.PASSWORD.MAX_LENGTH) {
-      Alert.alert('오류', `비밀번호는 ${constants.PASSWORD.MIN_LENGTH}~${constants.PASSWORD.MAX_LENGTH}자 사이여야 합니다.`);
+      setMessage(`비밀번호는 ${constants.PASSWORD.MIN_LENGTH}~${constants.PASSWORD.MAX_LENGTH}자 사이여야 합니다.`);
       return false;
     }
 
@@ -77,6 +77,7 @@ const RegisterPassword = ({ navigation }: NameProps) => {
             onChangeText={setPassword}
             secureTextEntry
           />
+          {message ? <Text style={styles.messageText}>{message}</Text> : null}
         </View>
 
         <TouchableOpacity style={styles.continueButton} onPress={handleNext}>

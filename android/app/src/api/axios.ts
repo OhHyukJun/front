@@ -29,17 +29,17 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    console.error('응답 에러:', error.message);
+    console.log('응답 에러:', error.message);
 
     // 상세 에러 로그
     if (error.response) {
-      console.error('응답 상태 코드:', error.response.status);
-      console.error('응답 헤더:', error.response.headers);
-      console.error('응답 데이터:', error.response.data);
+      console.log('응답 상태 코드:', error.response.status);
+      console.log('응답 헤더:', error.response.headers);
+      console.log('응답 데이터:', error.response.data);
     } else if (error.request) {
-      console.error('요청 데이터:', error.request);
+      console.log('요청 데이터:', error.request);
     } else {
-      console.error('설정 중 에러:', error.message);
+      console.log('설정 중 에러:', error.message);
     }
 
     if (Platform.OS === 'android') {
