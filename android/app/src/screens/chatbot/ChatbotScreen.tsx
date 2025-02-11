@@ -134,14 +134,17 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
     }
 
     if (inputText.trim() === '') return;
+    setMessages((prevMessages) => {
+      const updatedMessages = [...prevMessages, 
+          { id: Date.now().toString(), text: inputText, sender: 'user' }
+      ];
+      if (!updatedMessages.some((msg) => msg.id === 'processing')) {
+        updatedMessages.push({ id: 'processing', text: '분석 중입니다...', sender: 'bot' });
+      }
 
-    const userMessage = { id: Date.now().toString(), text: inputText, sender: 'user' };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInputText('');
-
-    setMessages((prevMessages) =>
-      prevMessages.some((msg) => msg.id === 'processing') ? prevMessages : [...prevMessages, { id: 'processing', text: '분석 중입니다...', sender: 'bot' }]
-    );
+      return updatedMessages;
+    });
+    setTimeout(() => setInputText(''), 10);
 
     scrollToBottom();
 
@@ -190,7 +193,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
           </TouchableOpacity>
         ))}
       </View>
-      
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.inputBox}
