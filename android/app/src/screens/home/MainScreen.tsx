@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from '../css/MainScreen';
 import useBluetooth from '../bluetooth/useBlutooth';
@@ -11,6 +11,8 @@ type MainScreenProps = {
 const MainScreen = ({ navigation }: MainScreenProps) => {
   // const { findDeviceAndSendData, disconnectDevice } = useBluetooth();
   const {  connectToDevice, disconnectToDevice, isProcessing, result } = useBluetooth();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isScanning, setIsScanning] = useState(false); 
   /* const handleBluetooth = async () => {
     try {
       await findDeviceAndSendData('r'); // Attempt to find, connect, and send data
@@ -31,16 +33,24 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
       console.log('Attempting to disconnect Bluetooth device...');
       await disconnectToDevice(); // Bluetooth 연결 해제
     } catch (error: any) {
-      console.error('Error during Bluetooth disconnection:', error.message || error);
+      console.log('Error during Bluetooth disconnection:', error.message || error);
     }
   };
 
   const handleBluetooth = async () => {
+    if (isButtonDisabled || isScanning) return;
     try {
       console.log('Attempting to connect to Bluetooth device...');
+      setIsButtonDisabled(true);
+      setIsScanning(true);
       await connectToDevice(); // Bluetooth 연결 시도
     } catch (error: any) {
-      console.error('Error during Bluetooth handling:', error.message || error);
+      console.log('Error during Bluetooth handling:', error.message || error);
+    } finally {
+      setTimeout(() => {
+        setIsButtonDisabled(false); // 3초 후 버튼 활성화
+      }, 3000);
+      setIsScanning(false);
     }
   };
 
@@ -63,7 +73,6 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         >
           <Image source={require('../img/chatbot.png')} style={styles.chatbot} />
         </TouchableOpacity>
-
       </View>
     </View>
   );

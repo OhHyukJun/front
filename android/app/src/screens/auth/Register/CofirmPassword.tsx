@@ -12,6 +12,7 @@ type NameProps = {
 
 const ConfirmPassword = ({ navigation }: NameProps) => {
   const [username, setNameState] = useRecoilState(nameState); // 이름 상태 관리
+  const [message, setMessage] = useState('');
   const [email, setEmailState] = useRecoilState(emailState); // 이메일 상태 관리
   const [password, setPasswordState] = useRecoilState(passwordState); // 비밀번호 상태 관리
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -22,12 +23,12 @@ const ConfirmPassword = ({ navigation }: NameProps) => {
 
   const handleValid = (): boolean => {
     if (!confirmPassword) {
-      Alert.alert('오류', '비밀번호를 다시 입력해주세요.');
+      setMessage('비밀번호를 입력해주세요.');
       return false;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('오류', constants.PASSWORD.CHECK_MESSAGE);
+      setMessage('비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
       return false;
     }
 
@@ -48,7 +49,7 @@ const ConfirmPassword = ({ navigation }: NameProps) => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        Alert.alert('성공', '회원가입이 완료되었습니다!');
+        //Alert.alert('성공', '회원가입이 완료되었습니다!');
         setNameState('');
         setEmailState('');
         setPasswordState('');
@@ -57,8 +58,8 @@ const ConfirmPassword = ({ navigation }: NameProps) => {
       } else {
         Alert.alert('오류', '회원가입에 실패했습니다. 다시 시도해주세요.');
       }
-    } catch (error) {
-      console.error('회원가입 오류:', error);
+    } catch (error : any) {
+      console.log('회원가입 오류:', error);
       const errorMessage = error.response?.data?.message || '서버와의 통신 중 문제가 발생했습니다. 다시 시도해주세요.';
 
       Alert.alert('오류', errorMessage);
@@ -91,6 +92,7 @@ const ConfirmPassword = ({ navigation }: NameProps) => {
             onChangeText={setConfirmPassword}
             secureTextEntry
           />
+          {message ? <Text style={styles.messageText}>{message}</Text> : null}
         </View>
 
         <TouchableOpacity style={styles.continueButton} onPress={handleRegister}>
