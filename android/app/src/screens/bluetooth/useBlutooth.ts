@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
 import Snackbar from 'react-native-snackbar';
+import { debounce } from 'lodash';
 
 const targetDeviceName = 'bigAivleAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:41';
@@ -28,6 +29,7 @@ const useBluetooth = (): useBluetooth => {
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [result, setResult] = useState<string>('');
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+  const isRender = useRef(true);
 
   const connectToDeviceWrapper = async () => {
     if (isManuallyDisconnected) {
@@ -62,7 +64,7 @@ const useBluetooth = (): useBluetooth => {
     }, 1000);
   };
   const postEmotion = async () => {
-    if (result === null || result === undefined) {
+    if (!result) {
       Snackbar.show({
         text: '감정 결과가 없습니다.',
         duration: Snackbar.LENGTH_SHORT,
@@ -86,11 +88,18 @@ const useBluetooth = (): useBluetooth => {
       });
     }
   };
+  const debouncedPostEmotion = debounce(postEmotion, 500); // 500ms 이후 실행
+
   useEffect(() => {
-    if (result !== null) {
-      postEmotion();
+    if (isRender.current) {
+      isRender.current = false; // 첫 실행은 무시
+      return;
     }
-  },[result]);
+
+    if (result !== '') {
+      debouncedPostEmotion(); // 디바운스를 적용한 postEmotion 실행
+    }
+  }, [result]);
 
   return { connectedDevice, connectToDevice: connectToDeviceWrapper, disconnectToDevice, isProcessing, result };
 };
