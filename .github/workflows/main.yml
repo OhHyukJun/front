@@ -30,27 +30,44 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install Dependencies
         run: npm install
 
       - name: Build Android APK
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew --no-daemon --parallel assembleRelease
+
+      - name: Compress APK
+        run: |
+          tar -czf app-release.tar.gz android/app/build/outputs/apk/release/app-release.apk
 
       - name: Upload APK as an Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          name: app-release.tar.gz
+          path: app-release.tar.gz
+
+      - name: Delete Existing Release (if exists)
+        run: |
+          gh release delete latest --yes || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: "나비잠 Release v1.0.${{ github.run_number }}"
-          body: "나비잠 APK입니다."
+          tag_name: latest
+          name: "나비잠 최신 APK"
+          body: "가장 최신 버전의 나비잠 APK입니다."
           files: android/app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-
