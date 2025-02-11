@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     textAlign: 'center',
     fontSize: vw(7),
+    fontFamily: 'KCC-Ganpan',
     color: '#6D73C6',
     fontWeight: '600',
   },
