@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   outerChartContainer: {
     width: vw(88),
-    height: vh(30),
+    height: vh(29),
     backgroundColor: '#999CD9',
     borderRadius: 15,
     padding: vw(3),
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   innerChartContainer: {
     width: '95%',
-    height: '85%',
+    height: '80%',
     backgroundColor: '#FFFFFF', // ✅ 추가된 하얀색 배경 컨테이너
     borderRadius: 10,
     justifyContent: 'center',
@@ -181,6 +181,14 @@ const styles = StyleSheet.create({
     fontSize: vh(1.6),
     color: '#000',
   },
+
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    paddingBottom: 20,
+  },
+  
 
   
   
