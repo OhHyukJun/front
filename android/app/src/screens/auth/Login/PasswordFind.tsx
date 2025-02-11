@@ -52,12 +52,12 @@ const PasswordFind = ({ navigation }: NameProps) => {
       const data = response.data as { message?: string; success: boolean };
       setMessage(data.message || '임시 비밀번호가 이메일로 전송되었습니다.');
     } catch (error: any) {
-      console.error('비밀번호 찾기 오류:', error);
+      console.log('비밀번호 찾기 오류:', error);
 
       const errorMessage =
         error.response?.data?.message || '서버와의 연결이 실패했습니다. 다시 시도해주세요.';
-      setMessage('');
-      Alert.alert('오류', errorMessage);
+      setMessage(errorMessage);
+      //Alert.alert('오류', errorMessage);
     }
 
   };

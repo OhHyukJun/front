@@ -6,7 +6,9 @@ import { connectToDevice, sendData, receiveData, disconnectDevice } from './blue
 import { useRecoilState } from 'recoil';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
-const targetDeviceName = 'AivleBigPAudio';
+import Snackbar from 'react-native-snackbar';
+
+const targetDeviceName = 'bigAivleAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:41';
 const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const characteristicUUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
@@ -61,18 +63,26 @@ const useBluetooth = (): useBluetooth => {
   };
   const postEmotion = async () => {
     if (result === null || result === undefined) {
-      Alert.alert('Error', 'No emotion result available.');
+      Snackbar.show({
+        text: '감정 결과가 없습니다.',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#616161', // 회색 (정보)
+      });
       return;
     }
   
     try {
-      const response = await axiosInstance.post('/emotion/postEmotion', {
+      await axiosInstance.post('/emotion/postEmotion', {
         accessToken,
         emotion: result,
       })
     } catch (error: any) {
       console.error('Error sending emotion data:', error);
-      Alert.alert('Error', 'Failed to send emotion data.');
+      Snackbar.show({
+        text: '감정 데이터 전송 실패',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#616161', // 회색 (오류)
+      });
     }
   };
   useEffect(() => {
