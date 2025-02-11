@@ -22,12 +22,12 @@ const IdFind = ({ navigation }: NameProps) => {
     const emailRegex = constants.EMAIL.PATTERN;
 
     if (!email) {
-      Alert.alert('오류', '이메일을 입력해주세요.');
+      setMessage('이메일을 입력해주세요.');
       return;
     }
 
     if (!emailRegex.test(email)) {
-      Alert.alert('오류', '올바른 이메일 형식을 입력해주세요.');
+      setMessage('올바른 이메일 형식을 입력해주세요.');
       return;
     }
   
@@ -41,12 +41,12 @@ const IdFind = ({ navigation }: NameProps) => {
         setMessage('아이디를 찾을 수 없습니다.');
       }
     } catch (error: any) {
-      console.error('아이디 찾기 오류:', error);
+      console.log('아이디 찾기 오류:', error);
 
       const errorMessage =
         error.response?.data?.message || '서버와의 연결이 실패했습니다. 다시 시도해주세요.';
-      setMessage(''); // 에러가 발생하면 메시지를 초기화
-      Alert.alert('오류', errorMessage);
+      //setMessage(''); // 에러가 발생하면 메시지를 초기화
+      setMessage(errorMessage);
     }
   };
 

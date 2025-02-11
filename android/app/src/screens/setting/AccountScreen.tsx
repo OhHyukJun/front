@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity,Alert } from 'react-native';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useRecoilState,useRecoilValue } from 'recoil';
 import styles from '../css/AccountScreen';
 import { useLogout } from '../auth/Login/Logout';
 import LogoutModal from './LogoutModal';
 import { useDeleteAccount } from '../auth/Login/DeleteAccount';
 import DeleteAccountModal from './DeleteAccountModal';
 import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
+import { userImageState } from '../../atom/userImage';
+import { userNameState } from '../../atom/userInfo';
 
 type AccountScreenProps = {
   navigation: any;
@@ -23,12 +28,16 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
 
   const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileImage, setProfileImage] = useRecoilState(userImageState);
+  const [userName, setUserName ] = useRecoilState(userNameState);
 
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
         const data = await fetchUserInfo();
         setUserInfo(data);
+        setUserName(data?.name);
+        console.log(setUserName);
       } catch (error) {
         console.error('사용자 정보를 불러오는 중 오류 발생:', error);
         setUserInfo(null);
@@ -40,23 +49,95 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
     loadUserInfo();
   }, []);
 
+  const requestCameraPermission = async () => {
+    const result = await request(PERMISSIONS.ANDROID.CAMERA);
+    if (result === RESULTS.GRANTED) {
+      console.log('카메라 권한 허용됨.');
+      return true;
+    } else {
+      Alert.alert('카메라 권한이 필요합니다.');
+      return false;
+    }
+  };
+
+  const handleImageUpload = () => {
+    Alert.alert(
+      '프로필 사진 변경',
+      '이미지를 선택하는 방법을 선택하세요.',
+      [
+        {
+          text: '갤러리에서 선택',
+          onPress: () => pickImageFromLibrary(),
+        },
+        {
+          text: '카메라로 촬영',
+          onPress: () => captureImageWithCamera(),
+        },
+        {
+          text: '취소',
+          style: 'cancel',
+        },
+      ]
+    );
+  };
+
+  const pickImageFromLibrary = async () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 0.8,
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('사용자가 이미지 선택을 취소했습니다.');
+        } else if (response.errorMessage) {
+          console.error('이미지 선택 오류:', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          setProfileImage(response.assets[0].uri || null);
+        }
+      }
+    );
+  };
+
+  const captureImageWithCamera = async () => {
+    const hasPermission = await requestCameraPermission();
+    if (!hasPermission) return;
+
+    launchCamera(
+      {
+        mediaType: 'photo',
+        quality: 0.8,
+        saveToPhotos: true,
+      },
+      response => {
+        if (response.didCancel) {
+          console.log('사용자가 카메라 촬영을 취소했습니다.');
+        } else if (response.errorMessage) {
+          console.error('카메라 오류:', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          setProfileImage(response.assets[0].uri || null);
+        }
+      }
+    );
+  };
+
   return (
     <View style={styles.container}>
       {/* 프로필 섹션 */}
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image
-            source={require('../img/profile_placeholder.png')}
+             source={profileImage ? { uri: profileImage } : require('../img/profile_placeholder.png')}
             style={styles.profileImage}
           />
-          <TouchableOpacity style={styles.profileChangeButton}>
+          <TouchableOpacity style={styles.profileChangeButton} onPress={handleImageUpload}>
             <Image
               source={require('../img/profile_change.png')}
               style={styles.profileChangeIcon}
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.profileName}>사용자</Text>
+        <Text style={styles.profileName}>{userInfo?.name || '사용자'}</Text>
       </View>
 
       {/* Divider */}
