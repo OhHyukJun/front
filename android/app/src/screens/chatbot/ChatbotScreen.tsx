@@ -127,7 +127,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
     };
   }, [accessToken]);
 
-  const sendMessage = () => {
+  /*const sendMessage = () => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
       Alert.alert('WebSocket이 열려있지 않거나 유효하지 않습니다.');
       return;
@@ -135,7 +135,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
 
     if (inputText.trim() === '') return;
     setMessages((prevMessages) => {
-      const updatedMessages = [...prevMessages, 
+      const updatedMessages = [...prevMessages,
           { id: Date.now().toString(), text: inputText, sender: 'user' }
       ];
       if (!updatedMessages.some((msg) => msg.id === 'processing')) {
@@ -156,6 +156,22 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
     };
 
     socket.send(JSON.stringify(messagePayload));
+  };*/
+
+  const sendMessage = () => {
+    if (inputText.trim() === '') return;
+
+    // ✅ Alert 창을 띄워 전송 버튼이 눌렸는지 확인
+    Alert.alert("전송 버튼 클릭됨", `입력한 메시지: ${inputText}`);
+
+    // ✅ 메시지를 UI에 추가 (WebSocket과 무관하게 상태 업데이트 테스트)
+    setMessages((prevMessages) => [
+        ...prevMessages,
+        { id: Date.now().toString(), text: inputText, sender: 'user' }
+    ]);
+
+    setInputText(''); // 입력창 초기화
+    scrollToBottom();
   };
 
   const scrollToBottom = () => {
@@ -173,18 +189,18 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
       </View>
 
       <FlatList
-        ref={flatListRef}
-        data={messages}
-        keyExtractor={(item, index) => item.id ? `msg-${item.id}` : `msg-${index}-${Date.now()}`}
-        renderItem={({ item }) => (
-          <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
+    ref={flatListRef}
+    data={messages}
+    keyExtractor={(item) => `msg-${item.id}`}
+    renderItem={({ item }) => (
+        <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
             <Text style={styles.messageText}>{item.text}</Text>
-          </View>
-        )}
-        contentContainerStyle={styles.chatContainer}
-        onLayout={scrollToBottom}
-        onContentSizeChange={(_, __) => scrollToBottom()}
-      />
+        </View>
+    )}
+    contentContainerStyle={styles.chatContainer}
+    onLayout={scrollToBottom}
+    onContentSizeChange={() => scrollToBottom()}
+/>
 
       <View style={styles.suggestionContainer}>
         {['예방접종', '열이 나요', '두드러기', '목에 가시가 박혔어요'].map((suggestion, index) => (
