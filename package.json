@@ -1,5 +1,6 @@
 {
   "name": "MyProject2",
+  "displayName": "나비잠",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -21,6 +22,7 @@
     "axios": "^1.7.9",
     "buffer": "^6.0.3",
     "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-devtools": "^1.0.5",
     "react-native": "^0.76.5",
@@ -46,6 +48,7 @@
     "react-native-snackbar": "^2.8.0",
     "react-native-vector-icons": "^10.2.0",
     "react-native-viewport-units": "^0.0.5",
+    "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
     "socket.io-client": "^4.8.1"

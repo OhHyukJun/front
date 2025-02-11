@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../api/axios';
-import { accessTokenState } from '../../atom/login';
+
 // 감정 기록 타입 정의
 export interface BabyEmotionData {
   babyEmotionNum: number; // 감정 번호 (1~6)
@@ -20,18 +20,18 @@ interface BabyEmotionResponse {
   babyEmotionOrderByTime?: BabyEmotionByTimeData[]; // ✅ 시간별 감정 데이터
 }
 
-// ✅ 감정 기록을 가져오는 함수 (오류 방지 처리 추가)
 export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> => {
   try {
     const accessToken = await AsyncStorage.getItem('accessToken');
+
     if (!accessToken) {
-      console.log('❌ Access Token이 없습니다.');
+      console.error('❌ Access Token이 없습니다.');
       return null;
     }
 
     console.log('✅ 저장된 Access Token:', accessToken);
 
-    // ✅ API 호출
+    // ✅ `Cookie` 인증 방식 사용
     const response = await axiosInstance.get<BabyEmotionResponse>('/dashboard/getBabyEmotionInfo', {
       headers: {
         Cookie: `accessToken=${accessToken}`,
@@ -41,19 +41,12 @@ export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> =>
 
     console.log('✅ 감정 기록 불러오기 성공:', response.data);
 
-    // ✅ `null`과 빈 배열(`[]`)을 구분하여 반환
-    return {
-      success: response.data.success,
-      babyRecently: response.data.babyRecently && response.data.babyRecently.length > 0 ? response.data.babyRecently : null, 
-      babyEmotionOrderByTime: response.data.babyEmotionOrderByTime && response.data.babyEmotionOrderByTime.length > 0 ? response.data.babyEmotionOrderByTime : null, 
-    };
+    return response.data; 
   } catch (error: any) {
-    console.log('❌ 감정 기록 불러오기 오류:', error.response?.data || error.message);
+    console.error('❌ 감정 기록 불러오기 오류:', error.response?.data || error.message);
     return null;
   }
 };
-d
-
 
 // ✅ 감정 번호에 따른 .gif 이미지 반환
 export const getEmotionImage = (babyEmotionNum: number): any => {
@@ -67,5 +60,4 @@ export const getEmotionImage = (babyEmotionNum: number): any => {
   };
   return emotionImages[babyEmotionNum] || require('../img/pain.gif');
 };
-
 
