@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Cache Gradle Dependencies  # ✅ Gradle 캐싱 추가
+      - name: Cache Gradle Dependencies
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
@@ -60,7 +60,7 @@ jobs:
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: "나비잠 Release v1.0.${{ github.run_number }}"
-          body: "📦 자동 배포된 나비잠 APK입니다."
+          body: "나비잠 APK입니다."
           files: android/app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
