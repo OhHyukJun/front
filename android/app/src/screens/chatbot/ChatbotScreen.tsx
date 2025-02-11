@@ -4,7 +4,7 @@ import styles from '../css/ChatbotScreen';
 import { accessTokenState } from '../../atom/login';
 import { useRecoilValue } from 'recoil';
 
-const SOCKET_URL = 'ws://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.azurewebsites.net/chat';
+const SOCKET_URL = 'wss://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.azurewebsites.net/chat';
 
 const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
