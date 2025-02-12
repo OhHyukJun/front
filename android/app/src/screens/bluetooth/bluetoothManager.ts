@@ -185,7 +185,8 @@ export const sendData = async (
       for (const characteristic of characteristics) {
         if (characteristic.isWritableWithResponse) {
           // console.log('Sending start recording signal...');
-          await characteristic.writeWithResponse(base64.encode('r'));
+          const encodedData = Buffer.from("r", "utf-8").toString("base64"); 
+          await device.writeCharacteristicWithResponseForService(serviceUUID, characteristicUUID, encodedData);
           console.log('r 전송 완');
           setProcessing(true);
           // 약간의 지연을 주어 아두이노가 녹음할 준비 시간을 확보할 수 있도록 함

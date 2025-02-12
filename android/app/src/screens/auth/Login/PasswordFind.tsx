@@ -73,7 +73,7 @@ const PasswordFind = ({ navigation }: NameProps) => {
 
       <View style={styles.containerMini}>
         <View style={styles.content}>
-          <Text style={styles.title}>아이디 찾기</Text>
+          <Text style={styles.title}>비밀번호 찾기</Text>
           <Text style={styles.subtitle}>가입된 이메일을 확인해주세요</Text>
           <Text style={styles.smallSubtitle}>가입하신 이메일을 입력해주세요</Text>
         </View>
