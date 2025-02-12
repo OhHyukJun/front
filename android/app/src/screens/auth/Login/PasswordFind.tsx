@@ -36,7 +36,7 @@ const PasswordFind = ({ navigation }: NameProps) => {
 
     try {
 
-      const response = await axiosInstance.get(`/auth/findPass/email=${email}`, {
+      const response = await axiosInstance.get(`/auth/findPass?email=${email}`, {
         withCredentials: true,
       });
 

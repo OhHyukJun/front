@@ -76,7 +76,36 @@ const LoginScreen = () => {
       const response = await axiosInstance.post<{ accessToken: string; refreshToken: string }>('/auth/login', { email, password });
       await AsyncStorage.setItem('email', email ?? '');
 
-      
+      if (response.status === 200) {
+        const { accessToken, refreshToken } = response.data;
+        const isAdmin = email === ADMIN_EMAIL;
+
+        await AsyncStorage.setItem('accessToken', accessToken);
+        setAccessToken(accessToken);
+
+        if (!isAdmin) {
+          await AsyncStorage.setItem('refreshToken', refreshToken);
+          setRefreshToken(refreshToken);
+        }
+
+        setAdmin(isAdmin);
+        setLoginState(true);
+
+        console.log('Admin:', isAdmin);
+        console.log('Access Token:', accessToken);
+
+        setTimeout(() => {
+          //Alert.alert('로그인 성공', constants.SUCCESS.Login);
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Home' }],
+            })
+          );
+        }, 100);
+      } else {
+        Alert.alert('로그인 실패', constants.FAIL.Login);
+      }
     } catch (error) {
       console.log('로그인 오류:', error);
       // Alert.alert('로그인 실패', '서버에 문제가 발생했습니다. 나중에 다시 시도해주세요.');
