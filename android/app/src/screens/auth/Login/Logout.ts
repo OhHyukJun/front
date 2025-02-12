@@ -20,7 +20,7 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
   const [, setuserNameState] = useRecoilState(userNameState);
-  const [, setuserImageState] = useRecoilState(userImageState);
+  // const [, setuserImageState] = useRecoilState(userImageState);
   const [, setbabyEmotionState] = useRecoilState(babyEmotionState);
   const resetBabyEmotions = useResetRecoilState(babyEmotionState);
   const handleLogout = async () => {
@@ -47,7 +47,6 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
       setUserId('');
       setUserPw('');
       setuserNameState('');
-      setuserImageState('');
       resetBabyEmotions();
       setAccessToken(null);
       setRefreshToken(null);

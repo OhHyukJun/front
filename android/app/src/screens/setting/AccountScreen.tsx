@@ -48,7 +48,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         setLoading(false);
       }
     };
-  
+
     loadUserInfo();
   }, []);
 
@@ -63,7 +63,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
       console.log(`이미지 업로드 시작: ${imageUri}`);
 
       const base64Image = await RNFS.readFile(
-        imageUri.replace('file://', ''), // iOS의 경우 'file://' 제거 필요
+        imageUri.replace('file://', ''),
         'base64'
       );
 
@@ -112,18 +112,20 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           console.error('이미지 선택 오류:', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           const selectedImageUri = response.assets[0].uri || '';
-          setProfileImage(selectedImageUri);
 
           await uploadProfileImage(selectedImageUri, accessToken);
+          setProfileImage(selectedImageUri);
+
+          setIsImageModalVisible(false);
         }
-        setIsImageModalVisible(false);
       }
     );
   };
+
   const captureImageWithCamera = async () => {
     const hasPermission = await requestCameraPermission();
     if (!hasPermission) return;
-  
+
     launchCamera(
       {
         mediaType: 'photo',
@@ -137,14 +139,16 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           console.error('카메라 오류:', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           const capturedImageUri = response.assets[0].uri || '';
-          setProfileImage(capturedImageUri);
-  
+
           await uploadProfileImage(capturedImageUri, accessToken);
+          setProfileImage(capturedImageUri);
+
+          setIsImageModalVisible(false);
         }
-        setIsImageModalVisible(false);
       }
     );
   };
+
   return (
     <View style={styles.container}>
       {/* 프로필 섹션 */}
