@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {
@@ -29,6 +29,10 @@ const ChangePassword = ({navigation}: NameProps) => {
   const handlePrev = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    setPasswordState('');
+  },[]);
 
   const validateInputs = (): boolean => {
     if (!password) {
