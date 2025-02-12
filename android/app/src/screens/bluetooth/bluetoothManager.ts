@@ -14,7 +14,11 @@ export const connectToDevice = async (
   console.log('Starting Bluetooth connection process...');
   manager.startDeviceScan(null, null, async (error, device) => {
     if (error) {
-      Alert.alert('Error', 'Bluetooth 장치 검색 중 오류가 발생했습니다.');
+      Snackbar.show({
+        text: 'Bluetooth 장치 검색 중 오류가 발생했습니다.',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#616161', // 초록색 (성공)
+      });
       manager.stopDeviceScan();
       return;
     }
@@ -26,11 +30,33 @@ export const connectToDevice = async (
       try {
         const deviceConnection = await device.connect();
         await deviceConnection.discoverAllServicesAndCharacteristics();
+        const services = await deviceConnection.services();
+        console.log('서비스 목록: ',services);
+        for (const service of services) {
+          console.log(`service UUID: ${service.uuid}`);
+
+          const characteristics = await service.characteristics();
+          for (const characteristic of characteristics) {
+            console.log(`  ├─ Characteristic UUID: ${characteristic.uuid}`);
+            console.log(`     ├─ isReadable: ${characteristic.isReadable}`);
+            console.log(`     ├─ isWritableWithResponse: ${characteristic.isWritableWithResponse}`);
+            console.log(`     ├─ isWritableWithoutResponse: ${characteristic.isWritableWithoutResponse}`);
+            console.log(`     ├─ isNotifiable: ${characteristic.isNotifiable}`);
+          }
+        }
         setConnectedDevice(deviceConnection);
-        Alert.alert('Success', `Connected to ${deviceConnection.name}`);
+        Snackbar.show({
+          text: `Connected to ${deviceConnection.name}`,
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: '#616161', // 초록색 (성공)
+        });
         await sendData(deviceConnection);
       } catch (err) {
-        Alert.alert('Connection Failed', '장치 연결에 실패했습니다. 다시 시도해주세요.');
+        Snackbar.show({
+          text: '장치 연결에 실패했습니다. 다시 시도해주세요.',
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: '#616161', // 초록색 (성공)
+        });
       }
     }
   });
@@ -135,7 +161,7 @@ export const receiveData = async (
         }
       }
     );
-  } catch (err) {
+  } catch (err : any) {
     Snackbar.show({
       text: err.message || '데이터 수신 중 오류가 발생했습니다.',
       duration: Snackbar.LENGTH_SHORT,
@@ -155,11 +181,12 @@ export const sendData = async (
     const services = await device.services();
     for (const service of services) {
       const characteristics = await service.characteristics();
+      // console.log("Available characteristics:", characteristics.map(c => c.uuid));
       for (const characteristic of characteristics) {
         if (characteristic.isWritableWithResponse) {
           // console.log('Sending start recording signal...');
           await characteristic.writeWithResponse(base64.encode('r'));
-
+          console.log('r 전송 완');
           setProcessing(true);
           // 약간의 지연을 주어 아두이노가 녹음할 준비 시간을 확보할 수 있도록 함
           setTimeout(async () => {
