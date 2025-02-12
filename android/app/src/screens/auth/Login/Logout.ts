@@ -16,6 +16,8 @@ type RootParamList = {
 export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) => {
   const [, setUserId] = useRecoilState(userIdState);
   const [, setUserPw] = useRecoilState(userPwState);
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+  const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
   const [, setuserNameState] = useRecoilState(userNameState);
   const [, setuserImageState] = useRecoilState(userImageState);
@@ -37,12 +39,18 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
 
       console.log('로그아웃 응답:', response.data);
 
+      // AsyncStorage에서 토큰 삭제
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('refreshToken');
+
       // Recoil 상태 초기화
       setUserId('');
       setUserPw('');
       setuserNameState('');
       setuserImageState('');
       resetBabyEmotions();
+      setAccessToken(null);
+      setRefreshToken(null);
       setLoginState(false);
 
       RNRestart.restart();
