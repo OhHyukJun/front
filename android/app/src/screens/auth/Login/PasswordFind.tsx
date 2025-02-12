@@ -15,7 +15,7 @@ type NameProps = {
 const PasswordFind = ({ navigation }: NameProps) => {
   const [email, setEmail] = useRecoilState(emailState);
   const [message, setMessage] = useState(''); // 메시지 상태 추가
-  //const accessToken = useRecoilValue(accessTokenState);
+  const accessToken = useRecoilValue(accessTokenState);
 
   const handlePrev = () => {
     navigation.goBack();
@@ -23,35 +23,33 @@ const PasswordFind = ({ navigation }: NameProps) => {
 
   const handleFind = async () => {
     const emailRegex = constants.EMAIL.PATTERN;
-
+  
     if (!email) {
       setMessage('이메일을 입력해주세요.');
       return;
     }
-
+  
     if (!emailRegex.test(email)) {
       setMessage('이메일 형식으로 입력해주세요.');
       return;
     }
-
+  
     try {
-
-      const response = await axiosInstance.get(`/auth/findPass?email=${email}`, {
-        withCredentials: true,
-      });
-
+      console.log(email);
+      // 이메일을 쿼리 스트링에 포함하여 GET 요청 수행
+      const response = await axiosInstance.get(`/auth/findPass?email=${encodeURIComponent(email)}`);
+  
       const data = response.data as { message?: string; success: boolean };
       setMessage(data.message || '임시 비밀번호가 이메일로 전송되었습니다.');
     } catch (error: any) {
       console.log('비밀번호 찾기 오류:', error);
-
+  
       const errorMessage =
         error.response?.data?.message || '서버와의 연결이 실패했습니다. 다시 시도해주세요.';
       setMessage(errorMessage);
-      //Alert.alert('오류', errorMessage);
     }
-
   };
+  
 
 
   return (
