@@ -40,8 +40,9 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
 
     ws.onmessage = (event) => {
       try {
+        
         const response = JSON.parse(event.data);
-
+        console.log(event.data);
         if (response.header === 'Greeting' && response.data.request.length > 0 && response.data.response.length > 0) {
           let previousMessages = [];
           for (let i = 0; i < response.data.response.length; i++) {

@@ -11,8 +11,8 @@ import { debounce } from 'lodash';
 
 const targetDeviceName = 'bigAivleAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:41';
-const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
-const characteristicUUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+const serviceUUID = '4b9131c3-c9c5-cc8f-9e45-b51f01c2af4f';
+const characteristicUUID = 'a8261b36-07ea-f5b7-8846-e1363e48b5be';
 
 interface useBluetooth {
   connectedDevice: Device | null;
