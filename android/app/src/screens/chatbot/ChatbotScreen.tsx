@@ -4,7 +4,7 @@ import styles from '../css/ChatbotScreen';
 import { accessTokenState } from '../../atom/login';
 import { useRecoilValue } from 'recoil';
 
-const SOCKET_URL = 'ws://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.azurewebsites.net/chat';
+const SOCKET_URL = 'wss://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.azurewebsites.net/chat';
 
 const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -21,11 +21,11 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const connectWebSocket = () => {
     if (isConnected.current) return;
 
-    Alert.alert('WebSocket 연결 시도 중...');
+    console.log('WebSocket 연결 시도 중...');
     const ws = new WebSocket(SOCKET_URL);
 
     ws.onopen = () => {
-      Alert.alert('WebSocket 연결 성공');
+      console.log('WebSocket 연결 성공');
       isConnected.current = true;
       reconnectInterval.current = 1000;
 
