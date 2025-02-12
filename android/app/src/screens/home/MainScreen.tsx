@@ -104,9 +104,6 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         >
           <Image source={require('../img/chatbot.png')} style={styles.chatbot} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleDisconnect}>
-          <Text>해제</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
