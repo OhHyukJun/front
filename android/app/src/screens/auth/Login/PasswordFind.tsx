@@ -15,7 +15,7 @@ type NameProps = {
 const PasswordFind = ({ navigation }: NameProps) => {
   const [email, setEmail] = useRecoilState(emailState);
   const [message, setMessage] = useState(''); // 메시지 상태 추가
-  const accessToken = useRecoilValue(accessTokenState);
+  //const accessToken = useRecoilValue(accessTokenState);
 
   const handlePrev = () => {
     navigation.goBack();
@@ -34,18 +34,9 @@ const PasswordFind = ({ navigation }: NameProps) => {
       return;
     }
 
-    if (!accessToken) {
-      setMessage('유효하지 않은 토큰입니다.');
-      return;
-    }
-
     try {
-      Cookies.set('accessToken', accessToken, { path: '/' });
 
-      const response = await axiosInstance.get('/auth/findPass', {
-        headers: {
-          Cookie: `accessToken=${accessToken}`,
-        },
+      const response = await axiosInstance.get(`/auth/findPass?email=${email}`, {
         withCredentials: true,
       });
 
