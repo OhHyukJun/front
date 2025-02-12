@@ -13,6 +13,11 @@ export const connectToDevice = async (
 ): Promise<void> => {
   console.log('Starting Bluetooth connection process...');
   manager.startDeviceScan(null, null, async (error, device) => {
+    Snackbar.show({
+      text: '블루투스 스캔 중 입니다. 잠시만 기다려주세요.',
+      duration: Snackbar.LENGTH_SHORT,
+      backgroundColor: '#616161', // 회색 (정보)
+    });
     if (error) {
       Alert.alert('Error', 'Bluetooth 장치 검색 중 오류가 발생했습니다.');
       manager.stopDeviceScan();
@@ -27,7 +32,11 @@ export const connectToDevice = async (
         const deviceConnection = await device.connect();
         await deviceConnection.discoverAllServicesAndCharacteristics();
         setConnectedDevice(deviceConnection);
-        Alert.alert('Success', `Connected to ${deviceConnection.name}`);
+        Snackbar.show({
+          text:  `${deviceConnection.name}에 연결되었습니다.`,
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: '#616161', // 회색 (정보)
+        });
         await sendData(deviceConnection);
       } catch (err) {
         Alert.alert('Connection Failed', '장치 연결에 실패했습니다. 다시 시도해주세요.');
