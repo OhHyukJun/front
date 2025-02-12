@@ -49,19 +49,19 @@ const styles = StyleSheet.create({
     marginBottom: vh(2.1),
   },
   postItemContainer: {
-    alignSelf: 'stretch', // 부모 컨테이너 너비에 맞춤
+    alignSelf: 'stretch',
     marginBottom: vh(2),
   },
   postItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between', // 텍스트와 화살표를 양쪽에 배치
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: vh(1),
     paddingHorizontal: vw(4),
-    width: '100%', // 부모 컨테이너 너비를 기준으로 고정
+    width: '100%',
   },
   postTextContainer: {
-    flexShrink: 1, // 텍스트 길이가 길어도 화살표와 겹치지 않도록 설정
+    flexShrink: 1,
   },
   postTitle: {
     fontSize: 16,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     width: vw(5),
     height: vh(5),
     resizeMode: 'contain',
-    marginLeft: vw(2), // 텍스트와의 간격 유지
+    marginLeft: vw(2),
   },
   divider: {
     height: 1,

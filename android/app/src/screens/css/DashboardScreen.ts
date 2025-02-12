@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   innerChartContainer: {
     width: '95%',
     height: '80%',
-    backgroundColor: '#FFFFFF', // ✅ 추가된 하얀색 배경 컨테이너
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     justifyContent: 'center',
     flexDirection: 'row',
@@ -123,15 +123,12 @@ const styles = StyleSheet.create({
   },
   chartHourContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly', // 또는 'space-between'
-    alignItems: 'center', // 수직 정렬 조정 (필요 시)
-    flexWrap: 'wrap', // 만약 줄 바꿈이 필요하면 추가
-    width: '90%', // 상위 컨테이너 전체를 사용하도록 설정
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    width: '90%',
     marginTop: vh(1),
   },
-  
-
-
   chartBarContainer: {
     alignItems: 'center',
     width: vw(10),
@@ -151,7 +148,6 @@ const styles = StyleSheet.create({
     fontSize: vh(2),
     marginTop: vh(0.5),
   },
-
   emotionDescriptionContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -162,15 +158,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: vh(1),
     marginTop: vh(2),
-    borderWidth: 2, // ✅ 테두리 두께 설정
-    borderColor: '#999CD9', // ✅ 테두리 색상 (흰색)
+    borderWidth: 2,
+    borderColor: '#999CD9',
   },
   
   emotionDescriptionItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: vh(1),
-    width: vw(25), // 한 줄에 2개씩 배치
+    width: vw(25),
   },
   emotionIcon: {
     width: vw(5.6),
