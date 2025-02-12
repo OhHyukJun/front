@@ -10,7 +10,7 @@ import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
 
 const targetDeviceName = 'bigAivleAudio';
-const targetDeviceId = '8C:BF:EA:0E:E1:41';
+const targetDeviceId = '8C:BF:EA:0E:E1:42';
 const serviceUUID = '4b9131c3-c9c5-cc8f-9e45-b51f01c2af4f';
 const characteristicUUID = 'a8261b36-07ea-f5b7-8846-e1363e48b5be';
 
