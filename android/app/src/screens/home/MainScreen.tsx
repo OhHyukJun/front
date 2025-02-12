@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styles from '../css/MainScreen';
 import useBluetooth from '../bluetooth/useBlutooth';
 import { emotionTexts } from './emotionData';
+import { accessTokenState } from '../../atom/login';
+import axiosInstance from '../../api/axios';
+import { userImageState } from '../../atom/userImage';
 
 type MainScreenProps = {
   navigation: any;
@@ -12,22 +16,40 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
   // const { findDeviceAndSendData, disconnectDevice } = useBluetooth();
   const {  connectToDevice, disconnectToDevice, isProcessing, result } = useBluetooth();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isScanning, setIsScanning] = useState(false); 
-  /* const handleBluetooth = async () => {
-    try {
-      await findDeviceAndSendData('r'); // Attempt to find, connect, and send data
-    } catch (error) {
-      console.error('Error during Bluetooth handling:', error.message || error);
-    }
-  };
-  */
+  const [isScanning, setIsScanning] = useState(false);
+  const accessToken = useRecoilValue(accessTokenState);
+  const [profileImage, setProfileImage] = useRecoilState(userImageState);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get('/config/getProfileImage', {
+          headers: {
+            Cookie: `accessToken=${accessToken}`,
+          },
+          withCredentials: true,
+        });
+
+        if (response.data?.profileImage) {
+          setProfileImage(response.data.profileImage); // 서버에서 받은 이미지 URL 설정
+        }
+      } catch (error) {
+        console.error('프로필 이미지 불러오기 실패:', error);
+        setProfileImage('');
+      }
+    };
+
+    fetchProfileImage();
+  }, []);
+
   const getEmotionMessage = (emotion: string | null) => {
     if (emotion && emotion in emotionTexts) {
       return emotionTexts[emotion];
     }
     return '아이를 클릭해\n녹음해주세요 :)';
   };
-  
 
   const handleDisconnect = async () => {
     try {
@@ -65,7 +87,15 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
           </Text>
         </ImageBackground>
         <TouchableOpacity onPress={handleBluetooth}>
-          <Image source={require('../img/baby_profile.png')} style={styles.baby} />
+        <Image
+            source={
+              profileImage
+                ? { uri: profileImage }
+                : require('../img/baby_profile.png') // 기본 이미지
+            }
+            style={styles.baby}
+          />
+
         </TouchableOpacity>
         {/* chatbot 이미지에 TouchableOpacity 추가 */}
         <TouchableOpacity
