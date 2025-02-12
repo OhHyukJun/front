@@ -112,11 +112,13 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           console.error('이미지 선택 오류:', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
           const selectedImageUri = response.assets[0].uri || '';
-
+  
+          // 모달을 즉시 닫기
+          setIsImageModalVisible(false);
+  
+          // 이미지 업로드 수행
           await uploadProfileImage(selectedImageUri, accessToken);
           setProfileImage(selectedImageUri);
-
-          setIsImageModalVisible(false);
         }
       }
     );
@@ -140,14 +142,17 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         } else if (response.assets && response.assets.length > 0) {
           const capturedImageUri = response.assets[0].uri || '';
 
+          // 모달을 즉시 닫기
+          setIsImageModalVisible(false);
+
+          // 이미지 업로드 수행
           await uploadProfileImage(capturedImageUri, accessToken);
           setProfileImage(capturedImageUri);
-
-          setIsImageModalVisible(false);
         }
       }
     );
   };
+
 
   return (
     <View style={styles.container}>
