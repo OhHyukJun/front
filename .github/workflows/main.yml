@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     permissions:
-      contents: write 
+      contents: write
     name: Build & Release APK
     runs-on: ubuntu-latest
 
@@ -25,7 +25,10 @@ jobs:
       - name: Cache Gradle Dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -33,7 +36,9 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: |
+            ~/.npm
+            node_modules
           key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
@@ -44,29 +49,25 @@ jobs:
       - name: Build Android APK
         run: |
           cd android
-          ./gradlew --no-daemon --parallel assembleRelease
+          ./gradlew --no-daemon --parallel --build-cache --configure-on-demand assembleRelease
 
       - name: Compress APK
-        run: |
-          tar -czf app-release.tar.gz android/app/build/outputs/apk/release/app-release.apk
+        run: zip -r app-release.zip android/app/build/outputs/apk/release/app-release.apk
 
       - name: Upload APK as an Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/app-release.apk
-      - name: Delete Existing Release (if exists)
-        run: |
-          gh release delete latest --yes || true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-
-      - name: Create GitHub Release
+      
+      - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: latest
           name: "나비잠 최신 APK"
           body: "가장 최신 버전의 나비잠 APK입니다."
           files: android/app/build/outputs/apk/release/app-release.apk
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
