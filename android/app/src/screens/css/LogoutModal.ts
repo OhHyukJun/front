@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.4)', // 반투명 배경
+      backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
     modalContent: {
       width: vw(75),
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     modalTextContainer: {
       width: '100%',
-      paddingVertical: vh(4), // 🔹 위아래 여백 추가 (더 넓게 조정)
+      paddingVertical: vh(4),
       alignItems: 'center',
     },
     modalText: {
@@ -34,14 +34,14 @@ const styles = StyleSheet.create({
     },
     modalButtonCancel: {
         width: '100%',
-        paddingVertical: vh(1.2), // 기존과 동일한 여백
+        paddingVertical: vh(1.2),
         alignItems: 'center',
-        marginBottom: vh(0.3), // 🔹 "취소" 버튼 아래에만 여백 추가
+        marginBottom: vh(0.3),
       },
     divider: {
       width: '100%',
       height: 1,
-      backgroundColor: '#ddd', // 연한 회색 구분선
+      backgroundColor: '#ddd',
     },
   });
 
