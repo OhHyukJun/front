@@ -9,7 +9,7 @@ jobs:
   build:
     permissions:
       contents: write
-    name: Build & Release APK
+    name: Build & Release APK & Source
     runs-on: ubuntu-latest
 
     steps:
@@ -45,14 +45,13 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        
-      - name: Set up Environment Variables  # 💡 .env 파일 자동 생성
+
+      - name: Set up Environment Variables
         run: |
           echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
           echo "API_URL=${{ secrets.API_URL }}" >> .env
           echo "OTHER_SECRET=${{ secrets.OTHER_SECRET }}" >> .env
         shell: bash
-        
 
       - name: Build Android APK
         run: |
@@ -62,19 +61,33 @@ jobs:
       - name: Compress APK
         run: zip -r app-release.zip android/app/build/outputs/apk/release/app-release.apk
 
+      - name: Create Source Code ZIP
+        run: |
+          zip -r source-code.zip . \
+          -x "*.git*" "node_modules/*" "android/.gradle/*" "android/app/build/*" "*.DS_Store"
+        shell: bash
+
       - name: Upload APK as an Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/app-release.apk
       
+      - name: Upload Source Code as an Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-code.zip
+          path: source-code.zip
+
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: latest
-          name: "나비잠 최신 APK"
-          body: "가장 최신 버전의 나비잠 APK입니다."
-          files: android/app/build/outputs/apk/release/app-release.apk
+          name: "나비잠 최신 APK & Source"
+          body: "가장 최신 버전의 나비잠 APK 및 소스 코드입니다."
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
+            source-code.zip
           draft: false
           prerelease: false
         env:
