@@ -18,7 +18,7 @@ export const useDeleteAccount = (navigate: NavigationProp<RootParamList>['naviga
 
   const handleDeleteAccount = async () => {
     try {
-      console.log('🔥 회원 탈퇴 요청 시작');
+      console.log('회원 탈퇴 요청');
 
       if (!accessToken) {
         throw new Error('Access token is missing');
@@ -34,7 +34,7 @@ export const useDeleteAccount = (navigate: NavigationProp<RootParamList>['naviga
         throw new Error(data.message || '회원 탈퇴 실패');
       }
 
-      console.log('🎉 회원 탈퇴 성공!');
+      console.log('회원 탈퇴 성공');
 
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('refreshToken');
@@ -48,7 +48,7 @@ export const useDeleteAccount = (navigate: NavigationProp<RootParamList>['naviga
       Alert.alert('회원 탈퇴 완료', '정상적으로 탈퇴되었습니다.');
       navigate('Login');
     } catch (error: any) {
-      console.error('❌ 회원 탈퇴 오류:', error.response?.data || error.message);
+      console.error('회원 탈퇴 오류:', error.response?.data || error.message);
 
       Alert.alert(
         '회원 탈퇴 실패',

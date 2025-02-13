@@ -19,7 +19,6 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const [activeIndex, setActiveIndex] = useState(0);
 
-    // 동적으로 관리할 페이지 배열
     const pages = [
         { id: 'main', component: MainScreen },
         { id: 'dashboard', component: DashboardScreen },
@@ -41,7 +40,7 @@ const HomeScreen = () => {
                 showsHorizontalScrollIndicator={false}
                 style={styles.scrollView}
                 onScroll={handleScroll}
-                scrollEventThrottle={16} // 스크롤 이벤트 빈도 설정
+                scrollEventThrottle={16}
             >
                 {pages.map((page) => (
                     <View key={page.id} style={styles.page}>
@@ -51,7 +50,6 @@ const HomeScreen = () => {
             </ScrollView>
             </KeyboardAvoidingView>
             
-            {/* Pagination (페이지네이션 점) */}
             <View style={styles.pagination}>
                 {pages.map((_, index) => (
                     <View

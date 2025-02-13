@@ -21,7 +21,7 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
   const [, setLoginState] = useRecoilState(loginState);
   const [, setuserNameState] = useRecoilState(userNameState);
   const [, setuserImageState] = useRecoilState(userImageState);
-  const [, setbabyEmotionState] = useRecoilState(babyEmotionState);
+  // const [, setbabyEmotionState] = useRecoilState(babyEmotionState);
   const resetBabyEmotions = useResetRecoilState(babyEmotionState);
   const handleLogout = async () => {
     try {

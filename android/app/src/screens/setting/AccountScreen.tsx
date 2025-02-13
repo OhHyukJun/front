@@ -138,7 +138,6 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
 
   return (
     <View style={styles.container}>
-      {/* 프로필 섹션 */}
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image
@@ -155,10 +154,8 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         <Text style={styles.profileName}>{userInfo[0] || '사용자'}</Text>
       </View>
 
-      {/* Divider */}
       <View style={styles.divider} />
 
-      {/* 개인정보 컨테이너 */}
       <View style={styles.infoContainer}>
         <Text style={styles.containerTitle}>개인 정보</Text>
         <Text style={styles.containerSubtitle}>
@@ -174,7 +171,6 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
             </View>
       </View>
 
-      {/* 계정 관리 컨테이너 */}
       <View style={styles.infoContainer}>
         <Text style={styles.containerTitle}>계정 관리</Text>
         <Text style={styles.containerSubtitle}>

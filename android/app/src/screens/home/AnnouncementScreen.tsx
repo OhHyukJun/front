@@ -7,7 +7,7 @@ import { announcementListState } from '../../atom/announcement';
 import { adminState } from '../../atom/admin';
 import axiosInstance from '../../api/axios';
 type AnnouncementScreenProps = {
-  navigation: any; // React Navigation의 navigation 객체
+  navigation: any;
 };
 type Announcement = {
   header: string;
@@ -48,7 +48,6 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
 
   return (
     <View style={styles.container}>
-      {/* 공지사항 제목과 설명을 감싸는 공통 컨테이너 */}
       <View style={styles.headerContainer}>
         <View style={styles.roundedContainer}>
           <View style={styles.headerRow}>
@@ -56,7 +55,7 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
             <Text style={styles.headerText}>공지사항</Text>
           </View>
         </View>
-        {/* 하위 텍스트 안전하게 렌더링 */}
+
         <View>
           <Text style={styles.subHeaderText}>
             총 <Text style={styles.highlightedText}>{announcements.length}건</Text>의 공지사항이 있습니다.
@@ -64,7 +63,6 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
         </View>
       </View>
 
-      {/* 공지사항 목록 */}
       <View style={localStyles.flexContainer}>
         <ScrollView style={styles.postsContainer}>
           {announcements.map((announcement, index) => (
@@ -82,7 +80,6 @@ const AnnouncementScreen = ({ navigation }: AnnouncementScreenProps) => {
                   <Text style={styles.postTitle}>{announcement.header || '제목 없음'}</Text>
                   <Text style={styles.postDate}>{announcement.time || '날짜 없음'}</Text>
                 </View>
-                {/* 오른쪽 화살표 아이콘 */}
                 <Image source={require('../img/right_arrow.png')} style={styles.arrow} />
               </View>
               {index !== announcements.length - 1 && <View style={styles.divider} />}

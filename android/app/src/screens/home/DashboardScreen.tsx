@@ -47,10 +47,10 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
     }
 
     const emotions = await fetchBabyEmotion();
-    if (emotions.success) {
-      setBabyEmotions(emotions.babyRecently.slice(0, 15)); // ✅ 이미 빈 배열이므로 `?.` 필요 없음
-      setBabyEmotionByTime(emotions.babyEmotionOrderByTime);
-    }
+    if (emotions?.success) {
+      setBabyEmotions(emotions.babyRecently?.slice(0, 15) ?? []);
+      setBabyEmotionByTime(emotions.babyEmotionOrderByTime ?? []);
+    }    
   };
 
   useFocusEffect(
@@ -130,7 +130,6 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
         />
       </View>
 
-      {/* ✅ 수정된 시간별 감정 막대 그래프 */}
       <Text style={styles.chartTitle}>{babyName ? `이 시간에 우리 ${babyName}이는?` : '이 시간에 우리 아기는?'}</Text>
       <View style={styles.outerChartContainer}>
         <View style={styles.innerChartContainer}>

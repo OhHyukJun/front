@@ -3,7 +3,7 @@ import axiosInstance from '../../api/axios';
 
 export interface DashboardInfoResponse {
   babyName: string | null;
-  babyBirth: string | null; // 'YYYY-MM-DD' 형식
+  babyBirth: string | null;
 }
 
 /**
@@ -26,7 +26,6 @@ export const fetchDashboardInfo = async (): Promise<DashboardInfoResponse | null
   
       console.log('대시보드 정보 불러오기:', response.data);
   
-      // 강제 타입 단언 적용 (response.data의 타입을 DashboardInfoResponse로 변환)
       return response.data as DashboardInfoResponse;
     } catch (error) {
       console.log('대시보드 정보 불러오기 오류:', error);
