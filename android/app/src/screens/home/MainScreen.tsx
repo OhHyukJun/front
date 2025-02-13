@@ -14,7 +14,7 @@ type MainScreenProps = {
 
 const MainScreen = ({ navigation }: MainScreenProps) => {
   // const { findDeviceAndSendData, disconnectDevice } = useBluetooth();
-  const {  connectToDevice, disconnectToDevice, isProcessing, result } = useBluetooth();
+  const {connectToDevice, disconnectToDevice, isProcessing, result } = useBluetooth();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const accessToken = useRecoilValue(accessTokenState);
@@ -31,7 +31,7 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
           },
           withCredentials: true,
         });
-
+        console.log(response.data);
         if (response.data?.profileImage) {
           setProfileImage(response.data.profileImage); // 서버에서 받은 이미지 URL 설정
         }

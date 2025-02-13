@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity,Alert,Platform  } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity,Alert  } from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { useRecoilState,useRecoilValue } from 'recoil';
 import styles from '../css/AccountScreen';
 import { useLogout } from '../auth/Login/Logout';
 import LogoutModal from './LogoutModal';
 import { useDeleteAccount } from '../auth/Login/DeleteAccount';
 import DeleteAccountModal from './DeleteAccountModal';
-import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
 import { userImageState } from '../../atom/userImage';
-import { userNameState } from '../../atom/userInfo';
+import { userInfoState } from '../../atom/userInfo';
 import ImageUploadModal from './ImageUploadModal';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
 import RNFS from 'react-native-fs';
+
 type AccountScreenProps = {
   navigation: any;
 };
@@ -29,28 +29,10 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
-  const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const userInfo = useRecoilValue(userInfoState);
+  // const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
-  const [userName, setUserName ] = useRecoilState(userNameState);
   const accessToken = useRecoilValue(accessTokenState);
-
-  useEffect(() => {
-    const loadUserInfo = async () => {
-      try {
-        const data = await fetchUserInfo();
-        setUserInfo(data);
-        setUserName(data?.name);
-      } catch (error) {
-        console.error('사용자 정보를 불러오는 중 오류 발생:', error);
-        setUserInfo(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUserInfo();
-  }, []);
 
   const uploadProfileImage = async (imageUri: string, accessToken: string) => {
     if (!accessToken) {
