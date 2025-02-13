@@ -9,7 +9,7 @@ import LogoutModal from './LogoutModal';
 import { useDeleteAccount } from '../auth/Login/DeleteAccount';
 import DeleteAccountModal from './DeleteAccountModal';
 import { userImageState } from '../../atom/userImage';
-import { userInfoState } from '../../atom/userInfo';
+import { userNameState,userEmailState } from '../../atom/userInfo';
 import ImageUploadModal from './ImageUploadModal';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
@@ -29,7 +29,8 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userName, setuserName] = useRecoilState(userNameState);
+  const [userEmail, setuserEmail] = useRecoilState(userEmailState);
   // const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
   const accessToken = useRecoilValue(accessTokenState);
@@ -151,7 +152,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.profileName}>{userInfo?.name || '사용자'}</Text>
+        <Text style={styles.profileName}>{userName || '사용자'}</Text>
       </View>
 
       <View style={styles.divider} />
@@ -163,11 +164,11 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         </Text>
         <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>이메일</Text>
-              <Text style={styles.infoValue}>{userInfo?.email || '이메일 없음'}</Text>
+              <Text style={styles.infoValue}>{userEmail || '이메일 없음'}</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>이름</Text>
-              <Text style={styles.infoValue}>{userInfo?.name || '이름 없음'}</Text>
+              <Text style={styles.infoValue}>{userName || '이름 없음'}</Text>
             </View>
       </View>
 

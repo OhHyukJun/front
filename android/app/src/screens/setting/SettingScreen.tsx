@@ -7,8 +7,9 @@ import { fetchSettingInfo } from './hook/fetchSettingInfo';
 import { saveSettings } from './hook/saveSettings';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { userImageState } from '../../atom/userImage';
-import { userInfoState } from '../../atom/userInfo';
+import { userEmailState, userNameState } from '../../atom/userInfo';
 import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
+
 const screenWidth = Dimensions.get('window').width;
 
 type SettingScreenProps = {
@@ -23,28 +24,22 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [open, setOpen] = useState(false);
   const [, setLoading] = useState(true);
   const userImage = useRecoilValue(userImageState);
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [userName, setuserName] = useRecoilState(userNameState);
+  const [userEmail, setuserEmail] = useRecoilState(userEmailState);
 
   useEffect(() => {
     const loadSettings = async () => {
       try {
         setLoading(true);
-  
         const settingsData = await fetchSettingInfo();
-        const userData = await fetchUserInfo();
   
-        if (settingsData) {
+        if (settingsData && typeof settingsData === 'object') {
           setNotification(settingsData.alarm ? '동의' : '비동의');
-          setChildName(settingsData.babyName || null);
           setChildBirthDate(settingsData.babyBirth ? new Date(settingsData.babyBirth) : null);
+          setChildName(settingsData.babyName || '');
           setDeleteMonths(settingsData.dataEliminateDuration ?? 12);
-        }
-  
-        if (userData) {
-          setUserInfo({
-            name: userData.name || '이름 없음',
-            email: userData.email || '이메일 없음',
-          });
+        } else {
+          console.error('설정 데이터 형식이 올바르지 않습니다.', settingsData);
         }
       } catch (error) {
         console.error('설정 정보를 불러오는 중 오류 발생:', error);
@@ -56,8 +51,26 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
     loadSettings();
   }, []);
   
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        setLoading(true);
+        const userData = await fetchUserInfo();
+        if (userData) {
+          setuserName(userData.name || '사용자');
+          setuserEmail(userData.email || '');
+        }
+      } catch (error) {
+        console.error('사용자 정보를 불러오는 중 오류 발생:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
   
-
+    loadUserData();
+  }, []);
+  
+  
   const handleSave = async () => {
     console.log('저장 버튼 클릭');
 
@@ -80,7 +93,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image source={userImage ? { uri: userImage } : require('../img/profile_placeholder.png')} style={styles.profileImage} />
-          <Text style={styles.usernameText}>{userInfo?.name || '사용자'}</Text>
+          <Text style={styles.usernameText}>{userName || '사용자'}</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Account')}>
           <Text style={styles.accountManagementText}>계정관리</Text>

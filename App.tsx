@@ -24,6 +24,7 @@ import ChangePassword from './android/app/src/screens/setting/ChangePassword';
 import ConfirmPassword from './android/app/src/screens/auth/Register/CofirmPassword';
 import PersonalInfo from './android/app/src/screens/auth/Register/PersonalInfo';
 import AdminWrite from './android/app/src/screens/home/admin/AdminWrite';
+import AnnouncementDetail from './android/app/src/screens/home/AnnouncementDetail';
 // React Query Client 생성
 // const queryClient = new QueryClient();
 import { Buffer } from 'buffer';

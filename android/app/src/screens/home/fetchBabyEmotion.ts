@@ -23,7 +23,7 @@ export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> =>
     const accessToken = await AsyncStorage.getItem('accessToken');
 
     if (!accessToken) {
-      console.error('Access Token이 없습니다.');
+      console.log('Access Token이 없습니다.');
       return null;
     }
 
@@ -40,7 +40,7 @@ export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> =>
 
     return response.data;
   } catch (error: any) {
-    console.log('감정 기록 불러오기 오류:', error.response?.data || error.message);
+    console.log('감정 기록 불러오기 오류:', error.response?.data);
     return null;
   }
 };
