@@ -45,6 +45,14 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+        
+      - name: Set up Environment Variables  # 💡 .env 파일 자동 생성
+        run: |
+          echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "OTHER_SECRET=${{ secrets.OTHER_SECRET }}" >> .env
+        shell: bash
+        
 
       - name: Build Android APK
         run: |
