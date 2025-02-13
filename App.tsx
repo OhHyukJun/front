@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { QueryClient } from '@tanstack/react-query';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
+import { RecoilRoot, useSetRecoilState,useRecoilValue } from 'recoil';
 import { loginState, accessTokenState } from './android/app/src/atom/login';
 import { adminState } from './android/app/src/atom/admin';
 import SplashScreen from './android/app/src/screens/SplashScreen';
@@ -67,9 +67,29 @@ const AppInitializer = () => {
   return null; // 아무 UI도 렌더링하지 않음
 };
 
+const ErrorHandler = () => {
+  const isAdmin = useRecoilValue(adminState); // Recoil 상태 가져오기
+
+  useEffect(() => {
+    if (isAdmin) {
+      console.log('관리자 모드 활성화 - 모든 오류 무시됨');
+      LogBox.ignoreAllLogs(true); // 모든 로그 무시
+      const originalConsoleError = console.error;
+      console.error = (...args) => {
+        if (!isAdmin) {
+          originalConsoleError(...args);
+        }
+      };
+    }
+  }, [isAdmin]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <RecoilRoot>
+      <ErrorHandler />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Splash" component={SplashScreen} />

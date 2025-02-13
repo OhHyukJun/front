@@ -38,9 +38,9 @@ export const fetchBabyEmotion = async (): Promise<BabyEmotionResponse | null> =>
 
     console.log('감정 기록 불러오기 성공:', response.data);
 
-    return response.data; 
+    return response.data;
   } catch (error: any) {
-    console.error('감정 기록 불러오기 오류:', error.response?.data || error.message);
+    console.log('감정 기록 불러오기 오류:', error.response?.data || error.message);
     return null;
   }
 };
