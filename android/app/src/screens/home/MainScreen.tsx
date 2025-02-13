@@ -36,7 +36,7 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
           setProfileImage(response.data.profileImage); // 서버에서 받은 이미지 URL 설정
         }
       } catch (error) {
-        console.error('프로필 이미지 불러오기 실패:', error);
+        console.log('프로필 이미지 불러오기 실패:', error);
         setProfileImage('');
       }
     };

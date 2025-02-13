@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error: AxiosError) => {
-    console.error('요청 에러:', error.message);
+    console.log('요청 에러:', error.message);
     return Promise.reject(error);
   }
 );
@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (Platform.OS === 'android') {
-      ToastAndroid.show('에러 발생: ' + error.message, ToastAndroid.LONG);
+      console.log('에러 발생: ' + error.message, ToastAndroid.LONG);
     } else {
       Alert.alert('에러 발생', error.message);
     }
