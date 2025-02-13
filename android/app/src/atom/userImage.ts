@@ -1,9 +1,9 @@
 import { atom } from 'recoil';
 import persistAtom from './persist';
 
-export const userImageState = atom<string>({
+export const userImageState = atom<string | null>({
   key: 'userImageState',
-  default: '',
+  default: null,
   effects_UNSTABLE: [persistAtom],
 });
 
