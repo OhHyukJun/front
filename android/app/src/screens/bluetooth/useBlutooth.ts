@@ -8,9 +8,6 @@ import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
 import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
-import { fetchBabyEmotion } from '../home/fetchBabyEmotion';
-
-const SIMULATION_MODE = true; // false로 바꾸면 블루투스 통신 기능 사용 가능
 
 const targetDeviceName = 'bigAivleAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:42';
@@ -28,29 +25,11 @@ interface useBluetooth {
 const useBluetooth = (): useBluetooth => {
   const managerRef = useRef(new BleManager());
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
-  const [isManuallyDisconnected, setIsManuallyDisconnected] = useState(false);
+  const [isManuallyDisconnected, setIsManuallyDisconnected] = useState(false); // 수동 해제 상태 플래그
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [result, setResult] = useState<string>('');
-  const [accessToken] = useRecoilState(accessTokenState);
-  const prevResult = useRef<string | null>(null);
-
-  const simulateBluetoothProcess = () => {
-    console.log('시뮬레이션 모드 활성화! 블루투스 연결 없이 가짜 데이터 흐름을 흉내냅니다.');
-
-    setTimeout(() => {
-      setProcessing(true);
-      console.log('가짜 데이터 수신 중...');
-
-      setTimeout(() => {
-        const fakeEmotions = ['0', '1', '2', '3', '4', '5'];
-        const randomEmotion = fakeEmotions[Math.floor(Math.random() * fakeEmotions.length)];
-        console.log(`가짜 데이터 수신 완료: ${randomEmotion}`);
-
-        setResult(randomEmotion);
-        setProcessing(false);
-      }, 3000);
-    }, 2000);
-  };
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+  const isRender = useRef(true);
 
   const connectToDeviceWrapper = async () => {
     if (isManuallyDisconnected) {
@@ -64,11 +43,6 @@ const useBluetooth = (): useBluetooth => {
       return;
     }
 
-    if (SIMULATION_MODE) {
-      simulateBluetoothProcess();
-      return;
-    }
-
     await connectToDevice(
       managerRef.current,
       targetDeviceName,
@@ -76,53 +50,54 @@ const useBluetooth = (): useBluetooth => {
       setConnectedDevice,
       async (device) => {
         await sendData(device, serviceUUID, characteristicUUID, setProcessing, setResult);
+        console.log('setResult:', setResult);
       }
     );
   };
 
   const disconnectToDevice = async () => {
-    setIsManuallyDisconnected(true);
-    if (SIMULATION_MODE) {
-      console.log('[시뮬레이션] Bluetooth 연결 해제됨.');
-      setConnectedDevice(null);
-      return;
-    }
+    setIsManuallyDisconnected(true); // 플래그 활성화
     await disconnectDevice(connectedDevice, setConnectedDevice);
     setTimeout(() => {
-      setIsManuallyDisconnected(false);
+      setIsManuallyDisconnected(false); // 일정 시간 후 플래그 초기화
       console.log('수동 연결 해제 플래그 초기화됨.');
     }, 1000);
   };
-
-  const postEmotion = async (emotion: string) => {
-    if (!emotion || prevResult.current === emotion) {
-      console.log('중복 데이터 감지: 전송 안 함', emotion);
+  const postEmotion = async () => {
+    if (!result) {
+      Snackbar.show({
+        text: '감정 결과가 없습니다.',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#616161', // 회색 (정보)
+      });
       return;
     }
-
+  
     try {
-      console.log(`감정 데이터 전송: ${emotion}`);
-      const response = await axiosInstance.post('/emotion/postEmotion', { accessToken, emotion });
-      if (response.status === 200){
-        await fetchBabyEmotion();
-      }
-      prevResult.current = emotion;
-      
+      await axiosInstance.post('/emotion/postEmotion', {
+        accessToken,
+        emotion: result,
+      })
+      console.log('전송');
     } catch (error: any) {
       console.error('Error sending emotion data:', error);
       Snackbar.show({
         text: '감정 데이터 전송 실패',
         duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: '#616161',
+        backgroundColor: '#616161', // 회색 (오류)
       });
     }
   };
-
-  const debouncedPostEmotion = debounce(postEmotion, 500);
+  const debouncedPostEmotion = debounce(postEmotion, 500); // 500ms 이후 실행
 
   useEffect(() => {
-    if (result !== '' && prevResult.current !== result) {
-      debouncedPostEmotion(result);
+    if (isRender.current) {
+      isRender.current = false; // 첫 실행은 무시
+      return;
+    }
+
+    if (result !== '') {
+      debouncedPostEmotion(); // 디바운스를 적용한 postEmotion 실행
     }
   }, [result]);
 
