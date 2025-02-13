@@ -1,10 +1,8 @@
 import { atom } from 'recoil';
 import persistAtom from './persist';
 
-// 이름 상태
-export const userInfoState = atom<string[]>({
+export const userInfoState = atom<{ name: string; email: string } | null>({
   key: 'userInfoState',
-  default: [],
-  effects_UNSTABLE: [persistAtom], // 상태를 영구 저장
+  default: null,
+  effects_UNSTABLE: [persistAtom],
 });
-

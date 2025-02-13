@@ -5,7 +5,7 @@ import DatePicker from 'react-native-date-picker';
 import styles from '../css/SettingScreen';
 import { fetchSettingInfo } from './hook/fetchSettingInfo';
 import { saveSettings } from './hook/saveSettings';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { userImageState } from '../../atom/userImage';
 import { userInfoState } from '../../atom/userInfo';
 import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
@@ -23,7 +23,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const userImage = useRecoilValue(userImageState);
-  const userInfo = useRecoilValue(userInfoState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -41,8 +41,13 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
           setDeleteMonths(settingsData.dataEliminateDuration ?? 12);
         }
         if (userData) {
-          setUserInfo(userData);
-          setUserName(userData?.name);
+          if (userData) {
+            setUserInfo({
+              name: userData.name || '이름 없음',
+              email: userData.email || '이메일 없음',
+            });
+          }
+          // setUserName(userData?.name);
         }
       } catch (error) {
         console.error('설정 정보를 불러오는 중 오류 발생:', error);
@@ -77,7 +82,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image source={userImage ? { uri: userImage } : require('../img/profile_placeholder.png')} style={styles.profileImage} />
-          <Text style={styles.usernameText}>{userName || '사용자'}</Text>
+          <Text style={styles.usernameText}>{userInfo?.name || '사용자'}</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Account')}>
           <Text style={styles.accountManagementText}>계정관리</Text>

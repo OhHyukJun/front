@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity,Alert,Platform  } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity,Alert  } from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { useRecoilState,useRecoilValue, useResetRecoilState } from 'recoil';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { useRecoilState,useRecoilValue } from 'recoil';
 import styles from '../css/AccountScreen';
 import { useLogout } from '../auth/Login/Logout';
 import LogoutModal from './LogoutModal';
 import { useDeleteAccount } from '../auth/Login/DeleteAccount';
 import DeleteAccountModal from './DeleteAccountModal';
-import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
 import { userImageState } from '../../atom/userImage';
 import { userInfoState } from '../../atom/userInfo';
 import ImageUploadModal from './ImageUploadModal';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
 import RNFS from 'react-native-fs';
+
 type AccountScreenProps = {
   navigation: any;
 };
@@ -30,7 +30,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const userInfo = useRecoilValue(userInfoState);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
   const accessToken = useRecoilValue(accessTokenState);
 
@@ -151,7 +151,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.profileName}>{userInfo[0] || '사용자'}</Text>
+        <Text style={styles.profileName}>{userInfo?.name || '사용자'}</Text>
       </View>
 
       <View style={styles.divider} />
@@ -163,11 +163,11 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         </Text>
         <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>이메일</Text>
-              <Text style={styles.infoValue}>{userInfo[1] || '이메일 없음'}</Text>
+              <Text style={styles.infoValue}>{userInfo?.email || '이메일 없음'}</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>이름</Text>
-              <Text style={styles.infoValue}>{userInfo[1] || '이름 없음'}</Text>
+              <Text style={styles.infoValue}>{userInfo?.name || '이름 없음'}</Text>
             </View>
       </View>
 
