@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import styles from '../css/DashboardScreen';
 import { fetchDashboardInfo } from './fetchDashboardInfo';
 import { fetchBabyEmotion, getEmotionImage } from './fetchBabyEmotion';
+import { useIsFocused } from '@react-navigation/native';
 
 type DashboardScreenProps = {
   navigation: any;
+  isActive: boolean;
 };
 
 const emotionColors: { [key: number]: string } = {
@@ -28,7 +30,7 @@ const emotionLabels: { [key: number]: string } = {
   5: '졸려요',
 };
 
-const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
+const DashboardScreen = ({ navigation, isActive }: DashboardScreenProps) => {
   const [babyName, setBabyName] = useState<string | null>(null);
   const [babyBirth, setBabyBirth] = useState<string | null>(null);
   const [babyEmotions, setBabyEmotions] = useState<any[]>([]);
@@ -53,11 +55,13 @@ const DashboardScreen = ({ navigation }: DashboardScreenProps) => {
     }    
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
+  //const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isActive) {
       loadDashboardData();
-    }, [])
-  );
+    }
+  }, [isActive]);
 
 
   const calculateDaysSinceBirth = (birthDate: string | null): number | null => {

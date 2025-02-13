@@ -14,6 +14,8 @@ import ImageUploadModal from './ImageUploadModal';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
 import RNFS from 'react-native-fs';
+import base64 from 'react-native-base64';
+import { useFetchProfileImage } from '../home/fetchProfileImage';
 
 type AccountScreenProps = {
   navigation: any;
@@ -34,7 +36,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   // const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
   const accessToken = useRecoilValue(accessTokenState);
-
+  const fetchProfileImage = useFetchProfileImage();
   const uploadProfileImage = async (imageUri: string, accessToken: string) => {
     if (!accessToken) {
       console.error('Access Token이 없습니다. 업로드를 중단합니다.');
@@ -58,11 +60,11 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
       const response = await axiosInstance.post('/config/setProfileImage', requestBody, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
       });
-
-      console.log('프로필 이미지 업로드 성공:', response.data, '성공');
+      if (response.status === 200){
+        console.log('프로필 이미지 업로드 성공:', response.status, '성공');
+      }
       // Alert.alert('프로필 이미지가 업데이트되었습니다.');
     } catch (error) {
       console.error('프로필 이미지 업로드 실패:', error);

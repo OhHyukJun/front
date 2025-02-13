@@ -20,9 +20,9 @@ const HomeScreen = () => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     const pages = [
-        { id: 'main', component: MainScreen },
-        { id: 'dashboard', component: DashboardScreen },
-        { id: 'announcement', component: AnnouncementScreen },
+        { id: 'main', render: () => <MainScreen navigation={navigation} /> },
+        { id: 'dashboard', render: () => <DashboardScreen navigation={navigation} isActive={activeIndex === 1} /> },
+        { id: 'announcement', render: () => <AnnouncementScreen navigation={navigation} /> },
     ];
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -42,11 +42,12 @@ const HomeScreen = () => {
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
             >
-                {pages.map((page) => (
-                    <View key={page.id} style={styles.page}>
-                        <page.component navigation={navigation} />
-                    </View>
-                ))}
+            {pages.map((page, index) => (
+                <View key={page.id} style={styles.page}>
+                    {page.render()} 
+                </View>
+            ))}
+
             </ScrollView>
             </KeyboardAvoidingView>
             
