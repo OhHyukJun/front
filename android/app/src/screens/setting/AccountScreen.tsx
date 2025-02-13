@@ -29,7 +29,7 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
-  const userInfo = useRecoilValue(userInfoState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   // const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
   const accessToken = useRecoilValue(accessTokenState);

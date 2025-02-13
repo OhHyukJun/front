@@ -21,7 +21,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [childBirthDate, setChildBirthDate] = useState<Date | null>(null);
   const [deleteMonths, setDeleteMonths] = useState(12);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const userImage = useRecoilValue(userImageState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
@@ -29,25 +29,22 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
     const loadSettings = async () => {
       try {
         setLoading(true);
-
-        const [settingsData, userData] = await Promise.all([
-          fetchSettingInfo(),
-          fetchUserInfo(),
-        ]);
+  
+        const settingsData = await fetchSettingInfo();
+        const userData = await fetchUserInfo();
+  
         if (settingsData) {
           setNotification(settingsData.alarm ? '동의' : '비동의');
           setChildName(settingsData.babyName || null);
           setChildBirthDate(settingsData.babyBirth ? new Date(settingsData.babyBirth) : null);
           setDeleteMonths(settingsData.dataEliminateDuration ?? 12);
         }
+  
         if (userData) {
-          if (userData) {
-            setUserInfo({
-              name: userData.name || '이름 없음',
-              email: userData.email || '이메일 없음',
-            });
-          }
-          // setUserName(userData?.name);
+          setUserInfo({
+            name: userData.name || '이름 없음',
+            email: userData.email || '이메일 없음',
+          });
         }
       } catch (error) {
         console.error('설정 정보를 불러오는 중 오류 발생:', error);
@@ -59,17 +56,18 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
     loadSettings();
   }, []);
   
+  
 
   const handleSave = async () => {
     console.log('저장 버튼 클릭');
-    
+
     const success = await saveSettings({
       alarm: notification === '동의',
       babyName: childName || '',
       babyBirth: childBirthDate ? childBirthDate.toISOString().split('T')[0] : '',
       dataEliminateDuration: deleteMonths,
     });
-  
+
     if (success) {
       Alert.alert('저장 완료', '설정이 성공적으로 저장되었습니다.');
     } else {

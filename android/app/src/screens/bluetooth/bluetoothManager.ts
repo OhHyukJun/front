@@ -145,7 +145,7 @@ export const receiveData = async (
         }
       }
     );
-  } catch (err) {
+  } catch (err:any) {
     Snackbar.show({
       text: err.message || '데이터 수신 중 오류가 발생했습니다.',
       duration: Snackbar.LENGTH_SHORT,
