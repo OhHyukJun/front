@@ -7,8 +7,8 @@ import { fetchSettingInfo } from './hook/fetchSettingInfo';
 import { saveSettings } from './hook/saveSettings';
 import { useRecoilValue } from 'recoil';
 import { userImageState } from '../../atom/userImage';
-import { userNameState } from '../../atom/userInfo';
-
+import { userInfoState } from '../../atom/userInfo';
+import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
 const screenWidth = Dimensions.get('window').width;
 
 type SettingScreenProps = {
@@ -23,23 +23,37 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [open, setOpen] = useState(false); // Date Picker 모달 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
   const userImage = useRecoilValue(userImageState);
-  const userName = useRecoilValue(userNameState);
+  const userInfo = useRecoilValue(userInfoState);
 
-  // ✅ 설정 정보 불러오기
   useEffect(() => {
     const loadSettings = async () => {
-      setLoading(true);
-      const data = await fetchSettingInfo();
-      if (data) {
-        setNotification(data.alarm ? '동의' : '비동의'); // ✅ true면 '동의', false면 '비동의'
-        setChildName(data.babyName || null); // ✅ 빈 문자열이면 null
-        setChildBirthDate(data.babyBirth ? new Date(data.babyBirth) : null); // ✅ 빈 문자열이면 null
-        setDeleteMonths(data.dataEliminateDuration ?? 12); // ✅ 기본값 12개월
+      try {
+        setLoading(true);
+
+        const [settingsData, userData] = await Promise.all([
+          fetchSettingInfo(),
+          fetchUserInfo(),
+        ]);
+        if (settingsData) {
+          setNotification(settingsData.alarm ? '동의' : '비동의');
+          setChildName(settingsData.babyName || null);
+          setChildBirthDate(settingsData.babyBirth ? new Date(settingsData.babyBirth) : null);
+          setDeleteMonths(settingsData.dataEliminateDuration ?? 12);
+        }
+        if (userData) {
+          setUserInfo(userData);
+          setUserName(userData?.name);
+        }
+      } catch (error) {
+        console.error('설정 정보를 불러오는 중 오류 발생:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
+  
     loadSettings();
   }, []);
+  
 
   const handleSave = async () => {
     console.log('✅ 저장 버튼 클릭됨');

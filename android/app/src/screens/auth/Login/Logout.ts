@@ -46,7 +46,7 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
       // Recoil 상태 초기화
       setUserId('');
       setUserPw('');
-      setuserNameState('');
+      setuserNameState(null);
       setuserImageState('');
       resetBabyEmotions();
       setAccessToken(null);
