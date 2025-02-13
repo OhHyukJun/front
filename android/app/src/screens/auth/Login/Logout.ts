@@ -52,6 +52,7 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
       setAccessToken(null);
       setRefreshToken(null);
       setLoginState(false);
+      setuserImageState('');
 
       RNRestart.restart();
     } catch (error: any) {
