@@ -4,7 +4,8 @@ import { accessTokenState, refreshTokenState, userIdState, userPwState, loginSta
 import { Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import axiosInstance from '../../../api/axios';
-
+import { userNameState } from '../../../atom/userInfo';
+import { userImageState } from '../../../atom/userImage';
 const RNRestart = require('react-native-restart').default;
 
 type RootParamList = {
@@ -17,39 +18,44 @@ export const useDeleteAccount = (navigate: NavigationProp<RootParamList>['naviga
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
-
+  const [, setNameState] = useRecoilState(userNameState);
+  const [, setImgaeState] = useRecoilState(userImageState);
   const handleDeleteAccount = async () => {
     try {
-      // 1️⃣ accessToken 확인
+      // accessToken 확인
       console.log('회원 탈퇴 요청 Access Token:', accessToken);
 
       if (!accessToken) {
         throw new Error('Access token is missing');
       }
 
-      // 2️⃣ 서버에 탈퇴 요청 보내기
+      // 서버에 탈퇴 요청 보내기
       const response = await axiosInstance.post('/config/deleteUser', {
         accessToken, // 요청 본문에 accessToken 포함
       });
 
       console.log('회원 탈퇴 응답:', response.data);
 
-      if (!response.data.success) {
-        throw new Error(response.data.message || '회원 탈퇴 실패');
+      const responseData = response.data as { success: boolean; message?: string };
+
+      if (!responseData.success) {
+        throw new Error(responseData.message || '회원 탈퇴 실패');
       }
 
-      // 3️⃣ AsyncStorage에서 저장된 유저 데이터 삭제
+      // AsyncStorage에서 저장된 유저 데이터 삭제
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('refreshToken');
 
-      // 4️⃣ Recoil 상태 초기화
+      // Recoil 상태 초기화
       setUserId('');
       setUserPw('');
       setAccessToken(null);
+      setNameState(null);
+      setImgaeState('');
       setRefreshToken(null);
       setLoginState(false);
 
-      Alert.alert('회원 탈퇴 완료', '정상적으로 탈퇴되었습니다.');
+      // Alert.alert('회원 탈퇴 완료', '정상적으로 탈퇴되었습니다.');
       RNRestart.restart();
     } catch (error: any) {
       console.error('회원 탈퇴 오류:', error.response?.data || error.message);

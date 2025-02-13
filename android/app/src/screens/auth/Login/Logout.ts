@@ -1,10 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRecoilState,useRecoilValue } from 'recoil';
+import { useRecoilState,useRecoilValue,useResetRecoilState } from 'recoil';
 import { accessTokenState, refreshTokenState, userIdState, userPwState, loginState } from '../../../atom/login';
 import { Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import axiosInstance from '../../../api/axios';
-
+import { userInfoState } from '../../../atom/userInfo';
+import { userImageState } from '../../../atom/userImage';
+import { babyEmotionState } from '../../../atom/babyEmotionState';
+import { adminState } from '../../../atom/admin';
 const RNRestart = require('react-native-restart').default;
 
 type RootParamList = {
@@ -14,10 +17,14 @@ type RootParamList = {
 export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) => {
   const [, setUserId] = useRecoilState(userIdState);
   const [, setUserPw] = useRecoilState(userPwState);
+  const [setAdmin] = useRecoilValue(adminState);
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const [, setLoginState] = useRecoilState(loginState);
-  
+  const [, setuserInfoState] = useRecoilState(userInfoState);
+  const [, setuserImageState] = useRecoilState(userImageState);
+  // const [, setbabyEmotionState] = useRecoilState(babyEmotionState);
+  const resetBabyEmotions = useResetRecoilState(babyEmotionState);
   const handleLogout = async () => {
     try {
       // AsyncStorage에서 accessToken 가져오기
@@ -37,10 +44,14 @@ export const useLogout = (navigate: NavigationProp<RootParamList>['navigate']) =
       // AsyncStorage에서 토큰 삭제
       await AsyncStorage.removeItem('accessToken');
       await AsyncStorage.removeItem('refreshToken');
-
+      if (adminState){
+        setAdmin(false);
+      }
       // Recoil 상태 초기화
       setUserId('');
       setUserPw('');
+      setuserInfoState([]);
+      resetBabyEmotions();
       setAccessToken(null);
       setRefreshToken(null);
       setLoginState(false);

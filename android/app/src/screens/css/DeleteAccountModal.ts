@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)', // 반투명 배경
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   modalContent: {
     width: vw(75),
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   modalTextContainer: {
     width: '100%',
-    paddingVertical: vh(3.5), // 🔹 여백 통일 (로그아웃 모달과 맞춤)
+    paddingVertical: vh(3.5),
     alignItems: 'center',
   },
   modalText: {
@@ -26,13 +26,13 @@ const styles = StyleSheet.create({
   modalSubText: {
     fontSize: vh(2),
     textAlign: 'center',
-    color: '#666', // 🔹 강조 덜한 텍스트 (로그아웃 모달과 맞춤)
+    color: '#666',
     marginTop: vh(1),
-    paddingHorizontal: vw(5), // 좌우 여백 추가
+    paddingHorizontal: vw(5),
   },
   modalButton: {
     width: '100%',
-    paddingVertical: vh(1.3), // 🔹 로그아웃 모달과 동일한 버튼 높이
+    paddingVertical: vh(1.3),
     alignItems: 'center',
   },
   modalButtonText: {
@@ -45,18 +45,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   deleteButtonText: {
-    color: 'red', // 🔹 탈퇴 버튼 강조
+    color: 'red',
   },
   modalButtonCancel: {
     width: '100%',
     paddingVertical: vh(1.2),
     alignItems: 'center',
-    marginBottom: vh(0.3), // 🔹 "취소" 버튼 아래 여백 추가
+    marginBottom: vh(0.3),
   },
   divider: {
     width: '100%',
     height: 1,
-    backgroundColor: '#ddd', // 연한 회색 구분선 (로그아웃 모달과 동일)
+    backgroundColor: '#ddd',
   },
 });
 

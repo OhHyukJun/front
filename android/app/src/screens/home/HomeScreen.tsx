@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
     ScrollView,
     View,
-    StyleSheet,
+    KeyboardAvoidingView,
     Dimensions,
     NativeSyntheticEvent,
     NativeScrollEvent,
@@ -19,7 +19,6 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const [activeIndex, setActiveIndex] = useState(0);
 
-    // 동적으로 관리할 페이지 배열
     const pages = [
         { id: 'main', component: MainScreen },
         { id: 'dashboard', component: DashboardScreen },
@@ -34,13 +33,14 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
+            <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
             <ScrollView
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 style={styles.scrollView}
                 onScroll={handleScroll}
-                scrollEventThrottle={16} // 스크롤 이벤트 빈도 설정
+                scrollEventThrottle={16}
             >
                 {pages.map((page) => (
                     <View key={page.id} style={styles.page}>
@@ -48,8 +48,8 @@ const HomeScreen = () => {
                     </View>
                 ))}
             </ScrollView>
-
-            {/* Pagination (페이지네이션 점) */}
+            </KeyboardAvoidingView>
+            
             <View style={styles.pagination}>
                 {pages.map((_, index) => (
                     <View

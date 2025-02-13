@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert} from 'react-native';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {
@@ -8,7 +8,7 @@ import {
   userIdState,
 } from '../../atom/login';
 import styles from '../css/auth/Register/Register';
-import axiosInstance from '../../api/axios'; // Axios 인스턴스 가져오기
+import axiosInstance from '../../api/axios';
 import constants from '../auth/ConstantAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,8 +19,8 @@ type NameProps = {
 const ChangePassword = ({navigation}: NameProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isCheckedTwo, setIsCheckedTwo] = useState(false);
-  const [password, setPasswordState] = useRecoilState(userPwState); // 현재 비밀번호
-  const [newPassword, setNewPassword] = useState(''); // 새 비밀번호 저장
+  const [password, setPasswordState] = useRecoilState(userPwState);
+  const [newPassword, setNewPassword] = useState('');
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [, setRefreshToken] = useRecoilState(refreshTokenState);
   const userPwInputRef = useRef<TextInput>(null);
@@ -29,6 +29,10 @@ const ChangePassword = ({navigation}: NameProps) => {
   const handlePrev = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    setPasswordState('');
+  },[]);
 
   const validateInputs = (): boolean => {
     if (!password) {
@@ -82,7 +86,6 @@ const ChangePassword = ({navigation}: NameProps) => {
     setIsCheckedTwo(true);
   };
 
-  // 비밀번호 변경 요청
   const handleChange = async () => {
     console.log(password);
     console.log(newPassword);

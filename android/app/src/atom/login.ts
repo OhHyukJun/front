@@ -10,7 +10,7 @@ export const loginState = atom<boolean>({
 // 아이디 상태
 export const userIdState = atom<string | null>({
   key: 'userIdState',
-  default: null,
+  default: '',
   effects_UNSTABLE: [persistAtom], // 상태를 영구 저장
 });
 

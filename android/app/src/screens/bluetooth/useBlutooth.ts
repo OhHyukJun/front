@@ -6,10 +6,13 @@ import { connectToDevice, sendData, receiveData, disconnectDevice } from './blue
 import { useRecoilState } from 'recoil';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
-const targetDeviceName = 'AivleBigPAudio';
-const targetDeviceId = '8C:BF:EA:0E:E1:41';
-const serviceUUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
-const characteristicUUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+import Snackbar from 'react-native-snackbar';
+import { debounce } from 'lodash';
+
+const targetDeviceName = 'bigAivleAudio';
+const targetDeviceId = '8C:BF:EA:0E:E1:42';
+const serviceUUID = '4b9131c3-c9c5-cc8f-9e45-b51f01c2af4f';
+const characteristicUUID = 'a8261b36-07ea-f5b7-8846-e1363e48b5be';
 
 interface useBluetooth {
   connectedDevice: Device | null;
@@ -26,6 +29,7 @@ const useBluetooth = (): useBluetooth => {
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [result, setResult] = useState<string>('');
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+  const isRender = useRef(true);
 
   const connectToDeviceWrapper = async () => {
     if (isManuallyDisconnected) {
@@ -60,26 +64,42 @@ const useBluetooth = (): useBluetooth => {
     }, 1000);
   };
   const postEmotion = async () => {
-    if (result === null || result === undefined) {
-      Alert.alert('Error', 'No emotion result available.');
+    if (!result) {
+      Snackbar.show({
+        text: '감정 결과가 없습니다.',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#616161', // 회색 (정보)
+      });
       return;
     }
   
     try {
-      const response = await axiosInstance.post('/emotion/postEmotion', {
+      await axiosInstance.post('/emotion/postEmotion', {
         accessToken,
         emotion: result,
       })
+      console.log('전송');
     } catch (error: any) {
       console.error('Error sending emotion data:', error);
-      Alert.alert('Error', 'Failed to send emotion data.');
+      Snackbar.show({
+        text: '감정 데이터 전송 실패',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#616161', // 회색 (오류)
+      });
     }
   };
+  const debouncedPostEmotion = debounce(postEmotion, 500); // 500ms 이후 실행
+
   useEffect(() => {
-    if (result !== null) {
-      postEmotion();
+    if (isRender.current) {
+      isRender.current = false; // 첫 실행은 무시
+      return;
     }
-  },[result]);
+
+    if (result !== '') {
+      debouncedPostEmotion(); // 디바운스를 적용한 postEmotion 실행
+    }
+  }, [result]);
 
   return { connectedDevice, connectToDevice: connectToDeviceWrapper, disconnectToDevice, isProcessing, result };
 };

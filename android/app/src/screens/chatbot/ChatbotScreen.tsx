@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, BackHandler, AppState, InteractionManager  } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, BackHandler, AppState, InteractionManager,Alert } from 'react-native';
 import styles from '../css/ChatbotScreen';
 import { accessTokenState } from '../../atom/login';
 import { useRecoilValue } from 'recoil';
 
-const SOCKET_URL = 'ws://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.azurewebsites.net/chat';
+const SOCKET_URL = 'wss://ai-aivle-18-bigp-back-f4gud0d5hedhh8gj.koreacentral-01.azurewebsites.net/chat';
 
 const ChatbotScreen = ({ navigation }: { navigation: any }) => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -40,8 +40,9 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
 
     ws.onmessage = (event) => {
       try {
+        
         const response = JSON.parse(event.data);
-
+        console.log(event.data);
         if (response.header === 'Greeting' && response.data.request.length > 0 && response.data.response.length > 0) {
           let previousMessages = [];
           for (let i = 0; i < response.data.response.length; i++) {
@@ -129,19 +130,22 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
 
   const sendMessage = () => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.error('WebSocket이 열려있지 않거나 유효하지 않습니다.');
+      Alert.alert('WebSocket이 열려있지 않거나 유효하지 않습니다.');
       return;
     }
 
     if (inputText.trim() === '') return;
+    setMessages((prevMessages) => {
+      const updatedMessages = [...prevMessages,
+          { id: Date.now().toString(), text: inputText, sender: 'user' }
+      ];
+      if (!updatedMessages.some((msg) => msg.id === 'processing')) {
+        updatedMessages.push({ id: 'processing', text: '분석 중입니다...', sender: 'bot' });
+      }
 
-    const userMessage = { id: Date.now().toString(), text: inputText, sender: 'user' };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInputText('');
-
-    setMessages((prevMessages) =>
-      prevMessages.some((msg) => msg.id === 'processing') ? prevMessages : [...prevMessages, { id: 'processing', text: '분석 중입니다...', sender: 'bot' }]
-    );
+      return updatedMessages;
+    });
+    setTimeout(() => setInputText(''), 10);
 
     scrollToBottom();
 
@@ -190,7 +194,7 @@ const ChatbotScreen = ({ navigation }: { navigation: any }) => {
           </TouchableOpacity>
         ))}
       </View>
-      
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.inputBox}

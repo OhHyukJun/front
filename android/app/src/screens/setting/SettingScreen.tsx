@@ -5,10 +5,10 @@ import DatePicker from 'react-native-date-picker';
 import styles from '../css/SettingScreen';
 import { fetchSettingInfo } from './hook/fetchSettingInfo';
 import { saveSettings } from './hook/saveSettings';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { userImageState } from '../../atom/userImage';
-import { userNameState } from '../../atom/userInfo';
-
+import { userInfoState } from '../../atom/userInfo';
+import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
 const screenWidth = Dimensions.get('window').width;
 
 type SettingScreenProps = {
@@ -16,39 +16,58 @@ type SettingScreenProps = {
 };
 
 const SettingScreen = ({ navigation }: SettingScreenProps) => {
-  const [notification, setNotification] = useState('동의'); // 알림 설정 상태
-  const [childName, setChildName] = useState<string | null>(null); // ✅ 기본값 null
-  const [childBirthDate, setChildBirthDate] = useState<Date | null>(null); // ✅ 기본값 null
-  const [deleteMonths, setDeleteMonths] = useState(12); // ✅ 기본값 12개월
-  const [open, setOpen] = useState(false); // Date Picker 모달 상태
-  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [notification, setNotification] = useState('동의');
+  const [childName, setChildName] = useState<string | null>(null);
+  const [childBirthDate, setChildBirthDate] = useState<Date | null>(null);
+  const [deleteMonths, setDeleteMonths] = useState(12);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const userImage = useRecoilValue(userImageState);
-  const userName = useRecoilValue(userNameState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
-  // ✅ 설정 정보 불러오기
   useEffect(() => {
     const loadSettings = async () => {
-      setLoading(true);
-      const data = await fetchSettingInfo();
-      if (data) {
-        setNotification(data.alarm ? '동의' : '비동의'); // ✅ true면 '동의', false면 '비동의'
-        setChildName(data.babyName || null); // ✅ 빈 문자열이면 null
-        setChildBirthDate(data.babyBirth ? new Date(data.babyBirth) : null); // ✅ 빈 문자열이면 null
-        setDeleteMonths(data.dataEliminateDuration ?? 12); // ✅ 기본값 12개월
+      try {
+        setLoading(true);
+
+        const [settingsData, userData] = await Promise.all([
+          fetchSettingInfo(),
+          fetchUserInfo(),
+        ]);
+        if (settingsData) {
+          setNotification(settingsData.alarm ? '동의' : '비동의');
+          setChildName(settingsData.babyName || null);
+          setChildBirthDate(settingsData.babyBirth ? new Date(settingsData.babyBirth) : null);
+          setDeleteMonths(settingsData.dataEliminateDuration ?? 12);
+        }
+        if (userData) {
+          if (userData) {
+            setUserInfo({
+              name: userData.name || '이름 없음',
+              email: userData.email || '이메일 없음',
+            });
+          }
+          // setUserName(userData?.name);
+        }
+      } catch (error) {
+        console.error('설정 정보를 불러오는 중 오류 발생:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
+  
     loadSettings();
   }, []);
+  
 
   const handleSave = async () => {
-    console.log('✅ 저장 버튼 클릭됨');
+    console.log('저장 버튼 클릭');
     
     const success = await saveSettings({
-      alarm: notification === '동의', // ✅ "동의" → true, "비동의" → false 변환
-      babyName: childName || '', // ✅ 기본값이 null이면 빈 문자열로 저장
-      babyBirth: childBirthDate ? childBirthDate.toISOString().split('T')[0] : '', // ✅ 기본값이 null이면 빈 문자열로 저장
-      dataEliminateDuration: deleteMonths, // ✅ 필드명 일치
+      alarm: notification === '동의',
+      babyName: childName || '',
+      babyBirth: childBirthDate ? childBirthDate.toISOString().split('T')[0] : '',
+      dataEliminateDuration: deleteMonths,
     });
   
     if (success) {
@@ -60,23 +79,19 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
 
   return (
     <View style={styles.container}>
-      {/* 프로필 섹션 */}
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image source={userImage ? { uri: userImage } : require('../img/profile_placeholder.png')} style={styles.profileImage} />
-          <Text style={styles.usernameText}>{userName || '사용자'}</Text>
+          <Text style={styles.usernameText}>{userInfo?.name || '사용자'}</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Account')}>
           <Text style={styles.accountManagementText}>계정관리</Text>
         </TouchableOpacity>
       </View>
 
-      {/* 구분선 */}
       <View style={styles.divider} />
 
-      {/* 설정 카드 */}
       <View style={styles.settingCard}>
-        {/* 알림 설정 */}
         <View style={styles.row}>
           <Text style={styles.label}>알림 설정</Text>
           <View style={styles.radioGroup}>
@@ -95,7 +110,6 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
           </View>
         </View>
 
-        {/* 아이 이름과 생년월일 */}
         <View style={styles.rowHorizontal}>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>아이 이름</Text>
@@ -103,12 +117,11 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
               style={styles.input}
               placeholder="이름"
               placeholderTextColor="#BBBBBB"
-              value={childName || ''} // ✅ 기본값 null이면 빈 문자열
+              value={childName || ''}
               onChangeText={setChildName}
             />
           </View>
 
-          {/* 📌 생년월일 입력 */}
           <View style={styles.inputContainer}>
             <Text style={styles.label}>아이 생년 월일</Text>
             <TouchableOpacity onPress={() => setOpen(true)}>
@@ -123,7 +136,6 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
           </View>
         </View>
 
-        {/* 날짜 선택기 */}
         <DatePicker
           modal
           open={open}
@@ -140,7 +152,6 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
           onCancel={() => setOpen(false)}
         />
 
-        {/* 데이터 삭제 기한 */}
         <View style={styles.row}>
           <Text style={styles.label}>데이터 삭제 기한</Text>
           <View style={styles.sliderRow}>
@@ -156,7 +167,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
                 thumbButton={<Image source={require('../img/thumb_button.png')} style={{ resizeMode: 'contain' }} />}
                 sliderHeight={8}
                 sliderBorderRadius={4}
-                sliderWidth={screenWidth * 0.65 - 10} // ✅ 해결된 부분
+                sliderWidth={screenWidth * 0.65 - 10}
               />
               <View style={styles.sliderLabels}>
                 <Text style={styles.sliderLabelLeft}>3</Text>

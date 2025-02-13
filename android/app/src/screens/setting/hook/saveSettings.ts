@@ -8,7 +8,6 @@ export interface SettingsData {
   dataEliminateDuration: number;
 }
 
-// 🔹 API 응답 타입 정의
 interface SaveSettingsResponse {
   success: boolean;
 }
@@ -26,30 +25,29 @@ export const saveSettings = async (settingsData: SettingsData): Promise<boolean>
     }
 
     const requestData = {
-      accessToken, // ✅ 액세스 토큰 포함
+      accessToken,
       ...settingsData,
     };
 
     console.log('🔹 전송할 설정 데이터:', requestData);
 
-    // ✅ 수정된 부분: 헤더 추가
     const response = await axiosInstance.post<SaveSettingsResponse>(
       '/config/setSettingInfo',
       requestData,
       {
         headers: {
-          'Content-Type': 'application/json',  // JSON 형식 명확히 설정
-          Cookie: `accessToken=${accessToken}`, // 쿠키에 액세스 토큰 추가
+          'Content-Type': 'application/json',
+          Cookie: `accessToken=${accessToken}`,
         },
-        withCredentials: true,  // ✅ 쿠키 인증 활성화
+        withCredentials: true,
       }
     );
 
-    console.log('🔹 API 응답 데이터:', response.data);
+    console.log('API 응답 데이터:', response.data);
 
-    return response.data.success; // 성공 여부 반환
+    return response.data.success;
   } catch (error: any) {
-    console.error('❌ 설정 저장 오류:', error.response?.data || error.message);
+    console.error('설정 저장 오류:', error.response?.data || error.message);
     return false;
   }
 };

@@ -13,19 +13,16 @@ const LogoutModal = ({ isVisible, onConfirm, onCancel }: LogoutModalProps) => {
         <Modal transparent={true} visible={isVisible} animationType="fade">
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    {/* 텍스트 부분만 위아래 패딩 추가 */}
                     <View style={styles.modalTextContainer}>
                         <Text style={styles.modalText}>계정에서 로그아웃하시겠어요?</Text>
                     </View>
 
-                    {/* 구분선 */}
                     <View style={styles.divider} />
 
-                    <TouchableOpacity onPress={onConfirm} style={[styles.modalButton, styles.borderTop]}>
+                    <TouchableOpacity onPress={onConfirm} style={styles.modalButton}>
                         <Text style={[styles.modalButtonText, { color: 'red' }]}>로그아웃</Text>
                     </TouchableOpacity>
 
-                    {/* 구분선 */}
                     <View style={styles.divider} />
 
                     <TouchableOpacity onPress={onCancel} style={styles.modalButtonCancel}>

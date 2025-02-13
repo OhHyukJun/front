@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     height: vh(43),
     marginTop: -vh(8),
     resizeMode: 'contain',
-    justifyContent: 'center', // 중앙 정렬
-    alignItems: 'center' // 중앙 정렬
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   baby: {
     width: vw(64),
@@ -71,9 +71,9 @@ const styles = StyleSheet.create({
     color: '#808080',
     fontSize: vh(3.4),
     textAlign: 'center',
-    marginTop: -vh(1.3), // 상단 마진 조정
-    marginBottom: vh(1), // 하단 마진 조정
-    lineHeight: vh(4.3), // 라인 높이 조정
+    marginTop: -vh(1.3),
+    marginBottom: vh(1),
+    lineHeight: vh(4.3),
     marginLeft: vh(1.3),
     maxWidth: '90%',
     flexWrap: 'wrap',

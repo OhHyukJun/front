@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -27,6 +28,12 @@ import AdminWrite from './android/app/src/screens/home/admin/AdminWrite';
 // const queryClient = new QueryClient();
 import { Buffer } from 'buffer';
 global.Buffer = Buffer;
+
+
+LogBox.ignoreLogs([
+  'VirtualizedLists should never be nested inside plain ScrollViews',
+  'Cannot remove child at index',
+]);
 
 const Stack = createNativeStackNavigator();
 

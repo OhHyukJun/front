@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity,Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity,Alert  } from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { useRecoilState,useRecoilValue } from 'recoil';
 import styles from '../css/AccountScreen';
 import { useLogout } from '../auth/Login/Logout';
 import LogoutModal from './LogoutModal';
 import { useDeleteAccount } from '../auth/Login/DeleteAccount';
 import DeleteAccountModal from './DeleteAccountModal';
-import { fetchUserInfo } from '../auth/Login/FetchUserInfo';
 import { userImageState } from '../../atom/userImage';
-import { userNameState } from '../../atom/userInfo';
+import { userInfoState } from '../../atom/userInfo';
+import ImageUploadModal from './ImageUploadModal';
+import { accessTokenState } from '../../atom/login';
+import axiosInstance from '../../api/axios';
+import RNFS from 'react-native-fs';
 
 type AccountScreenProps = {
   navigation: any;
@@ -25,29 +28,47 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-
-  const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const userInfo = useRecoilValue(userInfoState);
+  // const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
-  const [userName, setUserName ] = useRecoilState(userNameState);
+  const accessToken = useRecoilValue(accessTokenState);
 
-  useEffect(() => {
-    const loadUserInfo = async () => {
-      try {
-        const data = await fetchUserInfo();
-        setUserInfo(data);
-        setUserName(data?.name);
-        console.log(setUserName);
-      } catch (error) {
-        console.error('사용자 정보를 불러오는 중 오류 발생:', error);
-        setUserInfo(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const uploadProfileImage = async (imageUri: string, accessToken: string) => {
+    if (!accessToken) {
+      console.error('Access Token이 없습니다. 업로드를 중단합니다.');
+      Alert.alert('로그인이 필요합니다.');
+      return;
+    }
 
-    loadUserInfo();
-  }, []);
+    try {
+      console.log(`이미지 업로드 시작: ${imageUri}`);
+
+      const base64Image = await RNFS.readFile(
+        imageUri.replace('file://', ''),
+        'base64'
+      );
+
+      const requestBody = {
+        accessToken: accessToken,
+        profileImage: base64Image,
+      };
+
+      const response = await axiosInstance.post('/config/setProfileImage', requestBody, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      console.log('프로필 이미지 업로드 성공:', response.data, '성공');
+      // Alert.alert('프로필 이미지가 업데이트되었습니다.');
+    } catch (error) {
+      console.error('프로필 이미지 업로드 실패:', error);
+      Alert.alert('프로필 이미지 업데이트에 실패했습니다.');
+    }
+  };
+
 
   const requestCameraPermission = async () => {
     const result = await request(PERMISSIONS.ANDROID.CAMERA);
@@ -60,40 +81,26 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
     }
   };
 
-  const handleImageUpload = () => {
-    Alert.alert(
-      '프로필 사진 변경',
-      '이미지를 선택하는 방법을 선택하세요.',
-      [
-        {
-          text: '갤러리에서 선택',
-          onPress: () => pickImageFromLibrary(),
-        },
-        {
-          text: '카메라로 촬영',
-          onPress: () => captureImageWithCamera(),
-        },
-        {
-          text: '취소',
-          style: 'cancel',
-        },
-      ]
-    );
-  };
-
   const pickImageFromLibrary = async () => {
     launchImageLibrary(
       {
         mediaType: 'photo',
         quality: 0.8,
       },
-      response => {
+      async response => {
         if (response.didCancel) {
           console.log('사용자가 이미지 선택을 취소했습니다.');
         } else if (response.errorMessage) {
           console.error('이미지 선택 오류:', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
-          setProfileImage(response.assets[0].uri || null);
+          const selectedImageUri = response.assets[0].uri || '';
+  
+          // 모달을 즉시 닫기
+          setIsImageModalVisible(false);
+  
+          // 이미지 업로드 수행
+          await uploadProfileImage(selectedImageUri, accessToken);
+          setProfileImage(selectedImageUri);
         }
       }
     );
@@ -109,28 +116,35 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         quality: 0.8,
         saveToPhotos: true,
       },
-      response => {
+      async response => {
         if (response.didCancel) {
           console.log('사용자가 카메라 촬영을 취소했습니다.');
         } else if (response.errorMessage) {
           console.error('카메라 오류:', response.errorMessage);
         } else if (response.assets && response.assets.length > 0) {
-          setProfileImage(response.assets[0].uri || null);
+          const capturedImageUri = response.assets[0].uri || '';
+
+          // 모달을 즉시 닫기
+          setIsImageModalVisible(false);
+
+          // 이미지 업로드 수행
+          await uploadProfileImage(capturedImageUri, accessToken);
+          setProfileImage(capturedImageUri);
         }
       }
     );
   };
 
+
   return (
     <View style={styles.container}>
-      {/* 프로필 섹션 */}
       <View style={styles.profileSection}>
         <View style={styles.profileDetails}>
           <Image
              source={profileImage ? { uri: profileImage } : require('../img/profile_placeholder.png')}
             style={styles.profileImage}
           />
-          <TouchableOpacity style={styles.profileChangeButton} onPress={handleImageUpload}>
+          <TouchableOpacity style={styles.profileChangeButton} onPress={() => setIsImageModalVisible(true)}>
             <Image
               source={require('../img/profile_change.png')}
               style={styles.profileChangeIcon}
@@ -140,10 +154,8 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
         <Text style={styles.profileName}>{userInfo?.name || '사용자'}</Text>
       </View>
 
-      {/* Divider */}
       <View style={styles.divider} />
 
-      {/* 개인정보 컨테이너 */}
       <View style={styles.infoContainer}>
         <Text style={styles.containerTitle}>개인 정보</Text>
         <Text style={styles.containerSubtitle}>
@@ -159,7 +171,6 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
             </View>
       </View>
 
-      {/* 계정 관리 컨테이너 */}
       <View style={styles.infoContainer}>
         <Text style={styles.containerTitle}>계정 관리</Text>
         <Text style={styles.containerSubtitle}>
@@ -198,6 +209,12 @@ const AccountScreen = ({ navigation }: AccountScreenProps) => {
           handleDeleteAccount();
         }}
         onCancel={() => setIsDeleteModalVisible(false)}
+      />
+      <ImageUploadModal 
+        isVisible={isImageModalVisible} 
+        onGallery={pickImageFromLibrary}
+        onCamera={captureImageWithCamera}
+        onCancel={() => setIsImageModalVisible(false)}
       />
 
     </View>

@@ -23,44 +23,33 @@ const PasswordFind = ({ navigation }: NameProps) => {
 
   const handleFind = async () => {
     const emailRegex = constants.EMAIL.PATTERN;
-
+  
     if (!email) {
       setMessage('이메일을 입력해주세요.');
       return;
     }
-
+  
     if (!emailRegex.test(email)) {
       setMessage('이메일 형식으로 입력해주세요.');
       return;
     }
-
-    if (!accessToken) {
-      setMessage('유효하지 않은 토큰입니다.');
-      return;
-    }
-
+  
     try {
-      Cookies.set('accessToken', accessToken, { path: '/' });
-
-      const response = await axiosInstance.get('/auth/findPass', {
-        headers: {
-          Cookie: `accessToken=${accessToken}`,
-        },
-        withCredentials: true,
-      });
-
+      console.log(email);
+      // 이메일을 쿼리 스트링에 포함하여 GET 요청 수행
+      const response = await axiosInstance.get(`/auth/findPass?email=${encodeURIComponent(email)}`);
+  
       const data = response.data as { message?: string; success: boolean };
       setMessage(data.message || '임시 비밀번호가 이메일로 전송되었습니다.');
     } catch (error: any) {
-      console.error('비밀번호 찾기 오류:', error);
-
+      console.log('비밀번호 찾기 오류:', error);
+  
       const errorMessage =
         error.response?.data?.message || '서버와의 연결이 실패했습니다. 다시 시도해주세요.';
-      setMessage('');
-      Alert.alert('오류', errorMessage);
+      setMessage(errorMessage);
     }
-
   };
+  
 
 
   return (
@@ -73,7 +62,7 @@ const PasswordFind = ({ navigation }: NameProps) => {
 
       <View style={styles.containerMini}>
         <View style={styles.content}>
-          <Text style={styles.title}>아이디 찾기</Text>
+          <Text style={styles.title}>비밀번호 찾기</Text>
           <Text style={styles.subtitle}>가입된 이메일을 확인해주세요</Text>
           <Text style={styles.smallSubtitle}>가입하신 이메일을 입력해주세요</Text>
         </View>

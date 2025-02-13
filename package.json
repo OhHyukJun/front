@@ -1,5 +1,6 @@
 {
   "name": "MyProject2",
+  "displayName": "나비잠",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -21,6 +22,8 @@
     "axios": "^1.7.9",
     "buffer": "^6.0.3",
     "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "react": "^18.3.1",
     "react-devtools": "^1.0.5",
     "react-native": "^0.76.5",
@@ -30,6 +33,7 @@
     "react-native-date-picker": "^5.0.10",
     "react-native-dotenv": "^3.4.11",
     "react-native-expo-viewport-units": "^0.0.8",
+    "react-native-fast-image": "^8.6.3",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.22.0",
     "react-native-get-random-values": "^1.11.0",
@@ -42,8 +46,10 @@
     "react-native-screens": "^4.5.0",
     "react-native-simple-slider": "^1.0.2",
     "react-native-slider": "^0.11.0",
+    "react-native-snackbar": "^2.8.0",
     "react-native-vector-icons": "^10.2.0",
     "react-native-viewport-units": "^0.0.5",
+    "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
     "socket.io-client": "^4.8.1"
@@ -61,6 +67,7 @@
     "@react-native/typescript-config": "^0.76.5",
     "@types/axios": "^0.9.36",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.17.15",
     "@types/react": "^18.3.18",
     "@types/react-native-fs": "^2.8.3",
     "@types/react-native-snap-carousel": "^3.8.11",
