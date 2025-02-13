@@ -7,7 +7,7 @@ import { emotionTexts } from './emotionData';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
 import { userImageState } from '../../atom/userImage';
-
+import { useFetchProfileImage } from './fetchProfileImage';
 type MainScreenProps = {
   navigation: any;
 };
@@ -20,29 +20,11 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
   const accessToken = useRecoilValue(accessTokenState);
   const [profileImage, setProfileImage] = useRecoilState(userImageState);
   const [loading, setLoading] = useState(true);
+  const fetchProfileImage = useFetchProfileImage();
 
   useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosInstance.get('/config/getProfileImage', {
-          headers: {
-            Cookie: `accessToken=${accessToken}`,
-          },
-          withCredentials: true,
-        });
-        console.log(response.data);
-        if (response.data?.profileImage) {
-          setProfileImage(response.data.profileImage); // 서버에서 받은 이미지 URL 설정
-        }
-      } catch (error) {
-        console.log('프로필 이미지 불러오기 실패:', error);
-        setProfileImage('');
-      }
-    };
-
     fetchProfileImage();
-  }, []);
+  }, [accessToken]);
 
   const getEmotionMessage = (emotion: string | null) => {
     if (emotion && emotion in emotionTexts) {
@@ -88,13 +70,13 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
         </ImageBackground>
         <TouchableOpacity onPress={handleBluetooth}>
         <Image
-            source={
-              profileImage
-                ? { uri: profileImage }
-                : require('../img/baby_profile.png') // 기본 이미지
-            }
-            style={styles.baby}
-          />
+          source={
+            profileImage && profileImage.trim() !== ''
+              ? { uri: profileImage }
+              : require('../img/baby_profile.png')
+          }
+          style={styles.baby}
+        />
 
         </TouchableOpacity>
         {/* chatbot 이미지에 TouchableOpacity 추가 */}
