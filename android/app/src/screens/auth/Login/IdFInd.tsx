@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useRecoilState } from 'recoil';
-import { emailState } from '../../../atom/Register';
 import styles from '../../css/auth/Register/Register';
 import constants from '../ConstantAuth';
 import axiosInstance from '../../../api/axios';
@@ -11,7 +9,7 @@ type NameProps = {
 };
 
 const IdFind = ({ navigation }: NameProps) => {
-  const [email, setEmail] = useRecoilState(emailState);
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState(''); // 메시지 상태 추가
 
   const handlePrev = () => {

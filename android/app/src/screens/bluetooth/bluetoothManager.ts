@@ -167,14 +167,12 @@ export const sendData = async (
       const characteristics = await service.characteristics();
       for (const characteristic of characteristics) {
         if (characteristic.isWritableWithResponse) {
-          // BLE 장치로 신호 전송
-
           setProcessing(true);
 
-          // 데이터 전송 후 즉시 receiveData 호출
+          // 데이터 전송 후 즉시 receiveData 호출 receiveDat를 호출해서 데이터 수신 준비를 마친 뒤 r 을 전송해야했다..
           await receiveData(device, serviceUUID, characteristicUUID, setProcessing, setResult);
           const encodedData = Buffer.from('r', 'utf-8').toString('base64');
-          await device.writeCharacteristicWithResponseForService(serviceUUID, characteristicUUID, encodedData);
+          await device.writeCharacteristicWithResponseForService(serviceUUID, characteristicUUID, encodedData); // 전송 시 UUID를 함꼐 보내줘야 아두이노에서 인식
           console.log('r 전송 완료');
           return;
         }
