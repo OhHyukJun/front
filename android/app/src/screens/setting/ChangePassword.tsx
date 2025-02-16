@@ -11,6 +11,7 @@ import styles from '../css/auth/Register/Register';
 import axiosInstance from '../../api/axios';
 import constants from '../auth/ConstantAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Snackbar from 'react-native-snackbar';
 
 type NameProps = {
   navigation: any;
@@ -66,6 +67,7 @@ const ChangePassword = ({navigation}: NameProps) => {
 
         await AsyncStorage.setItem('accessToken', accessToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
+        setNewPassword(password);
         setPasswordState('');
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
@@ -83,12 +85,17 @@ const ChangePassword = ({navigation}: NameProps) => {
 
   const handleNext = () => {
     if (!validateInputs()) return;
-    setIsCheckedTwo(true);
+    if (password !== newPassword) {
+      setIsCheckedTwo(true);
+      setNewPassword('');
+    }
+    else {
+      Alert.alert('비밀번호 오류', '기존 비밀번호와 일치하는 비밀번호 입니다.');
+    }
+
   };
 
   const handleChange = async () => {
-    console.log(password);
-    console.log(newPassword);
     if (password !== newPassword) {
       Alert.alert('인증 실패', '새 비밀번호가 일치하지 않습니다.');
       return;
@@ -101,7 +108,11 @@ const ChangePassword = ({navigation}: NameProps) => {
       });
 
       if (response.status === 200) {
-        Alert.alert('인증 완료', '비밀번호 변경이 완료되었습니다.');
+        Snackbar.show({
+          text: '비밀번호 변경이 완료되었습니다.',
+          duration: Snackbar.LENGTH_SHORT,
+          backgroundColor: '#616161',
+        });
         setPasswordState('');
         navigation.goBack();
       } else {
