@@ -20,7 +20,7 @@ const BLEConnection = () => {
       <Text style={styles.text}>Nearby Devices:</Text>
       {scannedDevices && scannedDevices.length > 0 ? (
         scannedDevices.map((device, index) => (
-          <Text key={index} style={styles.deviceText}>
+          <Text key={index}>
             {device.name || 'Unknown'} ({device.address || 'No Address'})
           </Text>
         ))

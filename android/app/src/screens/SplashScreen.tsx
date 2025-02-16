@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRecoilState, useRecoilValue  } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { loginState, accessTokenState } from '../atom/login';
 import styles from './css/SplashScreen';
 

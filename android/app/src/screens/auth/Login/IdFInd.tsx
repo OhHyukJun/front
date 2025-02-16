@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from '../../css/auth/Register/Register';
 import constants from '../ConstantAuth';
 import axiosInstance from '../../../api/axios';
@@ -28,7 +28,7 @@ const IdFind = ({ navigation }: NameProps) => {
       setMessage('올바른 이메일 형식을 입력해주세요.');
       return;
     }
-  
+
     try {
       const response = await axiosInstance.get(`/auth/findEmail?email=${email}`);
       const data = response.data;
