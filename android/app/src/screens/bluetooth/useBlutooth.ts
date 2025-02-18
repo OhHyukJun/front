@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
 import requestPermissions from './permissions';
-import { connectToDevice, sendData, receiveData, disconnectDevice } from './bluetoothManager';
+import { connectToDevice, sendData, disconnectDevice } from './bluetoothManager';
 import { useRecoilState } from 'recoil';
 import { accessTokenState } from '../../atom/login';
 import axiosInstance from '../../api/axios';
@@ -10,7 +10,7 @@ import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
 import { fetchBabyEmotion } from '../home/fetchBabyEmotion';
 
-const SIMULATION_MODE = true; // false로 바꾸면 블루투스 통신 기능 사용이 가능합니다.
+const SIMULATION_MODE = false; // false로 바꾸면 블루투스 통신 기능 사용이 가능합니다.
 
 const targetDeviceName = 'bigAivleAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:42';
