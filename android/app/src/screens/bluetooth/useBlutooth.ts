@@ -10,7 +10,7 @@ import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
 import { fetchBabyEmotion } from '../home/fetchBabyEmotion';
 
-const SIMULATION_MODE = false; // false로 바꾸면 블루투스 통신 기능 사용이 가능합니다.
+const SIMULATION_MODE = true; // false로 바꾸면 블루투스 통신 기능 사용이 가능합니다.
 
 const targetDeviceName = 'bigAivleAudio';
 const targetDeviceId = '8C:BF:EA:0E:E1:42';
