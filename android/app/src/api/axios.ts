@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       console.log('응답 상태 코드:', error.response.status);
       console.log('응답 헤더:', error.response.headers);
-      Alert.alert('오류', error.response.data.message || '알 수 없는 오류가 발생했습니다.');
+      Alert.alert('오류', error.response?.data?.message || '알 수 없는 오류가 발생했습니다.');
     } else if (error.request) {
       console.log('요청 데이터:', error.request);
     } else {
