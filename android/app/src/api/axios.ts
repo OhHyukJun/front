@@ -31,11 +31,16 @@ axiosInstance.interceptors.response.use(
   (error: AxiosError) => {
     console.log('응답 에러:', error.message);
 
+    if (error.response?.config?.url?.includes('/config/getProfileImage') && error.response?.status === 400) {
+      console.log('프로필 이미지가 존재하지 않음 (400), 경고창 표시 안함');
+      return Promise.reject(error);
+    }
+
     // 상세 에러 로그
     if (error.response) {
       console.log('응답 상태 코드:', error.response.status);
       console.log('응답 헤더:', error.response.headers);
-      console.log('응답 데이터:', error.response.data);
+      Alert.alert('오류', error.response.data.message || '알 수 없는 오류가 발생했습니다.');
     } else if (error.request) {
       console.log('요청 데이터:', error.request);
     } else {

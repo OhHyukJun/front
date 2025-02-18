@@ -30,7 +30,7 @@ export const useFetchProfileImage = () => {
 
       console.log('최신 프로필 이미지 응답:', response.status);
 
-      if (response.data?.profileImage) {
+      if (response.status === 200 && response.data?.profileImage) {
         const base64Image = response.data.profileImage;
         const decodedImage = `data:image/png;base64,${base64Image}`;
         setProfileImage(decodedImage);
@@ -39,7 +39,7 @@ export const useFetchProfileImage = () => {
         setProfileImage(null);
       }
     } catch (error) {
-      console.error('프로필 이미지 불러오기 실패:', error);
+      console.log('프로필 이미지 불러오기 실패','서버에서 프로필 이미지가 비어 있습니다.');
       setProfileImage(null);
     }
   };
