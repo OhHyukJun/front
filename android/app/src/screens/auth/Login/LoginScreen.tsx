@@ -9,6 +9,7 @@ import axiosInstance from '../../../api/axios';
 import constants from '../ConstantAuth';
 import { adminState } from '../../../atom/admin';
 import { ADMIN_EMAIL } from '@env';
+const RNRestart = require('react-native-restart').default;
 
 type RootParamList = {
   MainScreen: undefined;
@@ -103,6 +104,7 @@ const LoginScreen = () => {
             })
           );
         }, 100);
+        RNRestart.restart();
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
         setUserId('');

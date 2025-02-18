@@ -32,7 +32,7 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
       try {
         setLoading(true);
         const settingsData = await fetchSettingInfo();
-  
+
         if (settingsData && typeof settingsData === 'object') {
           setNotification(settingsData.alarm ? '동의' : '비동의');
           setChildBirthDate(settingsData.babyBirth ? new Date(settingsData.babyBirth) : null);
@@ -47,10 +47,10 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
         setLoading(false);
       }
     };
-  
+
     loadSettings();
   }, []);
-  
+
   useEffect(() => {
     const loadUserData = async () => {
       try {
@@ -66,11 +66,11 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
         setLoading(false);
       }
     };
-  
+
     loadUserData();
   }, []);
-  
-  
+
+
   const handleSave = async () => {
     console.log('저장 버튼 클릭');
 
