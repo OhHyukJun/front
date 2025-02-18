@@ -105,6 +105,8 @@ const LoginScreen = () => {
         }, 100);
       } else {
         Alert.alert('로그인 실패', constants.FAIL.Login);
+        setUserId('');
+        setUserPw('');
       }
     } catch (error:any) {
       Alert.alert('로그인 실패', error);
